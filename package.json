@@ -1,0 +1,31 @@
+{
+  "name": "brace_umd",
+  "version": "0.0.1",
+  "description": "This script provides a unified module definition for CommonJs, AMD, and the native global Object.",
+  "main": "lib/umd.js",
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "^3.2.0",
+    "chai": "^3.5.0",
+    "amdefine": "^2.3.3",
+    "uglify-js": "^3.0.9"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "brace",
+    "umd",
+    "module",
+    "amd",
+    "commonjs",
+    "unified"
+  ],
+  "author": "Robert Steckroth",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/restarian/brace_prototype/License.txt"
+    }
+  ]
+}

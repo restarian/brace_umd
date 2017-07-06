@@ -1,0 +1,8 @@
+
+## Brace UMD
+A unified module definition script to aid in module definitions which can use CommonJs, AMD, or the native global Object.
+------------
+
+**Author: Robert Steckroth**
+
+**License: MIT**
