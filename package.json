@@ -11,10 +11,11 @@
     "uglify-js": "^3.0.9"
   },
   "scripts": {
-    "test": "mocha",
-    "build_umd_source": "uglifyjs ./lib/umd.js --compress --mangle -o ./builds/umd.js",
-    "build_umd_example": "r_js -o ./example/require_build.js"
+    "test": "mocha"
   },
+	"bin": {
+		"build_umd": "./bin/build.umd.js"
+},
   "keywords": [
     "brace",
     "umd",
