@@ -1,6 +1,6 @@
 {
   "name": "brace_umd",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "This script provides a unified module definition for CommonJs, AMD, and the native global Object.",
   "main": "lib/umd.js",
   "dependencies": {},
@@ -13,9 +13,9 @@
   "scripts": {
     "test": "mocha"
   },
-	"bin": {
-		"build_umd": "./bin/build.umd.js"
-},
+  "bin": {
+    "build_umd": "./bin/build.umd.js"
+  },
   "keywords": [
     "brace",
     "umd",
