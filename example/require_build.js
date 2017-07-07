@@ -451,8 +451,8 @@
     include: ["foo/bar/bee"],
     insertRequire: ['foo/bar/bop'],
 */
-    name: "test",
-    out: "./builds/test.js",
+    name: "example",
+    out: "./builds/example.js",
 
     //An alternative to "include". Normally only used in a requirejs.config()
     //call for a module used for mainConfigFile, since requirejs will read
