@@ -19,6 +19,7 @@
   "keywords": [
     "brace",
     "umd",
+    "requirejs",
     "module",
     "amd",
     "commonjs",
