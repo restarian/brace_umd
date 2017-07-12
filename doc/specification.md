@@ -7,6 +7,7 @@
 ### Document pages
 * [Front Page](https://github.com/restarian/brace_umd/blob/master/README.md)
 * [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
+* [License](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 
 ----
 

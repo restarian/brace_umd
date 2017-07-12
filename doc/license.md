@@ -1,3 +1,14 @@
+# Brace UMD
+### License
+
+------
+
+### Document pages
+* [Front Page](https://github.com/restarian/brace_umd/blob/master/README.md)
+* [Specification](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
+* [Todo](https://.github.com/restarian/brace_umd/blob/master/doc/todo.md)
+
+----
 The MIT license
 
 Copyright (c) 2017 Robert Edward Steckroth

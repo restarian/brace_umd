@@ -10,7 +10,7 @@ A unified module definition script to support modules written with Requirejs, AM
 
 **Caveat:** An id string must be used in order to have native global Object support. Otherwise, it can be omitted to only supply CommonJs, RequireJs and AMDefine support.
 
-**Tested on Windows 10 and Ubuntu with the help of Bash for Windows :)**
+**Tested on Windows 10 and Ubuntu with the help of [Bash on Windows](https://github.com/Microsoft/BashOnWindows) :)**
 -------
 ![Bash_on_windows](https://raw.githubusercontent.com/restarian/brace_umd/master/doc/image/bash_on_windows_logo.jpg)
 
@@ -19,6 +19,7 @@ A unified module definition script to support modules written with Requirejs, AM
 ### Document pages
 * [Specification](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
 * [Todo](https://.github.com/restarian/brace_umd/blob/master/doc/todo.md)
+* [License](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 
 ----
 **Below are some ways to use the UMD. The following code works in nodejs or the browser:**
