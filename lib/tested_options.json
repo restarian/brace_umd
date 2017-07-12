@@ -1,0 +1,15 @@
+{
+  "output": {
+      "beautify": false
+  },
+  "compress": {
+      "sequences": false,
+      "dead_code": false,
+      "unused": false,
+      "global_defs": {
+          "DEBUG": false
+      }
+  },
+  "warnings": true,
+  "mangle": false 
+}
