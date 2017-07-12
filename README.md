@@ -1,14 +1,25 @@
 
-## Brace UMD
-A unified module definition script to support modules written with Requirejs, CommonJs, AMDefine or the native global Object syntax while also working seamlessly with the r.js optimizer.
+# Brace UMD
+A unified module definition script to support modules written with Requirejs, AMDefine, CommonJs syntax or use the native global Object while working seamlessly with the r.js optimizer.
 ------------
 
 **Author: Robert Steckroth**
 
 **License: MIT**
 
-**Caveat:** A id string must be used in order to have native global Object support.
+**Caveat:** An id string must be used in order to have native global Object support. Otherwise, it can be omitted to only supply CommonJs, RequireJs and AMDefine support.
 
+**Tested on Windows 10 and Ubuntu with the help of Bash for Windows :)**
+-------
+![Bash_on_windows](https://raw.githubusercontent.com/restarian/brace_umd/master/doc/image/bash_on_windows.jpg)
+
+------
+
+### Document pages
+* [Todo](https://raw.githubusercontent.com/restarian/brace_umd/master/doc/todo.md)
+* [Specification](https://raw.githubusercontent.com/restarian/brace_umd/master/specification.md)
+
+----
 **Below are some ways to use the UMD. The following code works in nodejs or the browser:**
 ```
 // A pretty output of the minified script used below
@@ -70,7 +81,7 @@ A unified module definition script to support modules written with Requirejs, Co
 ```
 
 
-**The generated script was generated via r.js -o require_build.js script in the requirejs_wrapped example. It works as a module definition in all platforms regardless of what is available.**
+**The script below was generated via _r.js -o require_build.js_ script in the requirejs_wrapped example. It works as a module definition on all platforms regardless of what libraries are available.**
 ```
 !function(global_this) {
     var global_define = define || void 0, global_requirejs = requirejs || void 0, global_require = require || void 0, define = function() {
