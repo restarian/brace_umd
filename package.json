@@ -1,6 +1,6 @@
 {
   "name": "brace_umd",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "This script provides a unified module definition for CommonJs, Requirejs, AMDefine, native global Objects while staying seamlessly compliant with the r.js optimizer.",
   "main": "lib/exporter.js",
   "dependencies": {},
