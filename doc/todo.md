@@ -1,10 +1,11 @@
 
 # Brace UMD
+### Todo
 
 ------
 
 ### Document pages
-* [Home](https://github.com/restarian/brace_umd/blob/master/README.md)
+* [Front Page](https://github.com/restarian/brace_umd/blob/master/README.md)
 * [Specification](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
 
 ----

@@ -1,9 +1,10 @@
 
 # Brace UMD
 A unified module definition script to support modules written with Requirejs, AMDefine, CommonJs syntax or use the native global Object while working seamlessly with the r.js optimizer.
+
 ------------
 
-**Author: Robert Steckroth**
+**Author: Robert Steckroth, Bustout**
 
 **License: MIT**
 
@@ -11,7 +12,7 @@ A unified module definition script to support modules written with Requirejs, AM
 
 **Tested on Windows 10 and Ubuntu with the help of Bash for Windows :)**
 -------
-![Bash_on_windows](https://raw.githubusercontent.com/restarian/brace_umd/master/doc/image/bash_on_windows.jpg)
+![Bash_on_windows](https://raw.githubusercontent.com/restarian/brace_umd/master/doc/image/bash_on_windows_logo.jpg)
 
 ------
 
