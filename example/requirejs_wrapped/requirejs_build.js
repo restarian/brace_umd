@@ -4,10 +4,9 @@
   optimize: "uglify2",
 	name: "example_module",
 	wrap: {
-		start: require("brace_umd").wrap_start.toString(),
-		end: require("brace_umd").wrap_end.toString()
-		//start: require("fs"),//.wrap_start,
-		//end: require("fs")//.wrap_end
+		// r.js redefines requrie and define again so make sure to use nodeRequire which will have the original requie statment.
+		start: nodeRequire("brace_umd").wrap_start,
+		end: nodeRequire("brace_umd").wrap_end
 	},
   uglify2: {
       output: {
