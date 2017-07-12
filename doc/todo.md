@@ -4,8 +4,8 @@
 ------
 
 ### Document pages
-* [Home](https://raw.githubusercontent.com/restarian/brace_umd/master/README.md)
-* [Specification](https://raw.githubusercontent.com/restarian/brace_umd/master/specification.md)
+* [Home](https://github.com/restarian/brace_umd/blob/master/README.md)
+* [Specification](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
 
 ----
 

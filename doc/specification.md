@@ -4,8 +4,8 @@
 ------
 
 ### Document pages
-* [Home](https://raw.githubusercontent.com/restarian/brace_umd/master/README.md)
-* [Todo](https://raw.githubusercontent.com/restarian/brace_umd/master/doc/todo.md)
+* [Home](https://github.com/restarian/brace_umd/blob/master/README.md)
+* [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 
 ----
 
