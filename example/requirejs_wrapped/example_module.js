@@ -1,8 +1,6 @@
-
-
 define(["another_module"], function(a) {
 
-    console.log("My module init'ed")
+    console.log("odule init")
     return {
       cool: "joes"
     }

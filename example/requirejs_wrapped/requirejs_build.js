@@ -18,6 +18,7 @@
               DEBUG: false
           },
       		unsafe: true,
+					unused: false,
       		properties: false,
       },
       warnings: true,
