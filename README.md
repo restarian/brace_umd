@@ -1,6 +1,6 @@
 
 # Brace UMD
-A unified module definition script to support modules written with Requirejs, AMDefine and CommonJs syntax while working seamlessly with the r.js optimizer.
+A unified module definition script to support modules written with Requirejs, AMDefine and CommonJs syntax while working seamlessly with the r.js optimizer and the native global Object.
 
 ------------
 
@@ -8,7 +8,13 @@ A unified module definition script to support modules written with Requirejs, AM
 
 **License: MIT**
 
-**Caveat:** An id string must be used in order to have native global Object support. Otherwise, it can be omitted to only supply CommonJs, RequireJs and AMDefine support.
+**Bonuses:**
+* well commented, professional code
+* thoroughly documented
+* unit tested safe on multiple platforms
+
+**Caveats:**
+  * An id string must be used in order to have native global Object support. Otherwise, it can be omitted to only supply CommonJs, RequireJs and AMDefine support.
 
 ------
 
@@ -16,7 +22,7 @@ A unified module definition script to support modules written with Requirejs, AM
 * [Build](https://github.com/restarian/brace_umd/blob/master/doc/build.md)
 * [Use with r.js](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md)
 * [Specification](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
-* [License](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
+* [License](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
 * [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 
 ----

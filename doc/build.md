@@ -6,9 +6,9 @@
 
 ### Document pages
 * [Front Page](https://github.com/restarian/brace_umd/blob/master/README.md)
-* [Use with r.js](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md)
+* [Using with r.js](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md)
 * [Specification](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
-* [License](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
+* [Licenses](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
 * [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 
 

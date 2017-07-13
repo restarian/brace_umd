@@ -1,4 +1,3 @@
-#!mocha
 /*
 Copyright (c) 2017 Robert Edward Steckroth
 
@@ -27,18 +26,32 @@ SOFTWARE.
  Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com>
 */
 
-if (typeof define !== 'function') { var define = require('amdefine')(module) }
+//var describe = require('mocha');
 
-define(["chai", "brace_umd"], function(chai, brace_umd) {
+var expect = require("chai").expect
+var spawn = require('child_process').spawn
+var path = require('path')
 
- var expect = chai.expect
+describe("The build script", function() {
 
-	describe("", function() {
+	//beforeEach(function() { })
+	it.only("should export the correct build file data when ran as a shell script.", function(done) {
 
-		//beforeEach(function() { })
+    build_script = spawn(path.join(__dirname, "/../bin/build_umd.js"))//, ['-lh', '/usr'])
+    //build_script = spawn("ls", ['-lh'])
 
-		it("", function() {
-		})
+    build_script.stdout.on('data', (data) => {
+      console.log("stdout: ${data}")
+    })
+
+    build_script.stderr.on('data', (data) => {
+      console.log("stderr: ${data}")
+    })
+
+    build_script.on('close', (code) => {
+      console.log("child process exited with code ${code}")
+      done()
+    })
 
 	})
 })
