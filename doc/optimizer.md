@@ -1,12 +1,12 @@
 
 # Brace UMD
-### Using Brace UMD with the Requirejs r.js optimizer
+### Using Brace UMD with the RequireJs r.js optimizer
 
 ------
 
 ### Document pages
 * [Front Page](https://github.com/restarian/brace_umd/blob/master/README.md)
-* [Build](https://github.com/restarian/brace_umd/blob/master/doc/build.md)
+* [Building UMD source](https://github.com/restarian/brace_umd/blob/master/doc/build.md)
 * [Specification](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
 * [License](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 * [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)

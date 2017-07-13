@@ -1,6 +1,6 @@
 
 # Brace UMD
-A unified module definition script to support modules written with Requirejs, AMDefine, CommonJs syntax or use the native global Object while working seamlessly with the r.js optimizer.
+A unified module definition script to support modules written with Requirejs, AMDefine and CommonJs syntax while working seamlessly with the r.js optimizer.
 
 ------------
 
@@ -10,19 +10,21 @@ A unified module definition script to support modules written with Requirejs, AM
 
 **Caveat:** An id string must be used in order to have native global Object support. Otherwise, it can be omitted to only supply CommonJs, RequireJs and AMDefine support.
 
-**Tested on Windows 10 and Ubuntu with the help of [Bash on Windows](https://github.com/Microsoft/BashOnWindows) :)**
--------
-![Bash_on_windows](https://raw.githubusercontent.com/restarian/brace_umd/master/doc/image/bash_on_windows_logo.jpg)
-
 ------
 
 ### Document pages
-* [Specification](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
-* [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 * [Build](https://github.com/restarian/brace_umd/blob/master/doc/build.md)
+* [Use with r.js](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md)
+* [Specification](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
 * [License](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
+* [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 
 ----
+
+**Tested on Windows 10 and Ubuntu 16 with the help of [Bash on Windows](https://github.com/Microsoft/BashOnWindows) :)**
+-------
+![Bash_on_windows](https://raw.githubusercontent.com/restarian/brace_umd/master/doc/image/bash_on_windows_logo.jpg)
+
 **Below are some ways to use the UMD. The following code works in nodejs or the browser:**
 ```
 // A pretty output of the minified script used below
@@ -60,7 +62,7 @@ A unified module definition script to support modules written with Requirejs, AM
 
     // Calling define, require or requirejs works with all definition types here.
     requirejs([], function(){})
-    requrie([], function(){})
+    require([], function(){})
     define([], function(){})
     define(["mod_a"], function(mod_a){
       return {}
