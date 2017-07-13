@@ -14,4 +14,5 @@
 **Things to do to Brace UMD**
 * Numerous unit tests
 * More examples
+* More code commenting
 * Use definitions with UglifyJs to weed out needed qualifiers so the mangler can be used with the build scripts.

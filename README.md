@@ -18,7 +18,7 @@ A unified module definition script to support modules written with Requirejs, AM
 
 ### Document pages
 * [Specification](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
-* [Todo](https://.github.com/restarian/brace_umd/blob/master/doc/todo.md)
+* [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 * [License](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 
 ----

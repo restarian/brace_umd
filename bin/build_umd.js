@@ -67,23 +67,22 @@ else if (process.argv.indexOf("options") >= 0) program.helpInformation = functio
     }
     return text.join("\n");
 };
-//program.option("-p, --parse <options>", "Specify parser options.", parse_js("parse", true));
 program.option("-c, --compress [options]", "Enable compressor/specify compressor options.", parse_js("compress", true));
 program.option("-m, --mangle [options]", "Mangle names/specify mangler options.", parse_js("mangle", true));
 program.option("--mangle-props [options]", "Mangle properties/specify mangler options.", parse_js("mangle-props", true));
 program.option("-b, --beautify [options]", "Beautify output/specify output options.", parse_js("beautify", true));
-program.option("-o, --output <file>", "Output file (default STDOUT).");
+//program.option("-o, --output <file>", "Output file (default STDOUT).");
 program.option("--comments [filter]", "Preserve copyright comments in the output.");
 program.option("--config-file <file>", "Read minify() options from JSON file.");
 //program.option("-d, --define <expr>[=value]", "Global definitions.", parse_js("define"));
 //program.option("--ie8", "Support non-standard Internet Explorer 8.");
-program.option("--keep-fnames", "Do not mangle/drop function names. Useful for code relying on Function.prototype.name.");
-program.option("--name-cache <file>", "File to hold mangled name mappings.");
+//program.option("--keep-fnames", "Do not mangle/drop function names. Useful for code relying on Function.prototype.name.");
+//program.option("--name-cache <file>", "File to hold mangled name mappings.");
 //program.option("--self", "Build UglifyJS as a library (implies --wrap UglifyJS)");
 //program.option("--source-map [options]", "Enable source map/specify source map options.", parse_source_map());
 //program.option("--timings", "Display operations run time on STDERR.")
 //program.option("--toplevel", "Compress and/or mangle variables in toplevel scope.");
-//program.option("--verbose", "Print diagnostic messages.");
+program.option("--verbose", "Print diagnostic messages.");
 program.option("--warn", "Print warning messages.");
 //program.option("--wrap <name>", "Embed everything as a function with “exports” corresponding to “name” globally.");
 program.arguments("[files...]").parseArgv(process.argv);
@@ -174,130 +173,6 @@ if (program.verbose) {
     options.warnings = true;
 }
 
-if (program.self) {
-    if (program.args.length) {
-        print_error("WARN: Ignoring input files since --self was passed");
-    }
-    if (!options.wrap) options.wrap = "UglifyJS";
-    simple_glob(UglifyJS.FILES).forEach(function(name) {
-        files[convert_path(name)] = read_file(name);
-    });
-    //run();
-} else if (program.args.length) {
-    simple_glob(program.args).forEach(function(name) {
-        files[convert_path(name)] = read_file(name);
-    });
-    //run();
-} else {
-    var chunks = [];
-    process.stdin.setEncoding("utf8");
-    process.stdin.on("data", function(chunk) {
-        chunks.push(chunk);
-    }).on("end", function() {
-        files = [ chunks.join("") ];
-        //run();
-    });
-    process.stdin.resume();
-}
-
-function convert_ast(fn) {
-    return UglifyJS.AST_Node.from_mozilla_ast(Object.keys(files).reduce(fn, null));
-}
-
-function run() {
-    UglifyJS.AST_Node.warn_function = function(msg) {
-        print_error("WARN: " + msg);
-    };
-    if (program.timings) options.timings = true;
-    try {
-        if (program.parse) {
-            if (program.parse.acorn) {
-                files = convert_ast(function(toplevel, name) {
-                    return require("acorn").parse(files[name], {
-                        locations: true,
-                        program: toplevel,
-                        sourceFile: name
-                    });
-                });
-            } else if (program.parse.spidermonkey) {
-                files = convert_ast(function(toplevel, name) {
-                    var obj = JSON.parse(files[name]);
-                    if (!toplevel) return obj;
-                    toplevel.body = toplevel.body.concat(obj.body);
-                    return toplevel;
-                });
-            }
-        }
-    } catch (ex) {
-        fatal(ex);
-    }
-    var result = UglifyJS.minify(files, options);
-    if (result.error) {
-        var ex = result.error;
-        if (ex.name == "SyntaxError") {
-            print_error("Parse error at " + ex.filename + ":" + ex.line + "," + ex.col);
-            var col = ex.col;
-            var lines = files[ex.filename].split(/\r?\n/);
-            var line = lines[ex.line - 1];
-            if (!line && !col) {
-                line = lines[ex.line - 2];
-                col = line.length;
-            }
-            if (line) {
-                var limit = 70;
-                if (col > limit) {
-                    line = line.slice(col - limit);
-                    col = limit;
-                }
-                print_error(line.slice(0, 80));
-                print_error(line.slice(0, col).replace(/\S/g, " ") + "^");
-            }
-        }
-        if (ex.defs) {
-            print_error("Supported options:");
-            print_error(format_object(ex.defs));
-        }
-        fatal(ex);
-    } else if (program.output == "ast") {
-        print(JSON.stringify(result.ast, function(key, value) {
-            if (skip_key(key)) return;
-            if (value instanceof UglifyJS.AST_Token) return;
-            if (value instanceof UglifyJS.Dictionary) return;
-            if (value instanceof UglifyJS.AST_Node) {
-                var result = {
-                    _class: "AST_" + value.TYPE
-                };
-                value.CTOR.PROPS.forEach(function(prop) {
-                    result[prop] = value[prop];
-                });
-                return result;
-            }
-            return value;
-        }, 2));
-    } else if (program.output == "spidermonkey") {
-        print(JSON.stringify(UglifyJS.minify(result.code, {
-            compress: false,
-            mangle: false,
-            output: {
-                ast: true,
-                code: false
-            }
-        }).ast.to_mozilla_ast(), null, 2));
-    } else if (program.output) {
-        fs.writeFileSync(program.output, result.code);
-        if (result.map) {
-            fs.writeFileSync(program.output + ".map", result.map);
-        }
-    } else {
-        print(result.code);
-    }
-    if (program.nameCache) {
-        fs.writeFileSync(program.nameCache, JSON.stringify(options.nameCache));
-    }
-    if (result.timings) for (var phase in result.timings) {
-        print_error("- " + phase + ": " + result.timings[phase].toFixed(3) + "s");
-    }
-}
 
 function fatal(message) {
     if (message instanceof Error) message = message.stack.replace(/^\S*?Error:/, "ERROR:")
@@ -305,36 +180,6 @@ function fatal(message) {
     process.exit(1);
 }
 
-// A file glob function that only supports "*" and "?" wildcards in the basename.
-// Example: "foo/bar/*baz??.*.js"
-// Argument `glob` may be a string or an array of strings.
-// Returns an array of strings. Garbage in, garbage out.
-function simple_glob(glob) {
-    if (Array.isArray(glob)) {
-        return [].concat.apply([], glob.map(simple_glob));
-    }
-    if (glob.match(/\*|\?/)) {
-        var dir = path.dirname(glob);
-        try {
-            var entries = fs.readdirSync(dir);
-        } catch (ex) {}
-        if (entries) {
-            var pattern = "^" + path.basename(glob)
-                .replace(/[.+^$[\]\\(){}]/g, "\\$&")
-                .replace(/\*/g, "[^/\\\\]*")
-                .replace(/\?/g, "[^/\\\\]") + "$";
-            var mod = process.platform === "win32" ? "i" : "";
-            var rx = new RegExp(pattern, mod);
-            var results = entries.filter(function(name) {
-                return rx.test(name);
-            }).map(function(name) {
-                return path.join(dir, name);
-            });
-            if (results.length) return results;
-        }
-    }
-    return [ glob ];
-}
 
 function read_file(path, default_value) {
     try {
@@ -466,6 +311,9 @@ SOFTWARE.
 var tested_options = require(lib + "tested_options.json")
 // This loops through the entire generated options object (via commander), and verifies that the Object qualifiers are contained in the tested_options
 // Object. A warning is emited and the options is not transfered to the tested_options Object if it is not set prior to this loop.
+//options.output = options.output || {}
+//options.output.preamble = "Generated by Brace_UMD " + info.version
+
 var break_first = false
 for ( var a in options )
   for ( var b in options[a] ) {
@@ -490,16 +338,23 @@ for ( var a in options )
     }
   }
 
+// These can not be changed so it is provided after the input parsing haapens (it should not be defined in tested_options.json).
+tested_options["mangle"]["reserved"] = ["define", "require", "requirejs"]
+tested_options["compress"]["unused"] = false
 console.log(tested_options)
+
 // This will create the run-time source code from the lib source. It is is fine to use the source in the lib directory if the wrappers and extra effeciency is not needed.
 fs.readFile(lib + "umd.js", (err, data) => {
   if (err) { throw err; return }
 
   // Get the raw source and run it through the minifier with a glabal scope variable so that it is seen as usefull by UglifyJS (otherwise it is just as good as nothing to the run-time
   // so UglifyJS will discard it).
-	var out = UglifyJS.minify("var z="+data.toString(), tested_options), location = path.join(lib, "../builds/") + "umd_"+info.version+".js"
+	var out = UglifyJS.minify("var discard_me="+data.toString(), tested_options), location = path.join(lib, "../builds/") + "umd_"+info.version+".js"
   // Remove the "var z=" above so that it is an anonymouse function.
-  var out = "(" + out.code.substr(6, out.code.length-7) + ")"
+  out = "(" + out.code.replace(/var\ discard_me\ *=\ */, "")
+  if ( out.charAt(out.length-1) === ";" )
+    out = out.substr(0, out.length-1)
+  out += ")"
   var build_dir = path.join(lib, "../builds/")
   location = build_dir + "umd_"+info.version+".js"
 	fs.writeFile(location, out, (err) => {

@@ -1,15 +1,17 @@
 {
   "output": {
-      "beautify": false
+    "beautify": true,
+    "quote_keys": false,
+    "quote_style": 0,
+    "comments": false
   },
   "compress": {
       "sequences": false,
-      "dead_code": false,
-      "unused": false,
       "global_defs": {
           "DEBUG": false
       }
   },
   "warnings": true,
-  "mangle": false 
+  "mangle": {
+  }
 }

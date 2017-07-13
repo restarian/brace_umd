@@ -6,7 +6,7 @@
 ### Document pages
 * [Front Page](https://github.com/restarian/brace_umd/blob/master/README.md)
 * [Specification](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
-* [Todo](https://.github.com/restarian/brace_umd/blob/master/doc/todo.md)
+* [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 
 ----
 The MIT license
