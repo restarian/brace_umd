@@ -14,6 +14,7 @@
 ----
 
 **The breakdown**
+  * Note: all packages are tested with the latest available versions. Submit an [issue](https://github.com/restarian/brace_umd/issues) if any versions you use break any the unit tests. Brace UMD uses Uglify version 3 so only issues using minor versions therein will be processed.
 
 * **License**: [MIT](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
 * **Dependencies**: None

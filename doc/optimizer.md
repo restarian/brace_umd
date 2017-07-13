@@ -12,12 +12,17 @@
 * [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 
 ----
+
+The *r.js* program also uses *uglify-js* so those options are imported from the build directory which created the build the fragments. Any uglify2 options set in the build file will overwrite the build source as it is re-minifies by *uglify-js*. This may be desirable so it is acceptable to supply new *uglify-js* options there.
+  * Note: *Brace UMD* uses UglifyJS-3 and is not compatible with any others.
+
 Example requiejs build file:
 
     {
-    	baseUrl: "./",
+      baseUrl: "./",
       out: "builds/example_module.js",
       optimize: "uglify2",
+      // Get the exported build options from the build_umd script and use those again.
       uglify2: nodeRequire("brace_umd").build_option,
     	name: "example_module",
     	wrap: {
@@ -26,5 +31,3 @@ Example requiejs build file:
     		end: nodeRequire("brace_umd").wrap_end
     	}
     }
-
-The r.js command will also use uglify-js so the options are imported from the build directory which will store the options used to build the fragments there.
