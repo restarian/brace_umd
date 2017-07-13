@@ -3,6 +3,7 @@
     "beautify": true,
     "quote_keys": false,
     "quote_style": 0,
+    "preamble": true,
     "comments": false
   },
   "compress": {

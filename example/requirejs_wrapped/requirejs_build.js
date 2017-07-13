@@ -8,20 +8,5 @@
 		start: nodeRequire("brace_umd").wrap_start,
 		end: nodeRequire("brace_umd").wrap_end
 	},
-  uglify2: {
-      output: {
-          beautify: true
-      },
-      compress: {
-          sequences: false,
-          global_defs: {
-              DEBUG: false
-          },
-      		unsafe: true,
-					unused: false,
-      		properties: false,
-      },
-      warnings: true,
-      mangle: false
-    }
+  uglify2: nodeRequire("brace_umd").build_option
 }
