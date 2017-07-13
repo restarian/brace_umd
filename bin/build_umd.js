@@ -279,7 +279,7 @@ function print(txt) {
 // End of UglifyJS code -------------------------------------------
 // The following code is from this module (Brace UMD), and the license and code follows until otherwise specified.
 /*
-Copyright (c) 2017 Robert Edward Steckroth
+Copyright (c) 2017 Robert Steckroth <RobertSteckroth@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

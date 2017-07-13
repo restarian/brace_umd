@@ -13,9 +13,9 @@
 ----
 
 
-Brace UMD resided under the MIT license 
+Brace UMD resided under the MIT license
 
-Copyright (c) 2017 Robert Edward Steckroth
+Copyright (c) 2017 Robert Edward Steckroth <RobertSteckroth@gmail.com>
 
   Brace UMD is a unified module definition script to use when defining javascript modules.
 
@@ -39,7 +39,7 @@ SOFTWARE.
 
 -----
 
-* Brace UMD uses large code segments from uglify-js project so the license from there is included here as well.
+* Brace UMD uses large code segments from the uglify-js project so the license is included.
 
 
 UglifyJS is released under the BSD license:

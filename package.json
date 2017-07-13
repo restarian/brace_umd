@@ -17,21 +17,34 @@
     "build_umd": "./bin/build_umd.js"
   },
   "keywords": [
+    "umd",
     "brace",
+    "unified",
+    "amd",
+    "define",
+    "definition",
+    "require",
+    "requirejs",
+    "commonjs",
     "r.js",
     "r_js",
-    "umd",
-    "requirejs",
-    "module",
-    "amd",
-    "commonjs",
-    "unified"
+    "module"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/restarian/brace_umd.git"
+  },
   "author": "Robert Steckroth",
+  "maintainers": [
+    {
+      "name": "nickali",
+      "email": "robertsteckroth@gmail.com"
+    }
+  ],
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/restarian/brace_prototype/License.txt"
+      "url": "https://github.com/restarian/brace_umd/blob/master/doc/license.md"
     }
   ]
 }

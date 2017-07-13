@@ -18,6 +18,6 @@
 
 * **License**: [MIT](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
 * **Dependencies**: None
-* **Development dependencies**: [Mocha](https://www.npmjs.com/package/mocha), [Chai](https://www.npmjs.com/package/chai), [Commander](https://www.npmjs.com/package/commander), [Commander](https://www.npmjs.com/package/commander), [UglifyJS-3](https://www.npmjs.com/package/uglify-js)  
+* **Development dependencies**: [Mocha](https://www.npmjs.com/package/mocha), [Chai](https://www.npmjs.com/package/chai), [Commander](https://www.npmjs.com/package/commander), [UglifyJS-3](https://www.npmjs.com/package/uglify-js), [RequireJs](https://www.npmjs.com/package/requirejs)   
 * **Platform support**: Windows 10, Ubuntu 16 *[Apple and other versions require an issue submission](https://github.com/restarian/brace_umd/issues)*
 * **Installer support**: npm - *[Brace_UMD@npmjs.org ](https://www.npmjs.com/package/brace_umd)*
