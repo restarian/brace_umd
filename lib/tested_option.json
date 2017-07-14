@@ -2,6 +2,7 @@
   "output": {
     "beautify": true,
     "quote_keys": false,
+    "semicolons": true,
     "quote_style": 0,
     "preamble": true,
     "comments": false

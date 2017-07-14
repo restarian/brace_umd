@@ -6,7 +6,6 @@ lib = path.join(path.dirname(fs.realpathSync(__filename)), "/../lib/"),
 info = require(lib + "../package.json"),
 UglifyJS = require("uglify-js"),
 program = require("commander")
-options = {}
 // The following program includes code from another module (UglifyJS). The license and code follows until specified otherwise.
 
 /*
@@ -50,8 +49,8 @@ SUCH DAMAGE.
 var skip_keys = [ "cname", "enclosed", "parent_scope", "scope", "thedef", "uses_eval", "uses_with" ];
 var files = {};
 var options = {
-    compress: false,
-    mangle: false
+    compress: {},
+    mangle: {}
 };
 program.version(info.name + " " + info.version);
 program.parseArgv = program.parse;
@@ -93,7 +92,8 @@ if (program.configFile) {
 if (!program.output && program.sourceMap && program.sourceMap.url != "inline") {
     fatal("ERROR: cannot write source map to STDOUT");
 }
-[
+*/
+;[
     "compress",
     "ie8",
     "mangle",
@@ -105,7 +105,7 @@ if (!program.output && program.sourceMap && program.sourceMap.url != "inline") {
         options[name] = program[name];
     }
 });
-*/
+
 if (program.beautify) {
     options.output = typeof program.beautify == "object" ? program.beautify : {};
     if (!("beautify" in options.output)) {
@@ -314,17 +314,19 @@ var tested_option = require(lib + "tested_option.json")
 // This loops through the entire generated options object (via commander), and verifies that the Object qualifiers are contained in the tested_option
 // Object. A warning is emited and the options is not transfered to the tested_option Object if it is not set prior to this loop.
 
-var break_first = false
 // Loop through the options Object set by the commander code. These values will be tranfered to the tested_option Object the qualifier is already define in the tested_option Object.
 for ( var a in options )
   if ( !(a in tested_option) ) {
-    console.warn("Option", a, "is not defined in the tested_option.json file therefore is not safe to use and will be skipped.")
+    console.log("Option", a, "is not defined in the tested_option.json file therefore is not safe to use and will be skipped.")
   }
   else {
     // Check to see if the options qualifier resided in the tested_option Object as well.
     for ( var qualifier in options[a] )
-      if ( !(qualifier in tested_option[a]) ) {
-        console.warn("Option", a + "." + qualifier, "is not defined in the tested_option.json file therefore is not safe to use and will be skipped.")
+      if ( a+"."+qualifier === "compress.unused" || a+"."+qualifier === "mangle.reserved" ) {
+        console.log("Option", a + "." + qualifier, "is set internally and therefore will not be re-set.")
+      }
+      else if ( !(qualifier in tested_option[a]) ) {
+        console.log("Option", a + "." + qualifier, "is not defined in the tested_option.json file therefore is not safe to use and will be skipped.")
       }
       else {
         tested_option[a] = tested_option[a] || {}
@@ -344,45 +346,46 @@ var location = path.join(lib, "../build/build_options_") + info.version + ".json
 fs.writeFile(location, JSON.stringify(tested_option), (err) => {
   if (err) { throw err; return }
   console.log("Exported build options:", location)
-})
-// This will create the run-time source code from the lib source. It is is fine to use the source in the lib directory if the wrappers and extra effeciency is not needed.
-fs.readFile(lib + "umd.js", (err, data) => {
-  if (err) { throw err; return }
 
-  // Get the raw source and run it through the minifier with a glabal scope variable so that it is seen as usefull by UglifyJS (otherwise it is just as good as nothing to the run-time
-  // so UglifyJS will discard it).
-	var out = UglifyJS.minify("var discard_me="+data.toString(), tested_option), location = path.join(lib, "../build/") + "umd_"+info.version+".js"
-  // Remove the "var z=" above so that it is an anonymouse function.
-  out = out.code.replace(/var\ discard_me\ *=\ */, "(")
-  if ( out.charAt(out.length-1) === ";" )
-    out = out.substr(0, out.length-1)
-  out += ")"
-  var build_dir = path.join(lib, "../build/")
-  location = build_dir + "umd_"+info.version+".js"
-	fs.writeFile(location, out, (err) => {
-  	if (err) { throw err; return }
-    console.log("Exported uglify-js primary script build:", location)
-/*
-    location = build_dir + "umd_commonjs_"+info.version+".js"
-    fs.writeFile(location, "module.exports="+out, (err) => {
-  	  if (err) { throw err; return }
-    	console.log("Exported uglify-js CommonJS module build:", location)
-*/
-      // Write out the wrapping fragment for use with the requirejs optimizer (r.js). This should go in the {wrap {start: []} } part of the r.js optimizer build file.
-      location = build_dir + "wrap_start_umd_"+info.version+".frag"
-    	fs.writeFile(location, out.substr(0, out.length-2), (err) => {
-        if (err) { throw err; return }
-    		console.log("Exported uglify-js build end wrap:", location)
+  // This will create the run-time source code from the lib source. It is is fine to use the source in the lib directory if the wrappers and extra effeciency is not needed.
+  fs.readFile(lib + "umd.js", (err, data) => {
+    if (err) { throw err; return }
 
-        // and also create a simple closing wrapper.
-        location = build_dir + "wrap_end_umd_"+info.version+".frag"
-        fs.writeFile(location, "})(this)", (err) => {
+    // Get the raw source and run it through the minifier with a glabal scope variable so that it is seen as usefull by UglifyJS (otherwise it is just as good as nothing to the run-time
+    // so UglifyJS will discard it).
+  	var out = UglifyJS.minify("var discard_me="+data.toString(), tested_option), location = path.join(lib, "../build/") + "umd_"+info.version+".js"
+    // Remove the "var z=" above so that it is an anonymouse function.
+    out = out.code.replace(/var\ discard_me\ *=\ */, "(")
+    if ( out.charAt(out.length-1) === ";" )
+      out = out.substr(0, out.length-1)
+    out += ")"
+    var build_dir = path.join(lib, "../build/")
+    location = build_dir + "umd_"+info.version+".js"
+  	fs.writeFile(location, out, (err) => {
+    	if (err) { throw err; return }
+      console.log("Exported uglify-js primary script build:", location)
+  /*
+      location = build_dir + "umd_commonjs_"+info.version+".js"
+      fs.writeFile(location, "module.exports="+out, (err) => {
+    	  if (err) { throw err; return }
+      	console.log("Exported uglify-js CommonJS module build:", location)
+  */
+        // Write out the wrapping fragment for use with the requirejs optimizer (r.js). This should go in the {wrap {start: []} } part of the r.js optimizer build file.
+        location = build_dir + "wrap_start_umd_"+info.version+".frag"
+      	fs.writeFile(location, out.substr(0, out.length-2), (err) => {
           if (err) { throw err; return }
       		console.log("Exported uglify-js build end wrap:", location)
-          // so windows cli will return back to the prompt.
-          process.exit()
-      	})
- //   	})
+
+          // and also create a simple closing wrapper.
+          location = build_dir + "wrap_end_umd_"+info.version+".frag"
+          fs.writeFile(location, "})(this)", (err) => {
+            if (err) { throw err; return }
+        		console.log("Exported uglify-js build end wrap:", location)
+            // so windows cli will return back to the prompt.
+            process.exit(1)
+        	})
+   //   	})
+    	})
   	})
 	})
 

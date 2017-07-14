@@ -1,8 +1,18 @@
 
 # Brace UMD
-A unified module definition script to support modules written with Requirejs, AMDefine and CommonJs syntax while working seamlessly with the r.js optimizer and the native global Object.
+### A unified module definition script to support modules written with Requirejs, AMDefine and CommonJs syntax while working seamlessly with the r.js optimizer and the native global Object.
 
-------------
+
+------
+
+### Document pages
+* [Build](https://github.com/restarian/brace_umd/blob/master/doc/build.md)
+* [Use with r.js](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md)
+* [Specification](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
+* [Licenses](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
+* [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
+
+----
 
 **Author: Robert Steckroth, Bustout**
 
@@ -14,20 +24,10 @@ A unified module definition script to support modules written with Requirejs, AM
 * unit tested safe on multiple platforms
 
 **Caveats:**
-  * An id string must be used in order to have native global Object support. Otherwise, it can be omitted to only supply CommonJs, RequireJs and AMDefine support.
+  * An id string must be used in order to have native global Object support. Otherwise, it can be omitted to only supply CommonJs, RequireJs, AMDefine r.js support.
 
-------
 
-### Document pages
-* [Build](https://github.com/restarian/brace_umd/blob/master/doc/build.md)
-* [Use with r.js](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md)
-* [Specification](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
-* [License](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
-* [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
-
-----
-
-**Tested on Windows 10 and Ubuntu 16 with the help of [Bash on Windows](https://github.com/Microsoft/BashOnWindows) :)**
+Tested on Windows 10 and Ubuntu 16 with the help of [Bash on Windows](https://github.com/Microsoft/BashOnWindows) :)
 -------
 ![Bash_on_windows](https://raw.githubusercontent.com/restarian/brace_umd/master/doc/image/bash_on_windows_logo.jpg)
 

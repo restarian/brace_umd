@@ -5,7 +5,7 @@
 ------
 
 ### Document pages
-* [Front Page](https://github.com/restarian/brace_umd/blob/master/README.md)
+* [Synopsis](https://github.com/restarian/brace_umd/blob/master/README.md)
 * [Building UMD source](https://github.com/restarian/brace_umd/blob/master/doc/build.md)
 * [Using with r.js](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md)
 * [Licenses](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
