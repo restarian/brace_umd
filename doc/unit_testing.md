@@ -13,8 +13,9 @@
 ----
 
 ** Output of unit testing**
-    > mocha
-    The build script
+      
+      > mocha
+      The build script
       as a shell process
         √ should export the correct build file when no cli arguments are utilized. (453ms)
         √ should provide a warning message when internally set options are attempted to be set (440ms)
@@ -25,9 +26,6 @@
         √ should warn ans exit when the tested-options file does not exist (319ms)
         √ should not make the changes of non-tested build options which are attempted to be set (435ms)
         √ odd cli arguments are processed appropriately (428ms)
-
-    Module loading
-
-        √
-
-    10 passing (4s)
+      Module loading
+          √
+      10 passing (4s)

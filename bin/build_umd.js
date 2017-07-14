@@ -375,9 +375,7 @@ if ( tested_option.compress ) {
 }
 
 console.log("Options to be used with uglify-js:\n", tested_option)
-
 var location = path.join(lib, "../build/build_options_") + info.version + ".json"
-
 
 fs.writeFile(location, JSON.stringify(tested_option), (err) => {
   if (err) { throw err; return }
@@ -420,7 +418,8 @@ fs.writeFile(location, JSON.stringify(tested_option), (err) => {
 
             // and also create a simple closing wrapper.
             location = build_dir + "wrap_end_umd_"+info.version+".frag"
-            fs.writeFile(location, "})(this)", (err) => {
+            var end_wrap = '})(this, typeof require !== "undefined"&&require||undefined, typeof requirejs !== "undefined"&&requirejs||undefined, typeof define !== "undefined"&&define||undefined)'
+            fs.writeFile(location, end_wrap, (err) => {
               if (err) { throw err; return }
           		console.log("Exported uglify-js build end wrap:", location)
               // so windows cli will return back to the prompt.
