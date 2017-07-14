@@ -7,14 +7,7 @@
     "preamble": true,
     "comments": false
   },
-  "compress": {
-      "sequences": false,
-      "global_defs": {
-          "DEBUG": false
-      }
-  },
+  "compress": false,
   "warnings": true,
-  "mangle": {
-    
-  }
+  "mangle": false
 }

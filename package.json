@@ -3,7 +3,9 @@
   "version": "0.2.6",
   "description": "This script provides a unified module definition for CommonJs, Requirejs, AMDefine, native global Objects while staying seamlessly compliant with the r.js optimizer.",
   "main": "lib/exporter.js",
-  "dependencies": {},
+  "dependencies": {
+    "commander": "^2.0.0"
+  },
   "devDependencies": {
     "mocha": "^3.2.0",
     "chai": "^3.5.0",
@@ -45,6 +47,10 @@
     {
       "type": "MIT",
       "url": "https://github.com/restarian/brace_umd/blob/master/doc/license.md"
+    },
+    {
+      "type": "BSD",
+      "url": "https://github.com/mishoo/UglifyJS2/blob/master/LICENSE"
     }
   ]
 }

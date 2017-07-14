@@ -67,12 +67,13 @@ describe("The build script", function() {
 
   	it("should export the correct build file when no cli arguments are utilized.", function(done) {
 
-      build_process("")
+      // This will use the run-time accessed tested_option but it does matter what is set to it.
+      build_process("--tested-options test/unit_tested_option_a.json")
 
-      build_script.on("close", function(exit_code) {
+      build_script.on("exit", function(exit_code) {
+        expect(parseInt(exit_code)).to.equal(5)
 
-        //code = parseInt(exit_code)
-        var tested_option = require(path.join(__dirname, "/../lib/tested_option.json"))
+        var tested_option = require(require("../").build_information.tested_options_file)
         var export_option = require("../").build_option
         // Delete the three build options which are set internally.
         delete export_option.compress.unused
@@ -89,31 +90,78 @@ describe("The build script", function() {
 
   	it("should provide a warning message when internally set options are attempted to be set", function(done) {
 
-      build_process("--compress unused,unsafe,nope mangle reserved=[]")
-      build_script.on("close", (exit_code) => {
-        expect(stdout).to.include("Option compress.unused is set internally and therefore will not be re-set.")
-        expect(stdout).to.include("Option mangle.reserved is set internally and therefore will not be re-set.")
-        expect(stdout).to.include("Option compress.unsafe is not defined in the tested_option.json file therefore is not safe to use and will be skipped.")
-        expect(stdout).to.include("Option compress.nope is not defined in the tested_option.json file therefore is not safe to use and will be skipped.")
+      build_process("--tested-options test/unit_tested_option_a.json --compress unused,unsafe,nope mangle reserved=[]")
+      build_script.on("exit", function(exit_code) {
+        expect(parseInt(exit_code)).to.equal(5)
+        var tested_file = require("../").build_information.tested_options_file
+        expect(stdout).to.include("Option compress.unused is set internally. Therefore it will not be re-set.")
+        expect(stdout).to.include("Option mangle.reserved is set internally. Therefore it will not be re-set.")
+        expect(stdout).to.include("Option compress.unsafe is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
+        expect(stdout).to.include("Option compress.nope is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
         done()
       })
     })
 
   	it("should provide a warning message when non-tested options which are attempted to be set", function(done) {
 
-      build_process("--compress unused,unsafe")
-      build_script.on("close", (exit_code) => {
-        expect(stdout).to.include("Option compress.unused is set internally and therefore will not be re-set.")
-        expect(stdout).to.include("Option compress.unsafe is not defined in the tested_option.json file therefore is not safe to use and will be skipped.")
+      build_process("--tested-options test/unit_tested_option_a.json --compress unused,unsafe")
+      build_script.on("exit", function(exit_code) {
+        expect(parseInt(exit_code)).to.equal(5)
+        var tested_file = require("../").build_information.tested_options_file
+        expect(stdout).to.include("Option compress.unused is set internally. Therefore it will not be re-set.")
+        expect(stdout).to.include("Option compress.unsafe is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
+        done()
+      })
+    })
+  	it("create the proper mangle and compress output with the unit test file a", function(done) {
+
+      build_process("--tested-options test/unit_tested_option_a.json --mangle reservedd=true,properties --beautify beautify=false,saywhat=false,semicolons=false")
+      build_script.on("exit", function(exit_code) {
+
+        expect(parseInt(exit_code)).to.equal(5)
+
+        var tested_file = require("../").build_information.tested_options_file
+        var tested_option = require(tested_file)
+        var export_option = require("../").build_option
+
+        expect(stdout).to.include("Option mangle.reservedd is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
+        expect(tested_option.compress).to.deep.equal({ "sequences": false, "global_defs": { "DEBUG": false } })
+        expect(tested_option.mangle).to.deep.equal({})
+
+        expect(export_option.mangle).to.deep.equal({ reserved: [ 'define', 'require', 'requirejs' ] })
+        expect(export_option.compress).to.deep.equal({ unused: false, "sequences": false, "global_defs": { "DEBUG": false } })
+        done()
+      })
+
+    })
+  	it("create the proper mangle and compress output with the unit test file b", function(done) {
+
+      build_process("--tested-options test/unit_tested_option_b.json --mangle reservedd=true,properties --compress --beautify beautify=false,saywhat=false,semicolons=false")
+      build_script.on("exit", function(exit_code) {
+
+        expect(parseInt(exit_code)).to.equal(5)
+
+        var tested_file = require("../").build_information.tested_options_file
+        var tested_option = require(tested_file)
+        var export_option = require("../").build_option
+
+        expect(stdout).to.include("Option mangle.reservedd is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
+
+        expect(tested_option.compress).to.equal(false)
+        expect(tested_option.mangle).to.equal(false)
+
+        expect(export_option.mangle).to.deep.equal({ reserved: [ 'define', 'require', 'requirejs' ] })
+        expect(export_option.compress).to.deep.equal({ unused: false })
         done()
       })
     })
   	it("should not make the changes of internally and non-tested build options which attempted to be set", function(done) {
 
-      build_process("--compress unused,unsafe,nah --mangle reserved=true --beautify beautify=false,saywhat=false,semicolons=false")
-      build_script.on("close", function(exit_code) {
+      build_process("--tested-options test/unit_tested_option_a.json --beautify beautify=false,saywhat=false,semicolons=false")
+      build_script.on("exit", function(exit_code) {
+        expect(parseInt(exit_code)).to.equal(5)
 
-        var tested_option = require(path.join(__dirname, "/../lib/tested_option.json"))
+        var tested_option = require(require("../").build_information.tested_options_file)
         var export_option = require("../").build_option
         // Delete the three build options which are set internally.
         delete export_option.compress.unused
@@ -123,6 +171,8 @@ describe("The build script", function() {
         delete tested_option.output.preamble
         // These should both be the same now.
 
+
+        tested_option.output = export_option.output
         tested_option.output.beautify = false
         tested_option.output.semicolons = false
 
@@ -130,13 +180,23 @@ describe("The build script", function() {
         done()
       })
   	})
+
+  	it("should warn ans exit when the tested-options file does not exist", function(done) {
+      build_process("--tested-options test/unit_tested_option_nope.json --compress unused=false,unsafe,nah,sequences --beautify saywhat=false")
+      build_script.on("exit", function(exit_code) {
+         // 9 is the exit code for early returns in the build_script
+         expect(parseInt(exit_code)).to.equal(9)
+         expect(stdout).to.include("The tested options file specified does not exist. ")
+         done()
+      })
+    })
   	it("should not make the changes of non-tested build options which are attempted to be set", function(done) {
 
-      build_process("--compress unused,unsafe,nah --beautify saywhat=false")
-      build_script.on("close", (exit_code) => {
-        code = parseInt(exit_code)
+      build_process("--tested-options test/unit_tested_option_b.json --compress unused=false,unsafe,nah,sequences --beautify saywhat=false")
+      build_script.on("exit", function(exit_code) {
+        expect(parseInt(exit_code)).to.equal(5)
 
-        var tested_option = require(path.join(__dirname, "/../lib/tested_option.json"))
+        var tested_option = require(require("../").build_information.tested_options_file)
         var export_option = require("../").build_option
         // Delete the three build options which are set internally.
         delete export_option.compress.unused
@@ -145,12 +205,36 @@ describe("The build script", function() {
         delete export_option.output.preamble
         delete tested_option.output.preamble
         // These should both be the same now.
+        tested_option.compress = export_option.compress
+        tested_option.output = export_option.output
+        tested_option.compress.unused = true
+        tested_option.compress.sequences = true
         expect(tested_option).to.deep.equal(export_option)
         done()
       })
+    })
+  	it("odd cli arguments are processed appropriately", function(done) {
+
+      build_process("--tested-options test/unit_tested_option_a.json --mangle _ --compress unused=false,unsafe,nah,_un=ff,_,_=aa --beautify saywhat=false")
+      build_script.on("exit", function(exit_code) {
+        expect(parseInt(exit_code)).to.equal(5)
+
+        var tested_file = require("../").build_information.tested_options_file
+        var export_option = require("../").build_option
+        expect(stdout).to.include("Option compress.nah is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
+        expect(stdout).to.include("Option compress._un is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
+        expect(stdout).to.include("Option output.saywhat is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
+        expect(stdout).to.include("Option compress.unused is set internally. Therefore it will not be re-set.")
+
+        expect(export_option.compress).to.deep.equal({unused: false})
+        expect(export_option.mangle).to.deep.equal({reserved: ["define", "require", "requirejs"]})
+
+        done()
+      })
   	})
-  	//it("should configure the preamble build option differently", function(done) {
-	  //})
-	})
+
+
+  })
+
 
 })

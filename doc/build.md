@@ -18,6 +18,7 @@
 Brace UMD is built with UglifyJS-3 and is tested on Windows 10 and Ubuntu 16. The command line program *(bin/build_umd)* accepts the exact same parameters as UglifyJS-3 does. E.g.
 
     build_umd --beautify comments="all",beautify=false
+
 Given the above command, the uglified data in the build directory will contain any comments included in the lib source. The builds will also not have beautified code. See <https://github.com/mishoo/UglifyJS2> for further reading on command line usage.
 
 Only some of the uglify-js options can be used sense the build code needs to be unit tested. Therefore, only options which are defined in the *lib/tested_option.json* file will be configurable. The *build_umd* script will warn when a non-tested option is attempted to be set. E.g
