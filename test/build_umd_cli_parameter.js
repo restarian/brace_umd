@@ -42,43 +42,25 @@ describe("The build script", function() {
 
     build_script.stdout.on("data", (data) => {
       stdout += data.toString()
-
     })
 
     build_script.stderr.on("data", (data) => {
       stderr += data.toString()
     })
-  }
 
-  var flatten = function(arg) {
-    var obj = {}
-    for ( var a in arg ) {
-      if ( typeof arg[a] === "object" ) {
-          obj[a] = (arg[a].constructor === Array) && [] || {}
-      } else {
-        obj[a] = a
-      }
-      for ( var b in arg[a] )
-        obj[a][b] = arg[a][b]
-    }
-    return obj
   }
 
   afterEach(function(){
 
     build_script = null
     stdout = stderr = code = ""
-    // The module need to be reloaded again so that it is idempotent.
-    /*
-    for ( var id in require.cache ) {
-      if ( path.parse(id).base === "exporter.js") {
+    // The module need to be reloaded again so that it is idempotent after changes are made to it.
+    for ( var id in require.cache )
+      if ( path.parse(id).base === "exporter.js")
         delete require.cache[id]
-      }
-      if ( path.parse(id).base === "tested_option.json") {
+      else if ( path.parse(id).base === "tested_option.json")
         delete require.cache[id]
-      }
-    }
-    */
+
   })
 
   describe("as a shell process", function() {
@@ -90,8 +72,8 @@ describe("The build script", function() {
       build_script.on("close", function(exit_code) {
 
         //code = parseInt(exit_code)
-        var tested_option = flatten(Object.create(require(path.join(__dirname, "/../lib/tested_option.json"))))
-        var export_option = flatten(Object.create(require("../").build_option))
+        var tested_option = require(path.join(__dirname, "/../lib/tested_option.json"))
+        var export_option = require("../").build_option
         // Delete the three build options which are set internally.
         delete export_option.compress.unused
         delete export_option.mangle.reserved
@@ -126,13 +108,13 @@ describe("The build script", function() {
         done()
       })
     })
-  	it.skip("should not make the changes of internally and non-tested build options which attempted to be set", function(done) {
+  	it("should not make the changes of internally and non-tested build options which attempted to be set", function(done) {
 
       build_process("--compress unused,unsafe,nah --mangle reserved=true --beautify beautify=false,saywhat=false,semicolons=false")
       build_script.on("close", function(exit_code) {
 
-        var tested_option = flatten(Object.create(require(path.join(__dirname, "/../lib/tested_option.json"))))
-        var export_option = flatten(Object.create(require("../").build_option))
+        var tested_option = require(path.join(__dirname, "/../lib/tested_option.json"))
+        var export_option = require("../").build_option
         // Delete the three build options which are set internally.
         delete export_option.compress.unused
         delete export_option.mangle.reserved
@@ -154,8 +136,8 @@ describe("The build script", function() {
       build_script.on("close", (exit_code) => {
         code = parseInt(exit_code)
 
-        var tested_option = flatten(Object.create(require(path.join(__dirname, "/../lib/tested_option.json"))))
-        var export_option = flatten(Object.create(require("../").build_option))
+        var tested_option = require(path.join(__dirname, "/../lib/tested_option.json"))
+        var export_option = require("../").build_option
         // Delete the three build options which are set internally.
         delete export_option.compress.unused
         delete export_option.mangle.reserved
