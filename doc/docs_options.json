@@ -7,7 +7,9 @@
     "preamble": true,
     "comments": false
   },
-  "compress": false,
+  "compress": {
+    "sequences": false
+  },
   "warnings": true,
-  "mangle": true 
+  "mangle": true
 }
