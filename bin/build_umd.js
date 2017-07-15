@@ -364,6 +364,7 @@ tested_option.output.preamble = tested_option.output.preamble === true && ("/* G
 if ( tested_option.mangle ) {
   if ( typeof tested_option.mangle !== "object" )
     tested_option.mangle = {}
+  // The code snippit will not work if these namspaces are mangled.
   tested_option["mangle"]["reserved"] = ["define", "require", "requirejs"]
 }
 
@@ -371,6 +372,7 @@ if ( tested_option.compress ) {
   if ( typeof tested_option.compress !== "object" ) {
     tested_option.compress = {}
   }
+  // Uglify will see the entire function as unused so this must be set to false to retain the script if it is to be compressed.
   tested_option["compress"]["unused"] = false
 }
 
@@ -378,12 +380,12 @@ console.log("Options to be used with uglify-js:\n", tested_option)
 var location = path.join(lib, "../build/build_options_") + info.version + ".json"
 
 fs.writeFile(location, JSON.stringify(tested_option), (err) => {
-  if (err) { throw err; return }
+  if (err) { console.log(err); process.exit(7) }
   console.log("Exported build options:", location)
 
   // This will create the run-time source code from the lib source. It is is fine to use the source in the lib directory if the wrappers and extra effeciency is not needed.
   fs.readFile(lib + "umd.js", (err, data) => {
-    if (err) { throw err; return }
+    if (err) { console.log(err); process.exit(7) }
 
     // Get the raw source and run it through the minifier with a glabal scope variable so that it is seen as usefull by UglifyJS (otherwise it is just as good as nothing to the run-time
     // so UglifyJS will discard it).
@@ -396,13 +398,13 @@ fs.writeFile(location, JSON.stringify(tested_option), (err) => {
     var build_dir = path.join(lib, "../build/")
     location = build_dir + "umd_"+info.version+".js"
   	fs.writeFile(location, out, (err) => {
-    	if (err) { throw err; return }
+      if (err) { console.log(err); process.exit(7) }
       console.log("Exported uglify-js primary script build:", location)
 
       location = build_dir + "build_information_"+info.version+".json"
       var build_info = { tested_options_file: tested_option_file }
     	fs.writeFile(location, JSON.stringify(build_info), (err) => {
-      	if (err) { throw err; return }
+        if (err) { console.log(err); process.exit(7) }
         console.log("Exported umb build information data file:", location)
     /*
         location = build_dir + "umd_commonjs_"+info.version+".js"
@@ -413,16 +415,16 @@ fs.writeFile(location, JSON.stringify(tested_option), (err) => {
           // Write out the wrapping fragment for use with the requirejs optimizer (r.js). This should go in the {wrap {start: []} } part of the r.js optimizer build file.
           location = build_dir + "wrap_start_umd_"+info.version+".frag"
         	fs.writeFile(location, out.substr(0, out.length-2), (err) => {
-            if (err) { throw err; return }
+            if (err) { console.log(err); process.exit(7) }
         		console.log("Exported uglify-js build end wrap:", location)
 
             // and also create a simple closing wrapper.
             location = build_dir + "wrap_end_umd_"+info.version+".frag"
             var end_wrap = '})(this, typeof require !== "undefined"&&require||undefined, typeof requirejs !== "undefined"&&requirejs||undefined, typeof define !== "undefined"&&define||undefined)'
             fs.writeFile(location, end_wrap, (err) => {
-              if (err) { throw err; return }
+              if (err) { console.log(err); process.exit(7) }
           		console.log("Exported uglify-js build end wrap:", location)
-              // so windows cli will return back to the prompt.
+              // This will signal that the script has ended successfully
               process.exit(5)
           	})
      //   	})
