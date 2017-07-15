@@ -21,7 +21,7 @@
 **Bonuses:**
 * well commented, professional code
 * thoroughly documented
-* deeply unit tested with multiple platforms
+* vast and deep unit tests on multiple platforms
 
 **Caveats:**
   * An id string must be used in order to have native global Object support in environments other than nodejs. Otherwise, it can be omitted to only supply CommonJs, RequireJs, AMDefine and r.js support.
