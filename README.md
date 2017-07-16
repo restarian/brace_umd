@@ -28,7 +28,7 @@
   * An id string must be used in order to have native global Object support in environments other than nodejs. Otherwise, it can be omitted to only supply CommonJs, RequireJs, AMDefine and r.js support.
 
 
-### Developed for Windows 10 and Ubuntu 16 with [![Bash on Windows](https://raw.githubusercontent.com/restarian/brace_umd/master/doc/image/bash_windows_logo.png)](https://github.com/Microsoft/BashOnWindows)
+[![Bash on Windows](https://raw.githubusercontent.com/restarian/brace_umd/master/doc/image/ubuntu_windows_logo.png)](https://github.com/Microsoft/BashOnWindows)
 
 
 **Below are some ways to use the UMD. The following code works in nodejs or the browser:**
