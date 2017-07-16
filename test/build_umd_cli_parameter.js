@@ -90,7 +90,7 @@ describe("The build script", function() {
 
   	it("should provide a warning message when internally set options are attempted to be set", function(done) {
 
-      build_process("--tested-options test/unit_tested_option_a.json --compress unused,unsafe,nope mangle reserved=[]")
+      build_process("--tested-options test/unit_tested_option_a.json --compress unused,unsafe,nope --mangle reserved=[]")
       build_script.on("exit", function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
         var tested_file = require("../").build_information.tested_options_file
