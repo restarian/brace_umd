@@ -2,7 +2,8 @@
 # Brace UMD
 ### A unified module definition script to support modules written with Requirejs, AMDefine and CommonJs syntax while working seamlessly with the r.js optimizer and the native global Object.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/j9w4v3romfw971y9/branch/master?svg=true)](https://ci.appveyor.com/project/restarian/brace-umd/branch/master) [![Build Status](https://travis-ci.org/restarian/brace_umd.svg?branch=master)](https://travis-ci.org/restarian/brace_umd)
+[![Build status](https://ci.appveyor.com/api/projects/status/j9w4v3romfw971y9/branch/master?svg=true)](https://ci.appveyor.com/project/restarian/brace-umd/branch/master) [![Build Status](https://travis-ci.org/restarian/brace_umd.svg?branch=master)](https://travis-ci.org/restarian/brace_umd) [![Downloads](https://img.shields.io/npm/dm/brace_umd.svg?svg=true)](https://npmjs.org/package/brace_umd)
+
 ------
 
 ### Document pages
@@ -27,10 +28,7 @@
   * An id string must be used in order to have native global Object support in environments other than nodejs. Otherwise, it can be omitted to only supply CommonJs, RequireJs, AMDefine and r.js support.
 
 
-Tested on Windows 10 and Ubuntu 16 with the help of [Bash on Windows](https://github.com/Microsoft/BashOnWindows) :)
--------
-![Bash_on_windows](https://raw.githubusercontent.com/restarian/brace_umd/master/doc/image/bash_on_windows_logo.jpg)
-
+### **Developed for Windows 10 and Ubuntu 16 with [![Bash on Windows](https://raw.githubusercontent.com/restarian/brace_umd/master/doc/image/bash_windows_logo.png)] (https://github.com/Microsoft/BashOnWindows)
 **Below are some ways to use the UMD. The following code works in nodejs or the browser:**
 ```javascript
 // A pretty output of the minified script used below
