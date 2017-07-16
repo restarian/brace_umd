@@ -1,8 +1,6 @@
 version: 1.0.{build}
 
 clone_depth: 1
-build:
-  verbosity: minimal
 notifications:
 - provider: Email
   to:
