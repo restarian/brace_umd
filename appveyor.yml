@@ -1,0 +1,32 @@
+version: 1.0.{build}
+
+clone_depth: 1
+build:
+  verbosity: minimal
+notifications:
+- provider: Email
+  to:
+  - robertsteckroth@gmail.com
+  subject: A Brace_UMD build has failed.
+  on_build_success: false
+  on_build_failure: true
+  on_build_status_changed: false
+
+
+environment:
+  matrix:
+    # node.js
+    - nodejs_version: 4
+    - nodejs_version: 6
+
+install:
+  - npm install
+
+build: off
+
+test_script:
+  - node --version && npm --version
+  - npm test
+
+matrix:
+  fast_finish: false

@@ -2,6 +2,7 @@
 # Brace UMD
 ### A unified module definition script to support modules written with Requirejs, AMDefine and CommonJs syntax while working seamlessly with the r.js optimizer and the native global Object.
 
+[![Build status](https://ci.appveyor.com/api/projects/status/j9w4v3romfw971y9/branch/master?svg=true)](https://ci.appveyor.com/project/restarian/brace-umd/branch/master)
 
 ------
 
