@@ -3,13 +3,11 @@
     "beautify": true,
     "quote_keys": false,
     "semicolons": true,
-    "quote_style": 0,
+    "quote_style": 1,
     "preamble": true,
     "comments": false
   },
-  "compress": {
-    "sequences": false
-  },
+  "compress": false,
   "warnings": true,
   "mangle": true
 }

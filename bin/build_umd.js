@@ -364,7 +364,7 @@ for ( var a in options )
   else if ( typeof options[a] !== "object" )
     tested_option[a] = options[a]
   else {
-    tested_option[a] = options[a].constructor()
+    tested_option[a] = tested_option[a] || options[a].constructor()
     for ( var qualifier in options[a] )
       // Check to see if the options qualifier resided in the tested_option Object as well.
       if ( a+"."+qualifier === "compress.unused" || a+"."+qualifier === "mangle.reserved" )
