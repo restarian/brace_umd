@@ -220,13 +220,15 @@ describe("The build script", function() {
         expect(parseInt(exit_code)).to.equal(5)
 
         var tested_file = require("../").build_information.tested_options_file
+        var tested_options = require(tested_file)
         var export_option = require("../").build_option
         expect(stdout).to.include("Option compress.nah is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
         expect(stdout).to.include("Option compress._un is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
         expect(stdout).to.include("Option output.saywhat is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
         expect(stdout).to.include("Option compress.unused is set internally. Therefore it will not be re-set.")
 
-        expect(export_option.compress).to.deep.equal({unused: false})
+        tested_options.compress.unused = false
+        expect(export_option.compress).to.deep.equal(tested_options.compress)
         expect(export_option.mangle).to.deep.equal({reserved: ["define", "require", "requirejs"]})
 
         done()
