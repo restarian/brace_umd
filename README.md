@@ -7,13 +7,15 @@
 ------
 
 ### Document pages
-* [Build](https://github.com/restarian/brace_umd/blob/master/doc/build.md)
+* [(Re)building the source](https://github.com/restarian/brace_umd/blob/master/doc/build.md)
 * [Use with r.js](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md)
 * [Specification](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
 * [Licenses](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
 * [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 
 ----
+
+[![Bash on Windows](https://raw.githubusercontent.com/restarian/brace_umd/master/doc/image/ubuntu_windows_logo.png)](https://github.com/Microsoft/BashOnWindows)
 
 **Author: Robert Steckroth, Bustout**
 
@@ -25,10 +27,7 @@
 * vast and deep unit tests on multiple platforms
 
 **Caveats:**
-  * An id string must be used in order to have native global Object support in environments other than nodejs. Otherwise, it can be omitted to only supply RequireJs, AMDefine and r.js support.
-
-
-[![Bash on Windows](https://raw.githubusercontent.com/restarian/brace_umd/master/doc/image/ubuntu_windows_logo.png)](https://github.com/Microsoft/BashOnWindows)
+  * An id string must be used in order to have native global Object support in environments other than nodejs. Otherwise, it can be omitted to supply only RequireJs, AMDefine and r.js support.
 
 
 **Below are some ways to use the UMD. The following code works in nodejs or the browser:**

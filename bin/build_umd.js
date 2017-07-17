@@ -93,14 +93,14 @@ else if (process.argv.indexOf("options") >= 0) program.helpInformation = functio
     }
     return text.join("\n");
 };
-program.option("--tested-options [file]", "Specify which tested options file to use.");
+program.option("--tested-options [file]", "Specify which tested options file to use. Default file is lib->.unit_tested_option.json. Beware: changing from the default requires knowledge of Brace Umd.");
 program.option("-c, --compress [options]", "Enable compressor/specify compressor options.", parse_js("compress", true));
 program.option("-m, --mangle [options]", "Mangle names/specify mangler options.", parse_js("mangle", true));
 program.option("--mangle-props [options]", "Mangle properties/specify mangler options.", parse_js("mangle-props", true));
 program.option("-b, --beautify [options]", "Beautify output/specify output options.", parse_js("beautify", true));
 //program.option("-o, --output <file>", "Output file (default STDOUT).");
 program.option("--comments [filter]", "Preserve copyright comments in the output.");
-program.option("--config-file <file>", "Read minify() options from JSON file.");
+program.option("--config-file <file>", "Read Uglify options from JSON file.");
 //program.option("-d, --define <expr>[=value]", "Global definitions.", parse_js("define"));
 //program.option("--ie8", "Support non-standard Internet Explorer 8.");
 //program.option("--keep-fnames", "Do not mangle/drop function names. Useful for code relying on Function.prototype.name.");
@@ -343,10 +343,10 @@ SOFTWARE.
  Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com>
 */
 
-// The only options that are known to be configurable (from unit tests), go here. Any options added to this Object is unsafe (all options listed below can be
-// changed however). The tested_option Object is kept in the project directory so that the unit tests have the same data as this program.
-
-tested_option_file = tested_option_file || (lib + "/.unit_tested_option.json")
+// The only options that are known to be configurable (via the unit tests), go in the tested-options josn file. Any options (properties), added to this json data will
+// be unsafe (any option property already listed there can be changed however). The json file for the tested_option file is kept in the project lib directory. The unit tests
+// specify other files for testing purposes only.
+tested_option_file = tested_option_file || (lib + ".unit_tested_option.json")
 if ( !fs.existsSync(tested_option_file) ) {
   console.log("The tested options file specified does not exist.", tested_option_file)
   process.exit(9)
@@ -364,13 +364,15 @@ for ( var a in options )
   else if ( typeof options[a] !== "object" )
     tested_option[a] = options[a]
   else {
-    tested_option[a] = tested_option[a] || options[a].constructor()
+    var tmp = tested_option[a]
+    // constructor is either a Object or an Array. It is ok if the Object is non-literal (e.g. new String()).
+    tested_option[a] = options[a].constructor()
     for ( var qualifier in options[a] )
-      // Check to see if the options qualifier resided in the tested_option Object as well.
-      if ( a+"."+qualifier === "compress.unused" || a+"."+qualifier === "mangle.reserved" )
+      // These options must be set in-order for Uglify to produce working r.js optimized code.
+      if ( a+"."+qualifier === "mangle.reserved" )
         console.log("Option", a + "." + qualifier, "is set internally. Therefore it will not be re-set.")
-
-      else if ( !(qualifier in tested_option[a]) )
+      // Check to see if the options qualifier resides in the tested_option Object as well.
+      else if ( !(qualifier in tmp) )
         console.log("Option", a + "." + qualifier, "is not defined in the tested options file:", tested_option_file, "-- Therefore it is not safe to use and will be skipped.")
       else
         tested_option[a][qualifier] = options[a][qualifier]
@@ -387,20 +389,20 @@ if ( tested_option.mangle ) {
   tested_option["mangle"]["reserved"] = ["define", "require", "requirejs"]
 }
 
+/*
 if ( tested_option.compress ) {
-  if ( typeof tested_option.compress !== "object" ) {
+  if ( typeof tested_option.compress !== "object" )
     tested_option.compress = {}
-  }
   // Uglify will see the entire function as unused so this must be set to false to retain the script if it is to be compressed.
   tested_option["compress"]["unused"] = false
 }
-
+*/
 
 console.log("Options to be used with uglify-js:\n", tested_option)
 console.log("Exporting data to build directory:", build_dir)
 
 var location = build_dir + "build_options_" + info.version + ".json"
-try { fs.writeFileSync(location, JSON.stringify(tested_option)) }
+try { fs.writeFileSync(location, JSON.stringify(tested_option, null, " ")) }
 catch(e) { console.log(e.message); process.exit(7) }
 console.log("Exported build options:", location)
 
@@ -426,16 +428,9 @@ console.log("Exported uglify-js primary script build:", location)
 
 location = build_dir + "build_information_"+info.version+".json"
 var build_info = { tested_options_file: tested_option_file }
-
-try { fs.writeFileSync(location, JSON.stringify(build_info)) }
+try { fs.writeFileSync(location, JSON.stringify(build_info, null, " ")) }
 catch(e) { console.log(e.message); process.exit(7) }
 console.log("Exported umb build information data file:", location)
-
-/*
-location = build_dir + "umd_commonjs_"+info.version+".js"
-fs.writeFileSync(location, "module.exports="+out)
-console.log("Exported uglify-js CommonJS module build:", location)
-*/
 
 // Write out the wrapping fragment for use with the requirejs optimizer (r.js). This should go in the {wrap {start: []} } part of the r.js optimizer build file.
 location = build_dir + "wrap_start_umd_"+info.version+".frag"
@@ -450,5 +445,5 @@ try { fs.writeFileSync(location, end_wrap) }
 catch(e) { console.log(e.message); process.exit(7) }
 console.log("Exported uglify-js build end wrap:", location)
 
-// This will signal that the script has ended successfully
+// This will signal that the script has ended successfully. The unit tests rely on this returning 5
 process.exit(5)

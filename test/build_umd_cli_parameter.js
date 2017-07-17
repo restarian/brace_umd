@@ -76,7 +76,6 @@ describe("The build script", function() {
         var tested_option = require(require("../").build_information.tested_options_file)
         var export_option = require("../").build_option
         // Delete the three build options which are set internally.
-        delete export_option.compress.unused
         delete export_option.mangle.reserved
         delete export_option.mangle.reserved
         // preamble is tough to match so it is ignored
@@ -94,7 +93,6 @@ describe("The build script", function() {
       build_script.on("exit", function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
         var tested_file = require("../").build_information.tested_options_file
-        expect(stdout).to.include("Option compress.unused is set internally. Therefore it will not be re-set.")
         expect(stdout).to.include("Option mangle.reserved is set internally. Therefore it will not be re-set.")
         expect(stdout).to.include("Option compress.unsafe is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
         expect(stdout).to.include("Option compress.nope is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
@@ -108,7 +106,6 @@ describe("The build script", function() {
       build_script.on("exit", function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
         var tested_file = require("../").build_information.tested_options_file
-        expect(stdout).to.include("Option compress.unused is set internally. Therefore it will not be re-set.")
         expect(stdout).to.include("Option compress.unsafe is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
         done()
       })
@@ -129,7 +126,7 @@ describe("The build script", function() {
         expect(tested_option.mangle).to.deep.equal({})
 
         expect(export_option.mangle).to.deep.equal({ reserved: [ 'define', 'require', 'requirejs' ] })
-        expect(export_option.compress).to.deep.equal({ unused: false, "sequences": false, "global_defs": { "DEBUG": false } })
+        expect(export_option.compress).to.deep.equal({ "sequences": false, "global_defs": { "DEBUG": false } })
         done()
       })
 
@@ -151,7 +148,7 @@ describe("The build script", function() {
         expect(tested_option.mangle).to.equal(false)
 
         expect(export_option.mangle).to.deep.equal({ reserved: [ 'define', 'require', 'requirejs' ] })
-        expect(export_option.compress).to.deep.equal({ unused: false })
+        //expect(export_option.compress).to.deep.equal()
         done()
       })
     })
@@ -235,18 +232,34 @@ describe("The build script", function() {
       })
   	})
 
-  	it("build for the docs", function(done) {
+  	it.skip("an empty config-file is accepted and used appropriately", function(done) {
 
-      build_process("--config-file doc/doc_config.json")
+      // build_config_a.json in an empty Object
+      build_process("--config-file test/build_config_a.json")
       build_script.on("exit", function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
-        expect(true).to.equal(true)
+        var tested_file = require("../").build_information.tested_options_file
+        var tested_option = require(tested_file)
+        var export_option = require("../").build_option
+
+        var tested_mangle = tested_option.mangle
+        tested_options.mangle.reserved = ["define", "require", "requirejs"]
+        expect(export_option.mangle).to.deep.equal(tested_mangle)
+
 
         done()
       })
   	})
 
+  	it("a bare bones build config-file is accepted and used appropriately", function(done) {
+
+      build_process("--config-file test/build_config_a.json")
+      build_script.on("exit", function(exit_code) {
+        expect(parseInt(exit_code)).to.equal(5)
+      })
+    })
+
+
+
   })
-
-
 })
