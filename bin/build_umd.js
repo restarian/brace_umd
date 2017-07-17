@@ -346,7 +346,7 @@ SOFTWARE.
 // The only options that are known to be configurable (from unit tests), go here. Any options added to this Object is unsafe (all options listed below can be
 // changed however). The tested_option Object is kept in the project directory so that the unit tests have the same data as this program.
 
-tested_option_file = tested_option_file || (lib + "/tested_option.json")
+tested_option_file = tested_option_file || (lib + "/.unit_tested_option.json")
 if ( !fs.existsSync(tested_option_file) ) {
   console.log("The tested options file specified does not exist.", tested_option_file)
   process.exit(9)
@@ -445,7 +445,7 @@ console.log("Exported uglify-js build end wrap:", location)
 
 // and also create a simple closing wrapper.
 location = build_dir + "wrap_end_umd_"+info.version+".frag"
-var end_wrap = '})(this, typeof require !== "undefined"&&require||undefined, typeof requirejs !== "undefined"&&requirejs||undefined, typeof define !== "undefined"&&define||undefined)'
+var end_wrap = "})(this)"
 try { fs.writeFileSync(location, end_wrap) }
 catch(e) { console.log(e.message); process.exit(7) }
 console.log("Exported uglify-js build end wrap:", location)

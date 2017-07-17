@@ -235,6 +235,16 @@ describe("The build script", function() {
       })
   	})
 
+  	it("build for the docs", function(done) {
+
+      build_process("--config-file doc/doc_config.json")
+      build_script.on("exit", function(exit_code) {
+        expect(parseInt(exit_code)).to.equal(5)
+        expect(true).to.equal(true)
+
+        done()
+      })
+  	})
 
   })
 
