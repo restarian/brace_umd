@@ -15,5 +15,6 @@
   },
   "warnings": true,
   "mangle": {
+      "properties": false
   }
 }
