@@ -378,6 +378,7 @@ for ( var a in options )
         build_option[a][qualifier] = options[a][qualifier]
   }
 
+
 // The preamble options is little special. A default string will be provided if the output.preamble option is set to true. Setting it to false will disable
 // it like in Uglify-js. Setting a string will use that for the preamble.
 
@@ -396,8 +397,9 @@ if ( build_option.mangle ) {
   if ( !build_option.mangle.reserved )
     build_option.mangle.reserved = []
 
+  // The mangle.reserved option is transformed to an Array so that the internal namspaces can be used.
   if ( build_option.mangle.reserved.constructor !== Array )
-    build_option.mangle.reserved = []
+    build_option.mangle.reserved = [build_option.mangle.reserved]
   // The umd script will not work if these namspaces are mangled.
   build_option.mangle.reserved = build_option.mangle.reserved.concat(["define", "require", "requirejs"])
 }
@@ -439,7 +441,7 @@ console.log("Exported umb build information data file:", location)
 
 // Write out the wrapping fragment for use with the requirejs optimizer (r.js). This should go in the {wrap {start: []} } part of the r.js optimizer build file.
 location = build_dir + "wrap_start_umd_"+info.version+".frag"
-try { fs.writeFileSync(location, out.substr(0, out.length-2)) }
+try { fs.writeFileSync(location, out.substr(0, out.length-2) + ";") }
 catch(e) { console.log(e.message); process.exit(7) }
 console.log("Exported uglify-js build end wrap:", location)
 

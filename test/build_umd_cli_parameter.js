@@ -89,7 +89,8 @@ describe("The build script", function() {
         done()
       })
     })
-  	it("create the proper mangle build option output with the unit test file a", function(done) {
+
+  	it("create the correct mangle build option output with the unit test file a", function(done) {
 
       build_process("--tested-options test/unit_tested_option_a.json --mangle reservedd=true,properties --beautify beautify=false,saywhat=false,semicolons=false")
       build_script.on("exit", function(exit_code) {
@@ -107,7 +108,8 @@ describe("The build script", function() {
       })
 
     })
-  	it("create the proper mangle and compress output with the unit test file b", function(done) {
+
+  	it("create the correct mangle and compress output with the unit test file b", function(done) {
 
       build_process("--tested-options test/unit_tested_option_b.json --mangle reservedd=true,properties --compress --beautify beautify=false,saywhat=false,semicolons=false")
       build_script.on("exit", function(exit_code) {
@@ -136,6 +138,23 @@ describe("The build script", function() {
          done()
       })
     })
+
+  	it("config file with all options set to false will export correctly", function(done) {
+
+      build_process("--config-file test/build_config_b.json")
+      build_script.on("exit", function(exit_code) {
+        expect(parseInt(exit_code)).to.equal(5)
+        var export_option = require("../").build_option
+        expect(export_option).to.be.an("object")
+
+        expect(export_option.compress).to.equal(false)
+        expect(export_option.mangle).to.equal(false)
+        expect(export_option.output).to.have.keys("preamble")
+
+        done()
+      })
+    })
+
   	it("should not make the changes of non-tested build options which are attempted to be set", function(done) {
 
       build_process("--tested-options test/unit_tested_option_d.json --compress unused=false,unsafe,nah,sequences --beautify saywhat=false")
@@ -150,6 +169,8 @@ describe("The build script", function() {
         done()
       })
     })
+
+
   	it("odd cli arguments are processed appropriately", function(done) {
 
       build_process("--tested-options test/unit_tested_option_d.json --mangle _ --compress=false --compress properties=false,unsafe,nah,_un=ff,_,_=aa --beautify saywhat=false")
@@ -172,6 +193,62 @@ describe("The build script", function() {
       })
   	})
 
+  	it("the mangle option is omitted if mangle not specified at all", function(done) {
+
+      // build_config_a.json in an empty Object
+      build_process("--config-file test/build_config_a.json")
+      build_script.on("exit", function(exit_code) {
+        expect(parseInt(exit_code)).to.equal(5)
+        var export_option = require("../").build_option
+        expect(export_option).to.be.an("object")
+        expect(export_option.mangle).to.not.be.an("object")
+        done()
+      })
+  	})
+
+  	it("the reserved option appends internally used namspaces when only specified to mangle", function(done) {
+
+      // build_config_a.json in an empty Object
+      build_process("--config-file test/build_config_a.json --mangle")
+      build_script.on("exit", function(exit_code) {
+        expect(parseInt(exit_code)).to.equal(5)
+        var export_option = require("../").build_option
+        expect(export_option).to.be.an("object")
+        expect(export_option.mangle).to.be.an("object")
+        expect(export_option.mangle.reserved).to.deep.equal([ "define", "require", "requirejs" ])
+        done()
+      })
+  	})
+
+  	it("the reserved option appends internally used namspaces when it is set to false", function(done) {
+
+      // build_config_a.json in an empty Object
+      build_process("--config-file test/build_config_a.json --mangle reserved=false")
+      build_script.on("exit", function(exit_code) {
+        expect(parseInt(exit_code)).to.equal(5)
+        var export_option = require("../").build_option
+        expect(export_option).to.be.an("object")
+        expect(export_option.mangle).to.be.an("object")
+        expect(export_option.mangle.reserved).to.deep.equal([ "define", "require", "requirejs" ])
+        done()
+      })
+  	})
+
+
+  	it("the reserved option appends internally used namspaces to a Array parameter", function(done) {
+
+      // build_config_a.json in an empty Object
+      build_process("--config-file test/build_config_a.json --mangle reserved=[cool,joes,false]")
+      build_script.on("exit", function(exit_code) {
+        expect(parseInt(exit_code)).to.equal(5)
+        var export_option = require("../").build_option
+        expect(export_option).to.be.an("object")
+        expect(export_option.mangle).to.be.an("object")
+        expect(export_option.mangle.reserved).to.deep.equal([ "cool", "joes", false, "define", "require", "requirejs" ])
+        done()
+      })
+  	})
+
   	it("an empty config-file is accepted and used appropriately", function(done) {
 
       // build_config_a.json in an empty Object
@@ -189,6 +266,15 @@ describe("The build script", function() {
       })
   	})
 
+  	it("this test is to build the project as the doc pages were", function(done) {
+
+      build_process("--config-file doc/doc_config.json")
+      build_script.on("exit", function(exit_code) {
+        expect(parseInt(exit_code)).to.equal(5)
+        done()
+
+      })
+    })
 
   })
 })

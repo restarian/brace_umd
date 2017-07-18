@@ -27,6 +27,7 @@
 * vast and deep unit tests on multiple platforms
 
 **Caveats:**
+  * Requires nodejs version 5 or greater
   * An id string must be used in order to have native global Object support in environments other than nodejs. Otherwise, it can be omitted to supply only RequireJs, AMDefine and r.js support.
 
 
