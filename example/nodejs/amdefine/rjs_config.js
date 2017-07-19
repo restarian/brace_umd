@@ -3,7 +3,7 @@
 	baseUrl: "./",
   out: "build/example_module.js",
   //optimize: "uglify2",
-  optimize: "none",
+  //optimize: "none",
   //uglify2: nodeRequire("brace_umd").build_option_extend({output: {beautify: true}}),
   //uglify2: nodeRequire("brace_umd").build_option_extend(),
 	wrap: {
