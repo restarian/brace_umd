@@ -1,6 +1,10 @@
 
-define(["./module_one"], function(mod) {
+define(["module_one", "second_module"], function(one, two) {
+  console.log("entry module init")
+  return {
+    id: "entry",
+    one: one,
+    two: two
+  }
 
-  console.log(this)
-  console.log(mod)
 })

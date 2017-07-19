@@ -34,7 +34,8 @@ build_dir = path.join(lib, "../build/"),
 info = require(lib + "../package.json"),
 UglifyJS = require("uglify-js"),
 program = require("commander"),
-tested_option_file = ""
+tested_option_file = "",
+bare_mangle_properties = []
 
 // The following program includes code from another module (UglifyJS). The license and code follows until specified otherwise.
 /*
@@ -161,9 +162,9 @@ if (program.mangleProps) {
     } else {
         if (typeof program.mangleProps != "object") program.mangleProps = {};
         if (!Array.isArray(program.mangleProps.reserved)) program.mangleProps.reserved = [];
-        require("../tools/domprops").forEach(function(name) {
-            UglifyJS._push_uniq(program.mangleProps.reserved, name);
-        });
+//        require(path.parse(require.resolve("uglify-js")).dir + "/../tools/domprops").forEach(function(name) {
+ //           UglifyJS._push_uniq(program.mangleProps.reserved, name);
+  //      });
     }
     if (typeof options.mangle != "object") options.mangle = {};
     options.mangle.properties = program.mangleProps;
@@ -348,40 +349,54 @@ SOFTWARE.
 // specify other files for testing purposes only.
 tested_option_file = tested_option_file || (lib + ".unit_tested_option.js")
 try { var tested_option = fs.readFileSync(tested_option_file).toString() }
-catch(e) { console.log(e.message); process.exit(7) }
+catch(e) { console.log(e); process.exit(7) }
 
 
 // This loops through the entire generated options object (via commander), and verifies that the Object qualifiers are contained in the tested_option
 // Object. A warning is emited and the options is not transfered to the tested_option Object if it is not set prior to this loop.
 //console.log(tested_option)
+var tested_option = UglifyJS.minify("var a="+tested_option, {compress: false, output: {semicolons: false, quote_keys: true, quote_style: 2}})
+if ( tested_option.error ) {
+  console.log(tested_option.error)
+  process.exit(7)
+}
 
-var tested_option = JSON.parse(UglifyJS.minify("var a="+tested_option, {compress: false, output: {semicolons: false, quote_keys: true, quote_style: 2}}).code.replace(/^var a=/, ""))
+try { tested_option = JSON.parse(tested_option.code.replace(/^var a=/, "")) }
+catch(e) { console.log(e); process.exit(7) }
 
 var build_option = {}
-// Loop through the options Object set by the commander code. These values will be tranfered to the tested_option Object the qualifier is already define in the tested_option Object.
-for ( var a in options )
-  if ( !(a in tested_option) )
-    console.log("Option", a, "is not defined in the tested options file:", tested_option_file, "-- Therefore it is not safe to use and will be skipped.")
-  else if ( typeof options[a] !== "object" )
-    build_option[a] = options[a]
-  else {
-    // constructor is either a Object or an Array. It is ok if the Object is non-literal (e.g. new String()).
-    build_option[a] = options[a].constructor()
-    for ( var qualifier in options[a] )
-      // These options must be set in-order for Uglify to produce working r.js optimized code.
-      //if ( a+"."+qualifier === "compress.unused" || a+"."+qualifier === "mangle.reserved" )
-       // console.log("Option", a + "." + qualifier, "is set internally. Therefore it will not be re-set.")
-      // Check to see if the options qualifier resides in the tested_option Object as well.
-      if ( typeof tested_option[a] !== "object" || !(qualifier in tested_option[a]) )
-        console.log("Option", a + "." + qualifier, "is not defined in the tested options file:", tested_option_file, "-- Therefore it is not safe to use and will be skipped.")
-      else
-        build_option[a][qualifier] = options[a][qualifier]
-  }
 
+var parse_option_as_object = function(opt, build_obj, test_obj, prefix) {
+  // The job of this is itterate over the entire options Object and set all of the data which is contained in the tested_option Object to the build_option Object.
+  // This way only options which are known to be safe with the umd exporter are used.
+
+  for ( var a in opt )
+    if ( typeof test_obj !== "object" || !(a in test_obj) ) {
+      console.log("Option", prefix + (prefix&&"."||"") + a, "is not defined in the tested options file:", tested_option_file, "-- Therefore it is not safe to use and will be skipped.")
+    } else if ( typeof opt[a] !== "object" || opt[a].constructor === Array ) {
+      build_obj[a] = opt[a]
+    } else {
+      // constructor is either a Object or an Array. It is ok if the Object is non-literal (e.g. new String()).
+      build_obj[a] = opt[a].constructor()
+      for ( var qualifier in opt[a] )
+        if ( typeof test_obj[a] !== "object" || !(qualifier in test_obj[a]) ) {
+          console.log("Option", prefix + (prefix&&"."||"") + a + "." + qualifier, "is not defined in the tested options file:", tested_option_file, "-- Therefore it is not safe to use and will be skipped.")
+        }
+        else if ( typeof opt[a][qualifier] === "object" && !(opt[a][qualifier] instanceof Array) ) {
+          build_obj[a][qualifier] = opt[a][qualifier].constructor()
+          parse_option_as_object(opt[a][qualifier], build_obj[a][qualifier], test_obj[a][qualifier], prefix + (prefix&&"."||"") + a + "." + qualifier)
+        }
+        else {
+          build_obj[a][qualifier] = opt[a][qualifier]
+        }
+    }
+}
+
+// Start the options itteration.
+parse_option_as_object(options, build_option, tested_option, "")
 
 // The preamble options is little special. A default string will be provided if the output.preamble option is set to true. Setting it to false will disable
 // it like in Uglify-js. Setting a string will use that for the preamble.
-
 if ( !options.output || !("preamble" in options.output) || options.output.preamble === true ) {
   if ( typeof build_option.output !== "object" )
     build_option.output = {}
@@ -398,10 +413,23 @@ if ( build_option.mangle ) {
     build_option.mangle.reserved = []
 
   // The mangle.reserved option is transformed to an Array so that the internal namspaces can be used.
-  if ( build_option.mangle.reserved.constructor !== Array )
+  if ( !(build_option.mangle.reserved instanceof Array) )
     build_option.mangle.reserved = [build_option.mangle.reserved]
   // The umd script will not work if these namspaces are mangled.
   build_option.mangle.reserved = build_option.mangle.reserved.concat(["define", "require", "requirejs"])
+
+
+  if ( build_option.mangle.properties ) {
+    // This call will inject the reserved names that are required when mangle-props is used.
+    if ( typeof build_option.mangle.properties !== "object" )
+      build_option.mangle.properties = {reserved: []}
+
+    if ( !(build_option.mangle.properties.reserved instanceof Array) )
+      build_option.mangle.properties.reserved = []
+
+    // The property name "require" should be reserved in mangle properties are used.
+    build_option.mangle.properties.reserved.push("require")// = build_option.mangle.properties.reserved.
+  }
 }
 
 console.log("Options to be used with uglify-js:\n", build_option)
@@ -409,17 +437,22 @@ console.log("Exporting data to build directory:", build_dir)
 
 var location = build_dir + "build_options_" + info.version + ".json"
 try { fs.writeFileSync(location, JSON.stringify(build_option, null, " ")) }
-catch(e) { console.log(e.message); process.exit(7) }
+catch(e) { console.log(e); process.exit(7) }
 console.log("Exported build options:", location)
 
 var data = ""
 try { data = fs.readFileSync(lib + "umd.js") }
-catch(e) { console.log(e.message); process.exit(7) }
+catch(e) { console.log(e); process.exit(7) }
 
 // Fetch the build source and run it through the minifier with a glabal scope variable so that it is seen as usefull by UglifyJS (otherwise it is just as good
 // as nothing to the run-time so UglifyJS will discard it). Note: It is is fine to use the source in the lib directory (umd.js) instead of the built file if the wrappers
 // and work uglify does are not needed.
 var out = UglifyJS.minify("var discard_me="+data.toString(), build_option)
+if ( out.error ) {
+  console.log(out.error)
+  process.exit(7)
+}
+
 location = build_dir + "umd_"+info.version+".js"
 
 // Remove the "var z=" above so that it is an anonymouse function.
@@ -430,26 +463,26 @@ out += ")"
 
 location = build_dir + "umd_"+info.version+".js"
 try { fs.writeFileSync(location, out) }
-catch(e) { console.log(e.message); process.exit(7) }
+catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js primary script build:", location)
 
 location = build_dir + "build_information_"+info.version+".json"
-var build_info = { tested_options_file: tested_option_file }
+var build_info = { tested_options_file: tested_option_file, version: info.version.toString() }
 try { fs.writeFileSync(location, JSON.stringify(build_info, null, " ")) }
-catch(e) { console.log(e.message); process.exit(7) }
+catch(e) { console.log(e); process.exit(7) }
 console.log("Exported umb build information data file:", location)
 
 // Write out the wrapping fragment for use with the requirejs optimizer (r.js). This should go in the {wrap {start: []} } part of the r.js optimizer build file.
 location = build_dir + "wrap_start_umd_"+info.version+".frag"
 try { fs.writeFileSync(location, out.substr(0, out.length-2) + ";") }
-catch(e) { console.log(e.message); process.exit(7) }
+catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js build end wrap:", location)
 
 // and also create a simple closing wrapper.
 location = build_dir + "wrap_end_umd_"+info.version+".frag"
 var end_wrap = "})(this)"
 try { fs.writeFileSync(location, end_wrap) }
-catch(e) { console.log(e.message); process.exit(7) }
+catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js build end wrap:", location)
 
 // This will signal that the script has ended successfully. The unit tests rely on this returning 5

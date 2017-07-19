@@ -1,4 +1,12 @@
 {
-  "mangle": false,
+  "mangle": {
+    "test": {
+      "cools": "joes",
+      "cool": "joes",
+      "cool": "joes"
+    },
+    "properties": false
+  },
   "compress": false
+
 }

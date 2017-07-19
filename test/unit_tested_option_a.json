@@ -15,6 +15,11 @@
   },
   "warnings": true,
   "mangle": {
-      "properties": false
+      "properties": {
+          "reserved": false
+      },
+      "test": {
+        "cool": "joes"
+      }
   }
 }

@@ -103,7 +103,7 @@ describe("The build script", function() {
         expect(stdout).to.include("Option mangle.reservedd is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
         expect(export_option).to.be.an("object")
         expect(export_option.compress).to.be.a("undefined")
-        expect(export_option.mangle).to.deep.equal({reserved: ["define", "require", "requirejs"], properties: true})
+        expect(export_option.mangle).to.deep.equal({reserved: ["define", "require", "requirejs"], properties: {reserved: ["require"]}})
         done()
       })
 
@@ -111,7 +111,7 @@ describe("The build script", function() {
 
   	it("create the correct mangle and compress output with the unit test file b", function(done) {
 
-      build_process("--tested-options test/unit_tested_option_b.json --mangle reservedd=true,properties --compress --beautify beautify=false,saywhat=false,semicolons=false")
+      build_process("--tested-options test/unit_tested_option_b.json --mangle reservedd=true,properties=false --compress --beautify beautify=false,saywhat=false,semicolons=false")
       build_script.on("exit", function(exit_code) {
 
         expect(parseInt(exit_code)).to.equal(5)
@@ -124,7 +124,7 @@ describe("The build script", function() {
 
         expect(export_option).to.be.an("object")
         expect(export_option.compress).to.equal(true)
-        expect(export_option.mangle).to.deep.equal({ reserved: [ 'define', 'require', 'requirejs' ] })
+        expect(export_option.mangle).to.deep.equal({reserved: ["define", "require", "requirejs"]})
         done()
       })
     })
@@ -139,9 +139,23 @@ describe("The build script", function() {
       })
     })
 
+  	it("a config file with nested Object options works as expected", function(done) {
+
+      build_process("--config-file test/build_config_b.json --tested-options test/unit_tested_option_a.json")
+      build_script.on("exit", function(exit_code) {
+        var export_option = require("../").build_option
+        expect(export_option).to.be.an("object")
+        expect(export_option.output).to.have.keys("preamble")
+        expect(export_option.mangle).to.be.an("object")
+        expect(export_option.mangle.test).to.be.an("object")
+        expect(export_option.mangle.test.cool).to.equal("joes")
+        done()
+      })
+    })
+
   	it("config file with all options set to false will export correctly", function(done) {
 
-      build_process("--config-file test/build_config_b.json")
+      build_process("--config-file test/build_config_c.json")
       build_script.on("exit", function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
         var export_option = require("../").build_option
@@ -157,13 +171,13 @@ describe("The build script", function() {
 
   	it("should not make the changes of non-tested build options which are attempted to be set", function(done) {
 
-      build_process("--tested-options test/unit_tested_option_d.json --compress unused=false,unsafe,nah,sequences --beautify saywhat=false")
+      build_process("--tested-options test/unit_tested_option_a.json --compress unused=false,unsafe,nah,sequences --beautify saywhat=false")
       build_script.on("exit", function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
 
         var export_option = require("../").build_option
         expect(export_option).to.be.an("object")
-        expect(export_option.compress).to.deep.equal({unused: false, unsafe: true, sequences: true})
+        expect(export_option.compress).to.deep.equal({sequences: true})
         expect(export_option.output).to.have.any.keys("preamble")
         expect(export_option.compress).to.not.have.any.keys("nah")
         done()
@@ -173,7 +187,7 @@ describe("The build script", function() {
 
   	it("odd cli arguments are processed appropriately", function(done) {
 
-      build_process("--tested-options test/unit_tested_option_d.json --mangle _ --compress=false --compress properties=false,unsafe,nah,_un=ff,_,_=aa --beautify saywhat=false")
+      build_process("--tested-options test/unit_tested_option_a.json --mangle _ --compress properties=false,sequences=false,nah,_un=ff,_,_=aa --beautify saywhat=false")
       build_script.on("exit", function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
 
@@ -181,13 +195,14 @@ describe("The build script", function() {
         var export_option = require("../").build_option
         expect(stdout).to.include("Option compress.nah is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
         expect(stdout).to.include("Option compress._un is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
+        expect(stdout).to.include("Option mangle._ is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
         expect(stdout).to.include("Option compress._ is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
         expect(stdout).to.include("Option output.saywhat is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
 
         expect(export_option).to.be.an("object")
         expect(export_option.compress).to.be.an("object")
-        expect(export_option.compress.properties).to.equal(false)
-        expect(export_option.compress.unsafe).to.equal(true)
+        expect(export_option.compress).to.not.have.any.keys("properties")
+        expect(export_option.compress.sequences).to.equal(false)
 
         done()
       })
@@ -206,16 +221,19 @@ describe("The build script", function() {
       })
   	})
 
-  	it("the reserved option appends internally used namspaces when only specified to mangle", function(done) {
+  	it("the script appends internally used namspaces when --mangle-props is specified on the command line", function(done) {
 
       // build_config_a.json in an empty Object
-      build_process("--config-file test/build_config_a.json --mangle")
+      build_process("--config-file test/build_config_a.json --mangle-props")
       build_script.on("exit", function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
         var export_option = require("../").build_option
         expect(export_option).to.be.an("object")
         expect(export_option.mangle).to.be.an("object")
         expect(export_option.mangle.reserved).to.deep.equal([ "define", "require", "requirejs" ])
+        expect(export_option.mangle.properties).to.be.an("object")
+        expect(export_option.mangle.properties.reserved).to.be.an("array")
+        expect(export_option.mangle.properties.reserved).to.deep.equal([ "require" ])
         done()
       })
   	})
@@ -255,12 +273,12 @@ describe("The build script", function() {
       build_process("--config-file test/build_config_a.json")
       build_script.on("exit", function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
-        var tested_file = require("../").build_information.tested_options_file
+        var info = require("../").build_information
         var export_option = require("../").build_option
 
         expect(export_option).to.be.an("object")
         expect(export_option.output).to.be.an("object")
-        expect(export_option.output.preamble).to.equal("/* Generated by Brace_UMD 0.2.9 */")
+        expect(export_option.output.preamble).to.equal("/* Generated by Brace_UMD "+ info.version + " */" )
 
         done()
       })

@@ -9,7 +9,5 @@
   },
   "compress": false,
   "warnings": true,
-  "mangle": {
-    "properties": true
-  }
+  "mangle": { "properties": false }
 }
