@@ -1,0 +1,14 @@
+{
+  "output": {
+    "beautify": true
+  },
+  "compress": false,
+  "mangle": {
+    "test": {
+      "cool": "joes",
+      "cools": "joes",
+      "cool": "joes"
+    }
+  }
+
+}
