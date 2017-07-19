@@ -1,6 +1,6 @@
 {
   "name": "brace_umd",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "This script provides a unified module definition for the Requirejs and AMDefine syntax while staying seamlessly compliant with the r.js optimizer and factory based Objects.",
   "main": "lib/exporter.js",
   "dependencies": {
@@ -42,7 +42,6 @@
       "email": "robertsteckroth@gmail.com"
     }
   ],
-  "licenses": "MIT",
   "licenses": [
     {
       "type": "MIT",
