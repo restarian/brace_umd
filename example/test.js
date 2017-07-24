@@ -29,12 +29,9 @@ SOFTWARE.
 var expect = require("chai").expect
 var spawn = require("child_process").exec
 var path = require("path")
-var fs = require("fs")
 var requirejs = require("requirejs")
-//require("amd-loader")
-requirejs.config({
-  nodeRequire: require
-})
+var fs = require("fs")
+require("amd-loader")
 
 describe("Amdefine module loading after using r_js optimization", function() {
 
@@ -71,46 +68,13 @@ describe("Amdefine module loading after using r_js optimization", function() {
     }
   }
 
-  // An array with the values of the test direcotry is filtered to include all of the files included with the regex.
-  var config_file = fs.readdirSync("test/config").filter(function(value) { return RegExp(/^build_config_.*\.js/).test(value) }), config
-//config_file
-  ["build_config_d.json"].forEach(function(value) {
-    value = path.join("test/config/", value)
-
-    describe("Using config file "+ value, function() {
-    	it("after building the brace umd source", function(done) {
-        new spinner("", ["--config-file", value], undefined, function(exit_code) {
-          expect(parseInt(exit_code)).to.equal(5); done()
-        }, function(err) { expect(false).to.equal(true); done()
-        })
-      })
-
-      example_module_dir = path.join("example/nodejs/", "amdefine/")
-    	it.only("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module value will load", function(done) {
-        new spinner("r_js", ["-o", "./"+ example_module_dir + "rjs_config.js"], undefined, function() {
-          //requirejs(["require", path.join(process.cwd(), "/", example_module_dir, "build/", "entry")], function(require, library_module) {
-          requirejs(["require", "./example/nodejs/amdefine/build/entry"], function(require, library_module) {
-
-            var mod_one = require("module_one")
-            var mod_two = require("second_module")
-
-            expect(mod_one).to.be.an("object")
-            expect(mod_two).to.deep.equal({ id: "module_two" })
-
-            expect(mod_two).to.be.an("object")
-            expect(mod_two).to.deep.equal({ id: "module_two" })
-
-            expect(library_module).to.be.an("object")
-            expect(library_module).to.deep.equal({ id: "entry", module_two: { id: "module_two" }, second_module: { id: "second_module" } })
-
-            done()
-          })
-        }, function() {
-          expect(false).to.equal(true)
-          done()
-        })
-    	})
-  	})
-  })
+  describe("Using config file ", function() {
+  	it("the example module at will build using the rjs_config.js file and the correct module value will load", function(done) {
+      var a = require("./stuffss")
+      console.log(a)
+      require("entry")
+      done()
+    })
+	})
 
 })

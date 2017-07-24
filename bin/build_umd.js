@@ -392,7 +392,7 @@ var parse_option_as_object = function(opt, build_obj, test_obj, prefix) {
     }
 }
 
-// Start the options itteration.
+// Start the options iteration.
 parse_option_as_object(options, build_option, tested_option, "")
 
 // The preamble options is little special. A default string will be provided if the output.preamble option is set to true. Setting it to false will disable

@@ -95,7 +95,7 @@ describe("The build script", function() {
       build_process("--tested-options test/config/unit_tested_option_a.json --mangle reservedd=true,properties --beautify beautify=false,saywhat=false,semicolons=false")
       build_script.on("exit", function(exit_code) {
 
-        expect(parseInt(exit_code)).to.equal(5)
+      expect(parseInt(exit_code)).to.equal(5)
 
         var tested_file = require("../").build_information.tested_options_file
         var export_option = require("../").build_option

@@ -1,9 +1,9 @@
 
 
 define([], function() {
-  console.log("The first module in the example direcotry is set.")
-  return {
-    id: "module_one"
-  }
-
+  var id = "module_one"
+  console.log(id + " has initialized.")
+  var mod = {}
+  mod.id = id
+  return mod
 })

@@ -1,3 +1,6 @@
+var define = require("amdefine")(module)
 
-var a = require("./example/nodejs/amdefine/build/example_module.js")
-console.log(a)
+define(["./example/nodejs/amdefine/build/entry"], function() {
+	console.log(require("entry"))
+	console.log("dsdasdasd")
+})
