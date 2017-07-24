@@ -73,8 +73,7 @@ describe("Amdefine module loading after using r_js optimization", function() {
 
   // An array with the values of the test direcotry is filtered to include all of the files included with the regex.
   var config_file = fs.readdirSync("test/config").filter(function(value) { return RegExp(/^build_config_.*\.js/).test(value) }), config
-//config_file
-  ["build_config_d.json"].forEach(function(value) {
+  config_file.forEach(function(value) {
     value = path.join("test/config/", value)
 
     describe("Using config file "+ value, function() {
@@ -88,8 +87,7 @@ describe("Amdefine module loading after using r_js optimization", function() {
       example_module_dir = path.join("example/nodejs/", "amdefine/")
     	it.only("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module value will load", function(done) {
         new spinner("r_js", ["-o", "./"+ example_module_dir + "rjs_config.js"], undefined, function() {
-          //requirejs(["require", path.join(process.cwd(), "/", example_module_dir, "build/", "entry")], function(require, library_module) {
-          requirejs(["require", "./example/nodejs/amdefine/build/entry"], function(require, library_module) {
+          requirejs(["require", path.join(process.cwd(), "/", example_module_dir, "build/", "entry")], function(require, library_module) {
 
             var mod_one = require("module_one")
             var mod_two = require("second_module")
