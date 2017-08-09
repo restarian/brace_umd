@@ -87,6 +87,7 @@ describe("Amdefine module loading after using r_js optimization", function() {
       example_module_dir = path.join("example/nodejs/", "amdefine/")
     	it.only("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module value will load", function(done) {
         new spinner("r_js", ["-o", "./"+ example_module_dir + "rjs_config.js"], undefined, function() {
+
           requirejs(["require", path.join(process.cwd(), "/", example_module_dir, "build/", "entry")], function(require, library_module) {
 
             var mod_one = require("module_one")

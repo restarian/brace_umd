@@ -1,5 +1,6 @@
 {
 	"baseUrl": "./",
+  //"dir": "../../../../brace_build",
   "dir": "build",
 	"optimize": "none",
 	"modules": [
