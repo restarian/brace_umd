@@ -346,7 +346,7 @@ SOFTWARE.
  Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com>
 */
 
-// The only options that are known to be configurable (via the unit tests), go in the tested-options josn file. Any options (properties), added to this json data will
+// The only options that are known to be configurable (via the unit tests), go in the tested-options json file. Any options (properties), added to this json data will
 // be unsafe (any option property already listed there can be changed however). The json file for the tested_option file is kept in the project lib directory. The unit tests
 // specify other files for testing purposes only.
 tested_option_file = tested_option_file || (lib + ".unit_tested_option.js")
@@ -355,8 +355,7 @@ catch(e) { console.log(e); process.exit(7) }
 
 
 // This loops through the entire generated options object (via commander), and verifies that the Object qualifiers are contained in the tested_option
-// Object. A warning is emited and the options is not transfered to the tested_option Object if it is not set prior to this loop.
-//console.log(tested_option)
+// Object. A warning is emitted and the options is not transferred to the tested_option Object if it is not set prior to this loop.
 var tested_option = UglifyJS.minify("var a="+tested_option, {compress: false, output: {semicolons: false, quote_keys: true, quote_style: 2}})
 if ( tested_option.error ) {
   console.log(tested_option.error)
@@ -369,7 +368,7 @@ catch(e) { console.log(e); process.exit(7) }
 var build_option = {}
 
 var parse_option_as_object = function(opt, build_obj, test_obj, prefix) {
-  // The job of this is itterate over the entire options Object and set all of the data which is contained in the tested_option Object to the build_option Object.
+  // The job of this is iterate over the entire options Object and set all of the data which is contained in the tested_option Object to the build_option Object.
   // This way only options which are known to be safe with the umd exporter are used.
 
   for ( var a in opt )
@@ -413,7 +412,7 @@ if ( !options.output || !("preamble" in options.output) || options.output.preamb
 } else if ( options.output.preamble === false ) {
   delete build_option.output.preamble
 }
-// These can not be changed so it is provided after the input parsing haapens (it should not be defined in tested_option.json).
+// These can not be changed so it is provided after the input parsing happens (it should not be defined in tested_option.json).
 if ( build_option.mangle ) {
   if ( typeof build_option.mangle !== "object" )
     build_option.mangle = {reserved: []}
@@ -421,10 +420,10 @@ if ( build_option.mangle ) {
   if ( !build_option.mangle.reserved )
     build_option.mangle.reserved = []
 
-  // The mangle.reserved option is transformed to an Array so that the internal namspaces can be used.
+  // The mangle.reserved option is transformed to an Array so that the internal namespace can be used.
   if ( !(build_option.mangle.reserved instanceof Array) )
     build_option.mangle.reserved = [build_option.mangle.reserved]
-  // The umd script will not work if these namspaces are mangled.
+  // The umd script will not work if these namespaces are mangled.
   build_option.mangle.reserved = build_option.mangle.reserved.concat(["define", "require", "requirejs"])
 
   if ( build_option.mangle.properties ) {
@@ -452,9 +451,8 @@ var data = ""
 try { data = fs.readFileSync(lib + "umd.js") }
 catch(e) { console.log(e); process.exit(7) }
 
-// Fetch the build source and run it through the minifier with a glabal scope variable so that it is seen as usefull by UglifyJS (otherwise it is just as good
-// as nothing to the run-time so UglifyJS will discard it). Note: It is is fine to use the source in the lib directory (umd.js) instead of the built file if the wrappers
-// and work uglify does are not needed.
+// Fetch the build source and run it through the minifier. Note: It is is fine to use the source code in the lib directory (umd.js), instead of the 
+// built file (umd_[version].js), if the wrappers for r.js and uglifyjs minification are not needed.
 var out = UglifyJS.minify(data.toString(), build_option)
 if ( out.error ) {
   console.log(out.error)
@@ -474,21 +472,22 @@ try { fs.writeFileSync(location, JSON.stringify(build_info, null, " ")) }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported umb build information data file:", location)
 
-// Write out the wrapping fragment for use with the requirejs optimizer (r.js). This should go in the {wrap {start: []} } part of the r.js optimizer build file.
-
-// Find the first character which starts the closing brackit and function execution parenthesis to to separate them into two fragments.
+// Find the first character which starts the closing bracket and function execution parenthesis to to separate them into two fragments. This 
+// separates the function into two parts so that script can be injected into the function at the very bottom.
 var close_index = out.search(/\}[^\}]*$/)
 
+// Write out the wrapping fragment for use with the requirejs optimizer (r.js). This should go in the {wrap {start: []} } part of the r.js optimizer 
+// build file.
 location = build_dir + "wrap_start_umd_"+info.version+".frag"
 try { fs.writeFileSync(location, out.substr(0, close_index) + ";") }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js build end wrap:", location)
 
-// and also create a simple closing wrapper.
+// Also create the closing wrapper which is pulled from the minified source and write it to the build directory.
 location = build_dir + "wrap_end_umd_"+info.version+".frag"
 try { fs.writeFileSync(location, out.substr(close_index)) }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js build end wrap:", location)
 
-// This will signal that the script has ended successfully. The unit tests rely on this returning 5
+// This will signal that the script has ended successfully. The unit tests rely on this returning 5 to indicate a successful run.
 process.exit(5)

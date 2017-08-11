@@ -29,13 +29,15 @@ SOFTWARE.
 var expect = require("chai").expect,
 	spawn = require("child_process").exec,
 	path = require("path"),
-	fs = require("fs")
+	fs = require("fs");
+
+const repl = require('repl');
 
 var define
 
 var remove_cache = function() {
 
-	// The amdefine module need to be reloaded again so that the previouse module data which is stored in amdefines loader cache will be removed.
+	// The amdefine module need to be reloaded again so that the previous module data which is stored in the amdefine loader cache will be removed.
 	// All subsequent tests after the first one to verify if modules are available would pass or fail if the amdefine loader cache was not removed.
 	for ( var id in require.cache )
 	  if ( path.parse(id).base === "entry.js" || path.parse(id).base === "amdefine.js" )
@@ -51,7 +53,8 @@ describe("Checking test file dependencies..", function() {
 
 describe("Amdefine module loading after using r_js optimization", function() {
 
-    // Adding node to the command string will help windows know to use node with the file name. The unix shell knows what the #! at the beggining of the file is for.
+    // Adding node to the command string will help windows know to use node with the file name. The unix shell knows what the #! at the beginning
+	// of the file is for.
   var spinner = function() {
 
     this.cb = typeof arguments[3] === "function" && arguments[3] || function(){}
@@ -84,7 +87,7 @@ describe("Amdefine module loading after using r_js optimization", function() {
     }
   }
 
-  // An array with the values of the test direcotry is filtered to include all of the files included with the regex.
+  // An array with the values of the test directory is filtered to include all of the files included with the regex.
   //var config_file = fs.readdirSync("test/config").filter(function(value) { return RegExp(/^build_configg_.*\.json/).test(value) }), config
   //config_file.forEach(function(value) {
     //value = path.join("test/config/", value)
@@ -104,14 +107,16 @@ describe("Amdefine module loading after using r_js optimization", function() {
         })
       })
 
-	// The current woring directory of npm test commands is the module root which is what process.cwd() returns.
+	// The current working directory of npm test commands is the module root which is what process.cwd() returns.
 	example_module_dir = path.join(process.cwd(), "/example", "/nodejs/", "/amdefine")
 
     	it.only("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will load using amdefine", function(done) {
         new spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function() {
 
-	define = require("amdefine")(module)
+	var r = repl.start('> ');
+	var define = require("amdefine")(module)
 	require(path.join(example_module_dir, "/build", "/entry.js"))
+	.exit
 	done()
 	// Load the r.js optimized module which contains the dependencies module_one.js and second_module.
 /*
