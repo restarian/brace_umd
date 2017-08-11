@@ -1,7 +1,11 @@
 {
 	"mangle": false,
+	"compress": {
+		"unused": false
+},
 	"output": {
 		"beautify": true
 	}
+	
 
 }

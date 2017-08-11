@@ -26,12 +26,12 @@ SOFTWARE.
  Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com>
 */
 
-var expect = require("chai").expect
-var spawn = require("child_process").exec
-var path = require("path")
-var fs = require("fs")
+var expect = require("chai").expect,
+	spawn = require("child_process").exec,
+	path = require("path"),
+	fs = require("fs")
 
-var define = require("amdefine")(module)
+var define
 
 var remove_cache = function() {
 
@@ -110,18 +110,12 @@ describe("Amdefine module loading after using r_js optimization", function() {
     	it.only("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will load using amdefine", function(done) {
         new spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function() {
 
-	//	console.log("111111111", this.stdout)
-	 define = require("amdefine")(module)
-
+	define = require("amdefine")(module)
+	require(path.join(example_module_dir, "/build", "/entry.js"))
+	done()
 	// Load the r.js optimized module which contains the dependencies module_one.js and second_module.
-          define(["require", path.join(example_module_dir, "/build", "/entry.js")], function(req, entry) { 
-		console.log("FFFFFFFFFFFFFFFFFFFF", entry)
-          	expect(true).to.equal(true)
-	        done() 
-	  })
-
 /*
-          define([path.join(example_module_dir, "build/", "entry.js")], function(entry) {
+          define(["entry"], function(entry) {
 
 		console.log(entry)
             var mod_one = require("module_one")
