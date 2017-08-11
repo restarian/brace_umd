@@ -79,6 +79,8 @@ SUCH DAMAGE.
 var skip_keys = [ "cname", "enclosed", "parent_scope", "scope", "thedef", "uses_eval", "uses_with" ];
 var files = {};
 var options = {
+	mangle: false,
+	compress: false 
 };
 program.version(info.name + " " + info.version);
 program.parseArgv = program.parse;
@@ -395,6 +397,13 @@ var parse_option_as_object = function(opt, build_obj, test_obj, prefix) {
 // Start the options iteration.
 parse_option_as_object(options, build_option, tested_option, "")
 
+// These can not be changed so it is provided after the input parsing happens (it should not be defined in tested_option.json).
+if ( build_option.compress ) {
+  if ( typeof build_option.compress !== "object" )
+    build_option.compress = {}
+build_option.compress.unused = false
+}
+
 // The preamble options is little special. A default string will be provided if the output.preamble option is set to true. Setting it to false will disable
 // it like in Uglify-js. Setting a string will use that for the preamble.
 if ( !options.output || !("preamble" in options.output) || options.output.preamble === true ) {
@@ -417,7 +426,6 @@ if ( build_option.mangle ) {
     build_option.mangle.reserved = [build_option.mangle.reserved]
   // The umd script will not work if these namspaces are mangled.
   build_option.mangle.reserved = build_option.mangle.reserved.concat(["define", "require", "requirejs"])
-
 
   if ( build_option.mangle.properties ) {
     // This call will inject the reserved names that are required when mangle-props is used.
@@ -447,21 +455,15 @@ catch(e) { console.log(e); process.exit(7) }
 // Fetch the build source and run it through the minifier with a glabal scope variable so that it is seen as usefull by UglifyJS (otherwise it is just as good
 // as nothing to the run-time so UglifyJS will discard it). Note: It is is fine to use the source in the lib directory (umd.js) instead of the built file if the wrappers
 // and work uglify does are not needed.
-var out = UglifyJS.minify("var discard_me="+data.toString(), build_option)
+var out = UglifyJS.minify(data.toString(), build_option)
 if ( out.error ) {
   console.log(out.error)
   process.exit(7)
 }
+out = out.code
 
 location = build_dir + "umd_"+info.version+".js"
 
-// Remove the "var z=" above so that it is an anonymouse function.
-out = out.code.replace(/var\ discard_me\ *=\ */, "(")
-if ( out.charAt(out.length-1) === ";" )
-  out = out.substr(0, out.length-1)
-out += ")"
-
-location = build_dir + "umd_"+info.version+".js"
 try { fs.writeFileSync(location, out) }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js primary script build:", location)
@@ -473,15 +475,18 @@ catch(e) { console.log(e); process.exit(7) }
 console.log("Exported umb build information data file:", location)
 
 // Write out the wrapping fragment for use with the requirejs optimizer (r.js). This should go in the {wrap {start: []} } part of the r.js optimizer build file.
+
+// Find the first character which starts the closing brackit and function execution parenthesis to to separate them into two fragments.
+var close_index = out.search(/\}[^\}]*$/)
+
 location = build_dir + "wrap_start_umd_"+info.version+".frag"
-try { fs.writeFileSync(location, out.substr(0, out.length-2) + ";") }
+try { fs.writeFileSync(location, out.substr(0, close_index) + ";") }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js build end wrap:", location)
 
 // and also create a simple closing wrapper.
 location = build_dir + "wrap_end_umd_"+info.version+".frag"
-var end_wrap = "})(this)"
-try { fs.writeFileSync(location, end_wrap) }
+try { fs.writeFileSync(location, out.substr(close_index)) }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js build end wrap:", location)
 

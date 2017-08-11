@@ -1,5 +1,3 @@
-
-
 define([], function() {
   var id = "module_one"
   console.log(id + " has initialized.")

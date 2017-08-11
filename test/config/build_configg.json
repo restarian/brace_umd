@@ -1,0 +1,7 @@
+{
+	"mangle": false,
+	"output": {
+		"beautify": true
+	}
+
+}
