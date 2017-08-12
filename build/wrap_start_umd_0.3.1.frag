@@ -21,7 +21,7 @@
             } catch (e) {
                 console.log(e.message);
             }
-            console.log("Using proxied amdefine method. Avoid this by defining a global requirejs property prior to initializing this script.");
+            console.log("Using proxied amdefine method.");
             var use_type = umd.define || umd.factory;
             use_type.apply(use_type.prototype, arguments);
         },
@@ -32,7 +32,7 @@
             } catch (e) {
                 console.log(e.message);
             }
-            console.log("Using proxied requirejs method. Avoid this by defining a global define property prior to initializing this script.");
+            console.log("Using proxied requirejs method.");
             var use_type = umd.requirejs || umd.factory;
             use_type.apply(use_type.prototype, arguments);
         }
@@ -41,8 +41,7 @@
         if (umd.module && !umd.define) try {
             umd.define = umd.module.require("amdefine")(umd.module);
             for (var p in umd.define) delete this[p], this[p] = umd.define[p];
-            return console.log("Using proxied amdefine method. Avoid this by defining a global define property prior to initializing this script."), 
-            umd.define[key];
+            return console.log("Using proxied amdefine method."), umd.define[key];
         } catch (e) {
             return void console.log(e.message);
         }
@@ -51,7 +50,7 @@
         if (umd.module && !umd.requirejs) try {
             umd.requirejs = umd.module.require("requirejs");
             for (var p in umd.requirejs) delete this[p], this[p] = umd.requirejs[p];
-            console.log("Using proxied requirejs method. Avoid this by defining a global requirejs property prior to initializing this script.");
+            console.log("Using proxied requirejs method.");
         } catch (e) {
             return void console.log(e.message);
         }
