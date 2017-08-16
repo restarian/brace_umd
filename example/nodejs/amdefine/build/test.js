@@ -2,7 +2,8 @@
 var define = define || require("amdefine")(module);
 
 define("cool", [], function() {
-    return console.log("cool man"), {
+    console.log("cool man");
+    return {
         cool: "joes"
     };
 });

@@ -116,8 +116,13 @@ program.option("--verbose", "Print diagnostic messages.");
 program.option("--warn", "Print warning messages.");
 //program.option("--wrap <name>", "Embed everything as a function with “exports” corresponding to “name” globally.");
 program.arguments("[files...]").parseArgv(process.argv);
-if (program.configFile) {
+if ( program.configFile ) {
+	try {
     options = JSON.parse(read_file(program.configFile));
+	} catch(e) {
+		console.log("Unable to parse config file:", program.configFile, e)
+		process.exit(13)
+	}
 }
 /*
 if (!program.output && program.sourceMap && program.sourceMap.url != "inline") {
@@ -396,11 +401,27 @@ var parse_option_as_object = function(opt, build_obj, test_obj, prefix) {
 // Start the options iteration.
 parse_option_as_object(options, build_option, tested_option, "")
 
-// These can not be changed so it is provided after the input parsing happens (it should not be defined in tested_option.json).
-if ( build_option.compress ) {
-  if ( typeof build_option.compress !== "object" )
-    build_option.compress = {}
-build_option.compress.unused = false
+var compress_option = false
+// The JSON parsing is used to create a deep Object copy so that the original data can be stored after any internal options are set and removed (like
+// the compress.unused option).
+if ( build_option.compress ) 
+	compress_option = JSON.parse(JSON.stringify(build_option.compress))
+
+var mangle_option = false
+// The JSON parsing is used to create a deep Object copy so that the original data can be stored after any internal options are set and removed (like
+// the compress.unused option).
+if ( build_option.mangle ) 
+	mangle_option = JSON.parse(JSON.stringify(build_option.mangle))
+
+// The compress.unused option is set if the compress option is set to true or with additional options. This is only necessary when building the udm.js
+// source the first time because uglify-js will find code that is unused. It is fine to remove unused code after the module code is inserted and 
+// the r_js script runs uglify-js again on the distributable module. That is why the unused option is set when minifying the umd.js source but not
+// automatically included in the exported build options (unless the unused option is manually set). The compress.unused option should be listed in 
+// the tested_options file as well.
+if ( compress_option ) {
+	if ( typeof compress_option !== "object" )
+		build_option.compress = {}
+	build_option.compress.unused = false
 }
 
 // The preamble options is little special. A default string will be provided if the output.preamble option is set to true. Setting it to false will disable
@@ -412,17 +433,17 @@ if ( !options.output || !("preamble" in options.output) || options.output.preamb
 } else if ( options.output.preamble === false ) {
   delete build_option.output.preamble
 }
+
 // These can not be changed so it is provided after the input parsing happens (it should not be defined in tested_option.json).
 if ( build_option.mangle ) {
   if ( typeof build_option.mangle !== "object" )
     build_option.mangle = {reserved: []}
 
-  if ( !build_option.mangle.reserved )
+  if ( ! ("reserved" in build_option.mangle) )
     build_option.mangle.reserved = []
-
   // The mangle.reserved option is transformed to an Array so that the internal namespace can be used.
   if ( !(build_option.mangle.reserved instanceof Array) )
-    build_option.mangle.reserved = [build_option.mangle.reserved]
+    build_option.mangle.reserved = []
   // The umd script will not work if these namespaces are mangled.
   build_option.mangle.reserved = build_option.mangle.reserved.concat(["define", "require", "requirejs"])
 
@@ -434,10 +455,30 @@ if ( build_option.mangle ) {
     if ( !(build_option.mangle.properties.reserved instanceof Array) )
       build_option.mangle.properties.reserved = []
 
-    // The property name "require" should be reserved in mangle properties are used.
-    build_option.mangle.properties.reserved.push("require")// = build_option.mangle.properties.reserved.
+    // The property name "require" should be reserved if mangle properties are used so that module.require can be used.
+    build_option.mangle.properties.reserved.push("require")
   }
 }
+
+
+var data = ""
+try { data = fs.readFileSync(lib + "umd.js") }
+catch(e) { console.log(e); process.exit(7) }
+
+// Fetch the build source and run it through the minifier. Note: It is is fine to use the source code in the lib directory (umd.js), instead of the 
+// built file (umd_[version].js), if the wrappers for r.js and uglifyjs minification are not needed. Uglify-js will mutate the options Object passed
+// into the minify function so a JSON copy is used.
+var out = UglifyJS.minify(data.toString(), JSON.parse(JSON.stringify(build_option)))
+if ( out.error ) {
+  console.log(out.error)
+  process.exit(11)
+}
+out = out.code
+
+// The compress.unused option needs to be set back to the way it was originally If the compress option is set. This needs to be done so that unused
+// code is not removed until after the module code in inserted.
+build_option.compress = compress_option
+build_option.mangle = mangle_option
 
 console.log("Options to be used with uglify-js:\n", build_option)
 console.log("Exporting data to build directory:", build_dir)
@@ -446,19 +487,6 @@ var location = build_dir + "build_options_" + info.version + ".json"
 try { fs.writeFileSync(location, JSON.stringify(build_option, null, " ")) }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported build options:", location)
-
-var data = ""
-try { data = fs.readFileSync(lib + "umd.js") }
-catch(e) { console.log(e); process.exit(7) }
-
-// Fetch the build source and run it through the minifier. Note: It is is fine to use the source code in the lib directory (umd.js), instead of the 
-// built file (umd_[version].js), if the wrappers for r.js and uglifyjs minification are not needed.
-var out = UglifyJS.minify(data.toString(), build_option)
-if ( out.error ) {
-  console.log(out.error)
-  process.exit(7)
-}
-out = out.code
 
 location = build_dir + "umd_"+info.version+".js"
 

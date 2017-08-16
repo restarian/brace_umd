@@ -1,3 +1,5 @@
 node_modules/
+SRAP.js
+test.js
 *.swp
 *.swo

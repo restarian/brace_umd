@@ -15,6 +15,7 @@
   },
   "warnings": true,
   "mangle": {
+		"reserved": false,
       "properties": {
           "reserved": false
       },

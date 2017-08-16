@@ -4,23 +4,28 @@
 //require("./test.js")
 
 //console.log(define.global)
-//var expect = require("chai").expect
+var expect = require("chai").expect
 //	spawn = require("child_process").exec,
-//var	path = require("path"),
+var	path = require("path")
 //	fs = require("fs")
 
-const repl = require('repl');
-const r = repl.start('> ');
+var requirejs = require("requirejs")
+requirejs.config({nodeRequire: require})
 
-//it("Ddddd", function(done) {
 
-//	var define = require("amdefine")
-	var cool_joe = {}
-	console.log("---", typeof cool_joe) 			
-	require("./test.js")
+it("ddd", function(done) { 
+		
+		//var example_module_dir = path.join(process.cwd(), "/example", "/nodejs/", "/amdefine")
+		var example_module_dir = path.join("./example", "/nodejs/", "/amdefine")
+			
+		var mod_path = path.join(example_module_dir, "/build", "/entry.js")
 
-	false
-//	done()
-//})
+		requirejs(["require", mod_path], function(req) {
 
-//r.exit
+			console.log(1111, req("module_one"))		    	
+		//	done()
+//			expect(false).to.equal(false)
+		})
+
+
+})
