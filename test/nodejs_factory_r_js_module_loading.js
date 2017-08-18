@@ -39,7 +39,7 @@ var Spinner = method.Spinner
 Spinner.prototype.default_command = "node" 
 var build_path = path.join(__dirname, "/../", "/bin", "/build_umd.js") 
 
-var remove_cache = function(require) {
+var remove_cache = function() {
 
 	// The amdefine module need to be reloaded again so that the previous module data which is stored in the amdefine loader cache will be removed.
 	// All subsequent tests after the first one to verify if modules are available would pass or fail if the amdefine loader cache was not removed.
@@ -103,7 +103,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 			})
 
 			// The current working directory of npm test commands is the module root which is what process.cwd() returns.
-			example_module_dir = path.join(__dirname, "/../", "/example", "/nodejs/", "/factory")
+			var example_module_dir = path.join(__dirname, "/../", "/example", "/nodejs/", "/factory")
 
 			it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
 				" load using nodejs require", 

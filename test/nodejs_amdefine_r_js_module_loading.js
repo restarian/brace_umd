@@ -102,7 +102,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 			})
 
 			// The current working directory of npm test commands is the module root which is what process.cwd() returns.
-			example_module_dir = path.join(__dirname, "/../", "/example", "/nodejs/", "/amdefine")
+			var example_module_dir = path.join(__dirname, "/../", "/example", "/nodejs/", "/amdefine")
 
 			it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
 				" load using amdefine", 
