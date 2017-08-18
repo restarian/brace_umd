@@ -1,5 +1,4 @@
 node_modules/
 SCRAP.js
 test.js
-*.swp
-*.swo
+*.sw[a-z]
