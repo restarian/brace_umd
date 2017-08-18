@@ -1,1 +1,1 @@
-}(this, typeof module == "object" && module || undefined, typeof define == "function" && define || undefined, typeof requirejs == "function" && requirejs || undefined);
+}(this, "object" == typeof module && module || void 0, "function" == typeof define && define || void 0, "function" == typeof requirejs && requirejs || void 0);

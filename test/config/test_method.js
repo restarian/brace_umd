@@ -1,8 +1,6 @@
-
-// Adding node to the command string will help windows know to use node with the file name. The unix shell knows what the #! at the beginning
-// of the file is for.
 var spawn = require("child_process").exec,
-	path = require("path")
+	path = require("path"),
+	command_exist = require("command-exists")
 
 module.exports = {
 
@@ -10,10 +8,12 @@ module.exports = {
 
 		this.cb = typeof arguments[3] === "function" && arguments[3] || function(){}
 		this.err = typeof arguments[4] === "function" && arguments[4] || function(){}
-		this.parameters = arguments[1] instanceof Array && arguments[1] || [arguments[1]||""]
+		// If the parameter argument are not an Array than the value will be set as an Array.
+		this.parameter = arguments[1] instanceof Array && arguments[1] || [arguments[1]||""]
+		this.option = arguments[2]
 		this.stdout = this.stderr = ""
-		var command = (arguments[0] || "node "+path.join(process.cwd(), "/bin", "/build_umd.js ")) + " " + this.parameters.join(" ")
-		this._spinner = spawn(command, [], arguments[2])
+
+		var command = (arguments[0] || this.default_command)
 
 		this.error = function(error) {
 			this.err.call(this, error)
@@ -26,15 +26,25 @@ module.exports = {
 		}
 		this.exit = function(code) {
 			// The build script will exit with code 5 unless it had an error in which case it is automatically logged.
-		   if ( code !== 5 )
-				console.log(this.stdout)
 			this.cb.call(this, code)
 		}
 
-		this._spinner.stdout.on("data", this.standard_out.bind(this))
-		this._spinner.stderr.on("data", this.standard_err.bind(this))
-		this._spinner.on("exit", this.exit.bind(this))
-		this._spinner.on("error", this.error.bind(this))
+		// In linux the on("error", function is not called when a non-available command is provided to spawn so this is the fix. 
+		// See https://github.com/nodejs/node/issues/14871/ 
+		command_exist(command, (function(err, success ) {
+		
+			if ( !success ) {
+				this.error(err || new Error("Command not found: "+command))
+			} 
+			else {
+		    	this._spinner = spawn(command + " " + this.parameter.join(" "), [], this.option)
+				this._spinner.stdout.on("data", this.standard_out.bind(this))
+				this._spinner.stderr.on("data", this.standard_err.bind(this))
+				this._spinner.on("exit", this.exit.bind(this))
+				this._spinner.on("error", this.error.bind(this))
+		 	 }
+
+		}).bind(this))
 
 	}
 }

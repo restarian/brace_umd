@@ -79,8 +79,6 @@ SUCH DAMAGE.
 var skip_keys = [ "cname", "enclosed", "parent_scope", "scope", "thedef", "uses_eval", "uses_with" ];
 var files = {};
 var options = {
-	mangle: false,
-	compress: false 
 };
 program.version(info.name + " " + info.version);
 program.parseArgv = program.parse;
@@ -119,6 +117,7 @@ program.arguments("[files...]").parseArgv(process.argv);
 if ( program.configFile ) {
 	try {
     options = JSON.parse(read_file(program.configFile));
+	 // These should default to false but do not for some reason in uglify. Without this, the mangle and compress options are used if not specified or defined.
 	} catch(e) {
 		console.log("Unable to parse config file:", program.configFile, e)
 		process.exit(13)
@@ -415,14 +414,16 @@ if ( build_option.mangle )
 
 // The compress.unused option is set if the compress option is set to true or with additional options. This is only necessary when building the udm.js
 // source the first time because uglify-js will find code that is unused. It is fine to remove unused code after the module code is inserted and 
-// the r_js script runs uglify-js again on the distributable module. That is why the unused option is set when minifying the umd.js source but not
+// the r_js script runs uglify-js again on the distributable module. That is why the unused option is set when minifing the umd.js source but not
 // automatically included in the exported build options (unless the unused option is manually set). The compress.unused option should be listed in 
 // the tested_options file as well.
-if ( compress_option ) {
-	if ( typeof compress_option !== "object" )
-		build_option.compress = {}
-	build_option.compress.unused = false
-}
+if ( typeof compress_option !== "object" )
+	build_option.compress = {}
+
+if ( !build_option.mangle )
+	build_option.mangle = false
+
+build_option.compress.unused = false
 
 // The preamble options is little special. A default string will be provided if the output.preamble option is set to true. Setting it to false will disable
 // it like in Uglify-js. Setting a string will use that for the preamble.
@@ -436,28 +437,26 @@ if ( !options.output || !("preamble" in options.output) || options.output.preamb
 
 // These can not be changed so it is provided after the input parsing happens (it should not be defined in tested_option.json).
 if ( build_option.mangle ) {
-  if ( typeof build_option.mangle !== "object" )
-    build_option.mangle = {reserved: []}
+	if ( typeof build_option.mangle !== "object" )
+	build_option.mangle = {reserved: []}
 
-  if ( ! ("reserved" in build_option.mangle) )
-    build_option.mangle.reserved = []
-  // The mangle.reserved option is transformed to an Array so that the internal namespace can be used.
-  if ( !(build_option.mangle.reserved instanceof Array) )
-    build_option.mangle.reserved = []
-  // The umd script will not work if these namespaces are mangled.
-  build_option.mangle.reserved = build_option.mangle.reserved.concat(["define", "require", "requirejs"])
+	if ( ! ("reserved" in build_option.mangle) || !(build_option.mangle.reserved instanceof Array) )
+	 build_option.mangle.reserved = []
 
-  if ( build_option.mangle.properties ) {
-    // This call will inject the reserved names that are required when mangle-props is used.
-    if ( typeof build_option.mangle.properties !== "object" )
-      build_option.mangle.properties = {reserved: []}
+	// The umd script will not work if these namespaces are mangled.
+	build_option.mangle.reserved = build_option.mangle.reserved.concat(["define", "require", "requirejs"])
+	if ( build_option.mangle.properties ) {
+		// This call will inject the reserved names that are required when mangle-props is used.
+		if ( typeof build_option.mangle.properties !== "object" )
+			build_option.mangle.properties = {reserved: []}
 
-    if ( !(build_option.mangle.properties.reserved instanceof Array) )
-      build_option.mangle.properties.reserved = []
+		if ( !(build_option.mangle.properties.reserved instanceof Array) )
+			build_option.mangle.properties.reserved = []
 
-    // The property name "require" should be reserved if mangle properties are used so that module.require can be used.
-    build_option.mangle.properties.reserved.push("require")
-  }
+		// The property name "require" should be reserved if mangle properties are used so that module.require can be used by the original namespace.
+		build_option.mangle.properties.reserved = build_option.mangle.properties.reserved.concat(["define", "require", "requirejs", "factory", "force_type"])
+		// force_type is optionally set and therefore needs to be preserved inside the script.
+	}
 }
 
 

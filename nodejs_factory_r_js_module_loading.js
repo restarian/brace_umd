@@ -39,14 +39,15 @@ var Spinner = method.Spinner
 Spinner.prototype.default_command = "node" 
 var build_path = path.join(__dirname, "/../", "/bin", "/build_umd.js") 
 
-var remove_cache = function() {
+var remove_cache = (function(require) {
 
 	// The amdefine module need to be reloaded again so that the previous module data which is stored in the amdefine loader cache will be removed.
 	// All subsequent tests after the first one to verify if modules are available would pass or fail if the amdefine loader cache was not removed.
-	for ( var id in require.cache ) 
-	  if ( path.basename(id) === "entry.js" || path.basename(id) === "r.js" ) 
+	for ( var id in require.cache )
+	  if ( path.basename(id) === "entry.js" )
 	    delete require.cache[id]
-}
+
+}).bind(null, require)
 
 describe("Using stop further progression methodology for file dependencies: "+path.basename(__filename), function() { 
 
@@ -71,65 +72,58 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 		it_might("has all module dependencies available", function(done) {
 
 			this.stop = true 
-			expect(require("requirejs"), "requirejs was not found on system").to.be.a("function").that.have.property("config")
-			remove_cache()
+			expect(require, "nodejs require was mot available").to.be.a("function")
 			this.stop = false 
 			done()
 		})
 
 	})
 
-	describe("Requirejs module loading after using r_js optimization on amdefined modules", function() {
+	describe("nodejs require loading after r_js optimization on modules using the factory", function() {
 
 	  // An array with the values of the test directory is filtered to include all of the files included with the regex.
-	  var config_file = fs.readdirSync(path.join(__dirname, "/config")).filter(function(value) { return RegExp(/^build_config_.*\.json/).test(value) })
-	  config_file.forEach(function(value) {
-		 value = path.join(__dirname, "/config/", value)
-		
-		 describe("using config file "+ value, function() {
+	  fs.readdirSync(path.join(__dirname, "/config")).filter(function(value) { return RegExp(/^build_config_.*\.json/).test(value) })
+	  .forEach(function(value) {
 
-			// Remove the amdefine and module cache from the testing module.
+		 value = path.join(__dirname, "/config/", value)
+			
+		 describe("using config file "+ value + " with r_js", function() {
+		
 			beforeEach(remove_cache)
 
 			it_might("after building the brace umd source", function(done) {
 				// A new umd.js source build is created with the various config files in the test directory.
-				new Spinner("node", [build_path, "--config-file", value], undefined, function(exit_code) {
+				new Spinner("", [build_path, "--config-file", value], undefined, function(exit_code) {
+					expect(parseInt(exit_code)).to.equal(5)
 					done()
 				}, function(err) { 
-					expect(false).to.equal(true); 
+					expect(false, err).to.equal(true); 
 					done()
 				})
 			})
 
 			// The current working directory of npm test commands is the module root which is what process.cwd() returns.
-			example_module_dir = path.join(__dirname, "/../", "/example", "/nodejs/", "/amdefine")
+			example_module_dir = path.join(__dirname, "/../", "/example", "/nodejs/", "/factory")
 
 			it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
-				" load using amdefine", 
+				" load using nodejs require", 
 				function(done) {
-					new Spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function() {
 
-						var requirejs = require("requirejs")
-						//requirejs.config({nodeRequire: require})
+					new Spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function() {
 
 						var mod_path = path.join(example_module_dir, "/build", "/entry.js")
 
-						// Load the r.js optimized module which contains the dependencies module_one.js and second_module.
-						requirejs(["require", mod_path], 
-							function(req) {
+						var entry = require(mod_path)
+						expect(entry).to.be.an("object").that.nested.include({'module_one.id': "module_one"})
+						expect(entry).to.be.an("object").that.nested.include({'second_module.id': "second_module"})
 
-								var mod_one = req("module_one")
-								var mod_two = req("second_module")
-								var entry = req("entry")
+						expect(entry).to.be.an("object").that.nested.include({"entry.id": "entry"})
+							.that.deep.nested.include({"entry.module_one": {id: "module_one"}} )
 
-								expect(mod_one).to.be.an("object").that.deep.equal({ id: "module_one" })
-								expect(mod_two).to.be.an("object").that.deep.equal({ id: "second_module" })
-								expect(entry).to.be.an("object").that.deep.equal({id: "entry", module_one: {id: "module_one"}, second_module: {id: "second_module"}})
-								done()
-						})
+						done()
 
-					}, function(err) {
-					  expect(false, err).to.equal(true)
+					}, function() {
+					  expect(false).to.equal(true)
 					  done()
 					})
 				})

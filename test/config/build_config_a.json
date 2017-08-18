@@ -1,3 +1,5 @@
 {
-	"beautify": true  
+	"output": {
+		"beautify": true  
+	}
 }

@@ -30,10 +30,14 @@ var expect = require("chai").expect
 	spawn = require("child_process").exec,
 	path = require("path"),
 	fs = require("fs"),
-	//uglify = require("uglify-js"),
-	method = require("./config/test_method.js")
+	method = require(__dirname+"/config/test_method.js"),
+	maybe = require("mocha-maybe")
 
 var Spinner = method.Spinner
+// Adding node to the command string will help windows know to use node with the file name. The unix shell knows what the #! at the beginning
+// of the file is for. The build_umd.js source will run if the spinner command is empty by setting the default_command member.
+Spinner.prototype.default_command = "node" 
+var build_path = path.join(__dirname, "/../", "/bin", "/build_umd.js") 
 
 describe("The build script", function() {
 
@@ -51,7 +55,7 @@ describe("The build script", function() {
   	it("should export the correct build file with only the preamble option set to false", function(done) {
 
       // This will use the run-time accessed tested_option but it does matter what is set to it.
-      new Spinner("", "--tested-options test/config/unit_tested_option_a.json --beautify preamble=false", undefined, function(exit_code) {
+      new Spinner("node", [build_path, "--tested-options test/config/unit_tested_option_a.json --beautify preamble=false"], undefined, function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
         var export_option = require("../").build_option
         expect(export_option).to.be.an("object")
@@ -62,7 +66,7 @@ describe("The build script", function() {
 
   	it("should provide a warning message when non-tested options which are attempted to be set", function(done) {
 
-      new Spinner("", "--tested-options test/config/unit_tested_option_a.json --compress unused,unsafe", undefined, function(exit_code) {
+      new Spinner("node", [build_path, "--tested-options test/config/unit_tested_option_a.json --compress unused,unsafe"], undefined, function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
         var tested_file = require("../").build_information.tested_options_file
         expect(this.stdout).to.include("Option compress.unsafe is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
@@ -72,7 +76,7 @@ describe("The build script", function() {
 
   	it("create the correct mangle build option output with the unit test file a", function(done) {
 
-      new Spinner("", "--tested-options test/config/unit_tested_option_a.json --mangle reserved=[cool],reservedd=[nope] --mangle-props reserved=[require],notme=true --beautify beautify=false,saywhat=false,semicolons=false", undefined, function(exit_code) {
+      new Spinner("node", [build_path, "--tested-options test/config/unit_tested_option_a.json --mangle reserved=[cool],reservedd=[nope] --mangle-props reserved=[require],notme=true --beautify beautify=false,saywhat=false,semicolons=false"], undefined, function(exit_code) {
 
 			expect(parseInt(exit_code)).to.equal(5)
 
@@ -90,7 +94,7 @@ describe("The build script", function() {
 
   	it("create the correct mangle and compress output with the unit test file b", function(done) {
 
-      new Spinner("", "--tested-options test/config/unit_tested_option_b.json --mangle reservedd=true,properties=false --compress --beautify beautify=false,saywhat=false,semicolons=false", undefined, function(exit_code) {
+      new Spinner("node", [build_path, "--tested-options test/config/unit_tested_option_b.json --mangle reservedd=true,properties=false --compress --beautify beautify=false,saywhat=false,semicolons=false"], undefined, function(exit_code) {
 
         expect(parseInt(exit_code)).to.equal(5)
 
@@ -110,8 +114,8 @@ describe("The build script", function() {
     })
 
   	it("should warn and exit when the tested-options file does not exist", function(done) {
-       new Spinner("", "--tested-options test/config/unit_tested_option_nope.json --compress unused=false,unsafe,nah,sequences --beautify saywhat=false", 
-		 undefined, function(exit_code) {
+       new Spinner("node", [build_path, "--tested-options test/config/unit_tested_option_nope.json --compress unused=false,unsafe,nah,sequences --beautify saywhat=false"], undefined, 
+		 function(exit_code) {
          // 9 is the exit code for early returns in the build_script
          expect(parseInt(exit_code)).to.equal(7)
          expect(this.stdout).to.include("ENOENT: no such file or directory, open")
@@ -121,7 +125,7 @@ describe("The build script", function() {
 
   	it("a config file with non-uglify options erros and exits with code 11", function(done) {
 
-      new Spinner("", "--config-file test/config/build_config_b.json --tested-options test/config/unit_tested_option_a.json", undefined,
+      new Spinner("node", [build_path, "--config-file test/config/build_config_b.json --tested-options test/config/unit_tested_option_a.json"], undefined,
       function(exit_code) {
 			// return code 11 is an uglify-js error
          expect(parseInt(exit_code)).to.equal(11)
@@ -133,25 +137,23 @@ describe("The build script", function() {
 
   	it("a config file with nested Object mangle options works as expected", function(done) {
 
-      new Spinner("", "--config-file test/config/build_config_d.json --tested-options test/config/unit_tested_option_a.json", undefined,
+      new Spinner("node", [build_path, "--config-file test/config/build_config_d.json --tested-options test/config/unit_tested_option_a.json"], undefined,
       function(exit_code) {
 
          var export_option = require("../").build_option
 			expect(export_option).to.be.an("object")
 			expect(export_option.output).to.have.any.keys("preamble")
 			expect(export_option.mangle).to.be.an("object")
-         expect(export_option.mangle.reserved).to.be.an("array")
-         expect(export_option.mangle.reserved).to.deep.equal(["joes", true, "false"])
+         expect(export_option.mangle.reserved).to.be.an("array").that.deep.equal(["joes", true, "false"])
          expect(export_option.mangle.properties).to.be.an("object")
-         expect(export_option.mangle.properties.reserved).to.be.an("array")
-         expect(export_option.mangle.properties.reserved).to.deep.equal(["cool", false, false])
+         expect(export_option.mangle.properties.reserved).to.be.an("array").that.deep.equal(["cool", false, false])
          done()
 		})
 	})
 
   	it("config file with all options set to false will export correctly", function(done) {
 
-      new Spinner("", "--config-file test/config/build_config_c.json", undefined, function(exit_code) {
+      new Spinner("node", [build_path, "--config-file test/config/build_config_c.json"], undefined, function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
         var export_option = require("../").build_option
         expect(export_option).to.be.an("object")
@@ -168,15 +170,14 @@ describe("The build script", function() {
 
   	it("should not make the changes of non-tested build options which are attempted to be set", function(done) {
 
-      new Spinner("", "--tested-options test/config/unit_tested_option_a.json --compress unused=false,unsafe,nah,sequences --beautify saywhat=false",
-		undefined, function(exit_code) {
+      new Spinner("node", [build_path, "--tested-options test/config/unit_tested_option_a.json --compress unused=false,unsafe,nah,sequences --beautify saywhat=false"], undefined, 
+		function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
         var export_option = require("../").build_option
-		expect(this.stdout).to.include("Option compress.unused is not defined in the tested options file: /home/wasman/Restarian/brace_umd/test/config/unit_tested_option_a.json -- Therefore it is not safe to use and will be skipped.")
+		  expect(this.stdout).to.include("Option compress.unused is not defined in the tested options file: /home/wasman/Restarian/brace_umd/test/config/unit_tested_option_a.json -- Therefore it is not safe to use and will be skipped.")
         expect(export_option).to.be.an("object")
-        expect(export_option.compress).to.deep.equal({sequences: true})
         expect(export_option.output).to.have.any.keys("preamble")
-        expect(export_option.compress).to.not.have.any.keys("nah")
+        expect(export_option.compress).to.include({sequences: true}).that.not.have.any.keys("nah")
         done()
       })
     })
@@ -184,7 +185,7 @@ describe("The build script", function() {
 
   	it("odd cli arguments are processed appropriately", function(done) {
 
-      new Spinner("", "--tested-options test/config/unit_tested_option_a.json --mangle _ --compress properties=false,sequences=false,nah,_un=ff,_,_=aa --beautify saywhat=false", undefined, function(exit_code) {
+      new Spinner("node", [build_path, "--tested-options test/config/unit_tested_option_a.json --mangle _ --compress properties=false,sequences=false,nah,_un=ff,_,_=aa --beautify saywhat=false"], undefined, function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
 
         var tested_file = require("../").build_information.tested_options_file
@@ -207,7 +208,7 @@ describe("The build script", function() {
   	it("the mangle option is omitted if mangle not specified at all", function(done) {
 
       // build_config_a.json in an empty Object
-      new Spinner("", "--config-file test/config/build_config_a.json", undefined, function(exit_code) {
+      new Spinner("node", [build_path, "--config-file test/config/build_config_a.json"], undefined, function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
         var export_option = require("../").build_option
         expect(export_option).to.be.an("object")
@@ -219,7 +220,7 @@ describe("The build script", function() {
   	it("the mangle reserved options creates values as Array data if the value is non-array via the command line", function(done) {
 
       // build_config_a.json in an empty Object
-      new Spinner("", "--config-file test/config/build_config_a.json --mangle reserved=false --mangle-props reserved=true", undefined,
+      new Spinner("node", [build_path, "--config-file test/config/build_config_a.json --mangle reserved=false --mangle-props reserved=true"], undefined,
 		function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
         var export_option = require("../").build_option
@@ -236,7 +237,7 @@ describe("The build script", function() {
 
   	it("the mangle reserved options creates values as Array data if Array syntax is set via the command line", function(done) {
 
-      new Spinner("", "--config-file test/config/build_config_a.json --mangle reserved=[false,'cool'] --mangle-props reserved=[joes,true]", undefined,
+      new Spinner("node", [build_path, "--config-file test/config/build_config_a.json --mangle reserved=[false,'cool'] --mangle-props reserved=[joes,true]"], undefined,
 		function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
         var export_option = require("../").build_option
@@ -253,7 +254,7 @@ describe("The build script", function() {
   	})
 
   	it("the mangle reserved options creates values as Array data if Array syntax is set via the a config file (test/config/build_config_d.json", function(done) { 
-      new Spinner("", "--config-file test/config/build_config_d.json", undefined,
+      new Spinner("node", [build_path, "--config-file test/config/build_config_d.json"], undefined,
 		function(exit_code) {
 
         expect(parseInt(exit_code)).to.equal(5)
@@ -273,7 +274,7 @@ describe("The build script", function() {
   	it("an empty config-file is accepted and used appropriately", function(done) {
 
       // build_config_a.json in an empty Object
-      new Spinner("", "--config-file test/config/build_config_a.json", undefined, function(exit_code) {
+      new Spinner("node", [build_path, "--config-file test/config/build_config_a.json"], undefined, function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
         var info = require("../").build_information
         var export_option = require("../").build_option
@@ -288,7 +289,7 @@ describe("The build script", function() {
 
   	it("this test is to build the project as the doc pages were", function(done) {
 
-      new Spinner("", "--config-file doc/doc_config.json", undefined, function(exit_code) {
+      new Spinner("node", [build_path, "--config-file doc/doc_config.json"], undefined, function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
         done()
 
