@@ -410,13 +410,19 @@ var mangle_option = false
 // The JSON parsing is used to create a deep Object copy so that the original data can be stored after any internal options are set and removed (like
 // the compress.unused option).
 if ( build_option.mangle ) {
+	// The exports property namespace is the only on that will need to be the same when r.js optimizes again. It is set to mangle_option which will
+	// be set back to build_option.mangle after the build minify is ran. There are additional minify options that need to be set because more code
+	// will be added to the build source when the r.js minify process is ran which will be able to handle things like mangle without the needed 
+	// reserved options set (except for exports of course).
 	if ( build_option.mangle.properties ) {
 		if ( typeof build_option.mangle.properties !== "object" )
-			build_option.mangle.properties = {reserved: ["exports"]}
+			build_option.mangle.properties = {reserved: []}
 		if ( !(build_option.mangle.properties.reserved instanceof Array) )
-			build_option.mangle.properties.reserved = ["exports"]
+			build_option.mangle.properties.reserved = []
 
-		build_option.mangle.properties.reserved.push("exports")
+		// If the exports is defined in the config or via the cli for some reason then do not create two of them in the array.
+		if ( build_option.mangle.properties.reserved.indexOf("exports") === -1 )
+			build_option.mangle.properties.reserved.push("exports")
 
 	}
 	mangle_option = JSON.parse(JSON.stringify(build_option.mangle))

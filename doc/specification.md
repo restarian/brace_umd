@@ -26,7 +26,8 @@
 
 * [Windows 10](https://www.microsoft.com/en-us/software-download/windows10)
 * [Ubuntu 16](https://www.ubuntu.com/download/desktop)
-* [Bash on Windows](https://github.com/Microsoft/BashOnWindows) *for easy cross platform development*
+* [Ubuntu on Windows](https://github.com/Microsoft/BashOnWindows) *for easy cross platform development*
+* [VIM](www.vim.org) *As an IDE (ha)*
 * [Git/Github](https://github.com) *for repository management and storage*
 * [npm](https://www.npmjs.com) *for package management*
 * [Atom.io Editor](https://atom.io) with plugins: [vim-mode-plus](https://github.com/t9md/atom-vim-mode-plus), [script](https://atom.io/packages/script)

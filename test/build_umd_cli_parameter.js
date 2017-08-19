@@ -287,14 +287,5 @@ describe("The build script", function() {
       })
   	})
 
-  	it("this test is to build the project as the doc pages were", function(done) {
-
-      new Spinner("node", [build_path, "--config-file doc/doc_config.json"], undefined, function(exit_code) {
-        expect(parseInt(exit_code)).to.equal(5)
-        done()
-
-      })
-    })
-
   })
 })

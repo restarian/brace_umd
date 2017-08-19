@@ -15,9 +15,8 @@
 
 **Things to do with Brace UMD**
 * Basic
-  * Numerous unit tests
-  * More examples
-  * More code commenting
+	* Add a member to the exported to add options to the end wrap fragment in the r.js build files
+	* Create browser examples
+	* Unit test browser examples
 * Features
-  * Log the type of definition used so that the run-time user can be made aware of unwanted definition types . E.g. If all nodejs modules are expected to use requirejs but one of them uses a commonjs require.
-  * Enabling source maps to uglify may be warranted.
+	* Enabling source maps to uglify may be warranted.

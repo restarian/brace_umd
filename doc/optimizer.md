@@ -13,10 +13,9 @@
 
 ----
 
-The *r.js* program also uses *uglify-js* so those options are imported from the build directory which created the build the fragments. Any uglify2 options set in the build file will overwrite the build source as it is re-minifies by *uglify-js*. This may be desirable so it is acceptable to supply new *uglify-js* options there.
-  * Note: *Brace UMD* uses UglifyJS-3 and is not compatible with any other major versions.
+The *r.js* program also uses *uglify-js* so the options used in building the umd.js source are imported from the build directory which also contains the wrapping fragments. * Note: *Brace UMD* uses UglifyJS-3 and is not compatible with any other major versions.
 
-Example requiejs build file:
+Example r.js build config file where the umd source fragments and the build options which created the source are used:
 
 ```javascript
 {
