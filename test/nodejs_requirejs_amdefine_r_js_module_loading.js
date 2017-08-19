@@ -102,7 +102,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 			})
 
 			// The current working directory of npm test commands is the module root which is what process.cwd() returns.
-			var example_module_dir = path.join(__dirname, "/../", "/example", "/nodejs/", "/amdefine")
+			var example_module_dir = path.join(__dirname, "/../", "/example", "/nodejs/", "/requirejs_amdefine")
 
 			it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
 				" load using amdefine", 
@@ -110,23 +110,16 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 					new Spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function() {
 
 						var requirejs = require("requirejs")
+
 						// Set the baseUrl to the build directory so that any modules not found there will be loaded via the node require instead (which
 						// is requirejs best practice).
 						requirejs.config({baseUrl: path.join(example_module_dir, "/build"), nodeRequire: require})
-
 						// Load the r.js optimized module which contains the dependencies module_one.js and second_module.
-						requirejs(["require", "entry"], 
-							function(req) {
-
-								var mod_one = req("module_one")
-								var mod_two = req("second_module")
-								var entry = req("entry")
-
-								expect(mod_one).to.be.an("object").that.deep.equal({ id: "module_one" })
-								expect(mod_two).to.be.an("object").that.deep.equal({ id: "second_module" })
-								expect(entry).to.be.an("object").that.deep.equal({id: "entry", module_one: {id: "module_one"}, second_module: {id: "second_module"}})
-								done()
-						})
+						requirejs(["require", "entry"], function(req, mod) { 
+							var mod_two = req("second_module")
+							expect(mod_two).to.be.an("object").that.deep.equal({ id: "second_module" })
+							done()
+					   })
 
 					}, function(err) {
 					  expect(false, err).to.equal(true)

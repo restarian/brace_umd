@@ -102,7 +102,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 			})
 
 			// The current working directory of npm test commands is the module root which is what process.cwd() returns.
-			var example_module_dir = path.join(__dirname, "/../", "/example", "/nodejs/", "/requirejs")
+			var example_module_dir = path.join(__dirname, "/../", "/example", "/nodejs/", "/requirejs_amdefine")
 
 			it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
 				" load using amdefine", 
@@ -110,15 +110,14 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 					new Spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function() {
 
 						var requirejs = require("requirejs")
-						requirejs.config({nodeRequire: require})
+						requirejs.config({baseUrl: path.join(example_module_dir, "/build"), nodeRequire: require})
 
 						var mod_path = path.join(example_module_dir, "/build", "/entry.js")
 
 						// Load the r.js optimized module which contains the dependencies module_one.js and second_module.
 						requirejs(["require", mod_path], 
 							function(req, mod) {
-								console.log(mod)
-					
+								//console.log(mod)
 								done()
 						})
 

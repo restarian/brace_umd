@@ -409,8 +409,19 @@ if ( build_option.compress )
 var mangle_option = false
 // The JSON parsing is used to create a deep Object copy so that the original data can be stored after any internal options are set and removed (like
 // the compress.unused option).
-if ( build_option.mangle ) 
+if ( build_option.mangle ) {
+	if ( build_option.mangle.properties ) {
+		if ( typeof build_option.mangle.properties !== "object" )
+			build_option.mangle.properties = {reserved: ["exports"]}
+		if ( !(build_option.mangle.properties.reserved instanceof Array) )
+			build_option.mangle.properties.reserved = ["exports"]
+
+		build_option.mangle.properties.reserved.push("exports")
+
+	}
 	mangle_option = JSON.parse(JSON.stringify(build_option.mangle))
+}
+
 
 // The compress.unused option is set if the compress option is set to true or with additional options. This is only necessary when building the udm.js
 // source the first time because uglify-js will find code that is unused. It is fine to remove unused code after the module code is inserted and 
@@ -444,18 +455,12 @@ if ( build_option.mangle ) {
 	 build_option.mangle.reserved = []
 
 	// The umd script will not work if these namespaces are mangled.
-	build_option.mangle.reserved = build_option.mangle.reserved.concat(["define", "require", "requirejs"])
+	build_option.mangle.reserved = build_option.mangle.reserved.concat(["define", "require", "requirejs", "__dirname", "__filename"])
 	if ( build_option.mangle.properties ) {
 		// This call will inject the reserved names that are required when mangle-props is used.
-		if ( typeof build_option.mangle.properties !== "object" )
-			build_option.mangle.properties = {reserved: []}
-
-		if ( !(build_option.mangle.properties.reserved instanceof Array) )
-			build_option.mangle.properties.reserved = []
-
 		// The property name "require" should be reserved if mangle properties are used so that module.require can be used by the original namespace.
-		build_option.mangle.properties.reserved = build_option.mangle.properties.reserved.concat(["define", "require", "requirejs", "factory", "force_type"])
 		// force_type is optionally set and therefore needs to be preserved inside the script.
+		build_option.mangle.properties.reserved = build_option.mangle.properties.reserved.concat(["define", "require", "requirejs", "factory", "force_type"])
 	}
 }
 
