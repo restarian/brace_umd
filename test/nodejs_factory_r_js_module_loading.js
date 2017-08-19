@@ -27,7 +27,6 @@ SOFTWARE.
 */
 
 var expect = require("chai").expect,
-	spawn = require("child_process").exec,
 	path = require("path"),
 	fs = require("fs"),
 	method = require(__dirname+"/config/test_method.js"),
@@ -37,7 +36,7 @@ var Spinner = method.Spinner
 // Adding node to the command string will help windows know to use node with the file name. The unix shell knows what the #! at the beginning
 // of the file is for. The build_umd.js source will run if the spinner command is empty by setting the default_command member.
 Spinner.prototype.default_command = "node" 
-var build_path = path.join(__dirname, "/../", "/bin", "/build_umd.js") 
+var build_path = path.join(__dirname, "/..", "/bin", "/build_umd.js") 
 
 var remove_cache = function() {
 
@@ -103,7 +102,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 			})
 
 			// The current working directory of npm test commands is the module root which is what process.cwd() returns.
-			var example_module_dir = path.join(__dirname, "/../", "/example", "/nodejs/", "/factory")
+			var example_module_dir = path.join(__dirname, "/..", "/example", "/nodejs/", "/factory")
 
 			it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
 				" load using nodejs require", 
@@ -114,12 +113,10 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 						var mod_path = path.join(example_module_dir, "/build", "/entry.js")
 
 						var entry = require(mod_path)
-						expect(entry).to.be.an("object").that.nested.include({'module_one.id': "module_one"})
-						expect(entry).to.be.an("object").that.nested.include({'second_module.id': "second_module"})
-
-						expect(entry).to.be.an("object").that.nested.include({"entry.id": "entry"})
-							.that.deep.nested.include({"entry.module_one": {id: "module_one"}} )
-
+						console.log(entry.module_one)
+						expect(entry).to.be.an("object")
+						expect(entry.module_one).to.deep.equal({"id": "module_one"}) 
+						expect(entry.second_module).to.deep.equal({"id": "second_module"}) 
 						done()
 
 					}, function() {

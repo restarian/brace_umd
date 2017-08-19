@@ -123,21 +123,22 @@ describe("The build script", function() {
       })
     })
 
-  	it("a config file with non-uglify options erros and exits with code 11", function(done) {
-
-      new Spinner("node", [build_path, "--config-file test/config/build_config_b.json --tested-options test/config/unit_tested_option_a.json"], undefined,
+  	it("a config file with non-uglify options errors and exits with code 11", function(done) {
+		var tested_path = path.join(__dirname, "/config", "/unit_tested_option_a.json")
+      new Spinner("node", [build_path, "--config-file test/config/build_config_b.json --tested-options", tested_path], undefined,
       function(exit_code) {
 			// return code 11 is an uglify-js error
-         expect(parseInt(exit_code)).to.equal(11)
+			expect(parseInt(exit_code)).to.equal(11)
 			expect(this.stdout).to.include("DefaultsError: `test` is not a supported option")
-			expect(this.stdout).to.include("Option mangle.test.cools is not defined in the tested options file: /home/wasman/Restarian/brace_umd/test/config/unit_tested_option_a.json -- Therefore it is not safe to use and will be skipped.")
+			expect(this.stdout).to.include("Option mangle.test.cools is not defined in the tested options file: "+tested_path+" -- Therefore it is not safe to use and will be skipped.")
 			done()	
       })
     })
 
   	it("a config file with nested Object mangle options works as expected", function(done) {
 
-      new Spinner("node", [build_path, "--config-file test/config/build_config_d.json --tested-options test/config/unit_tested_option_a.json"], undefined,
+		var tested_path = path.join(__dirname, "/config", "/unit_tested_option_a.json")
+      new Spinner("node", [build_path, "--config-file test/config/build_config_d.json --tested-options", tested_path], undefined,
       function(exit_code) {
 
          var export_option = require("../").build_option
@@ -170,11 +171,12 @@ describe("The build script", function() {
 
   	it("should not make the changes of non-tested build options which are attempted to be set", function(done) {
 
-      new Spinner("node", [build_path, "--tested-options test/config/unit_tested_option_a.json --compress unused=false,unsafe,nah,sequences --beautify saywhat=false"], undefined, 
+		var tested_path = path.join(__dirname, "/config", "/unit_tested_option_a.json")
+      new Spinner("node", [build_path, "--tested-options", tested_path, "--compress unused=false,unsafe,nah,sequences --beautify saywhat=false"], undefined, 
 		function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
         var export_option = require("../").build_option
-		  expect(this.stdout).to.include("Option compress.unused is not defined in the tested options file: /home/wasman/Restarian/brace_umd/test/config/unit_tested_option_a.json -- Therefore it is not safe to use and will be skipped.")
+		  expect(this.stdout).to.include("Option compress.unused is not defined in the tested options file: "+ tested_path + " -- Therefore it is not safe to use and will be skipped.")
         expect(export_option).to.be.an("object")
         expect(export_option.output).to.have.any.keys("preamble")
         expect(export_option.compress).to.include({sequences: true}).that.not.have.any.keys("nah")
@@ -185,7 +187,8 @@ describe("The build script", function() {
 
   	it("odd cli arguments are processed appropriately", function(done) {
 
-      new Spinner("node", [build_path, "--tested-options test/config/unit_tested_option_a.json --mangle _ --compress properties=false,sequences=false,nah,_un=ff,_,_=aa --beautify saywhat=false"], undefined, function(exit_code) {
+	var tested_path = path.join(__dirname, "/config", "/unit_tested_option_a.json")
+      new Spinner("node", [build_path, "--tested-options", tested_path, "--mangle _ --compress properties=false,sequences=false,nah,_un=ff,_,_=aa --beautify saywhat=false"], undefined, function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
 
         var tested_file = require("../").build_information.tested_options_file
