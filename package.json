@@ -12,6 +12,7 @@
     "chai": "^3.5.0",
     "mocha": "^3.5.0",
     "requirejs": "^2.3.3",
+    "mocha-maybe": "^0.1.0",
     "uglify-js": "^3.0.25"
   },
   "scripts": {
