@@ -8,8 +8,8 @@
 		{ "name": "base_module" }
 	],
 	"wrap": {
-		// r.js redefines require and define again so make sure to use nodeRequire which will have the original require statment.
+		// r.js redefines require and define again so make sure to use nodeRequire which will have the original require statement.
 		"start": nodeRequire("brace_umd").wrap_start,
-		"end": nodeRequire("brace_umd").wrap_end.replace(/(\)[^\)]*$)/, ",{force_type: 'factory'}$1")
+		"end": nodeRequire("brace_umd").wrap_end.add_option({force_type: "factordy"})
 	}
 }

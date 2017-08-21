@@ -5,12 +5,11 @@
 ----
 ### Document pages
 
-* [Module synopsis](https://github.com/restarian/brace_umd/blob/master/doc/README.md)
-* [Exported build data](https://github.com/restarian/brace_umd/blob/master/doc/export.md)
-* [License information](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
-* [Using Brace UMD with the Requirejs optimizer](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md)
-* [Specifications](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
-* [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
+* [Exported build data](https:/github.com/restarian/brace_umd/blob/master/doc/export.md)
+* [License information](https:/github.com/restarian/brace_umd/blob/master/doc/license.md)
+* [Using Brace UMD with the Requirejs optimizer](https:/github.com/restarian/brace_umd/blob/master/doc/optimizer.md)
+* [Specifications](https:/github.com/restarian/brace_umd/blob/master/doc/specification.md)
+* [Todo](https:/github.com/restarian/brace_umd/blob/master/doc/todo.md)
 
 ----
 

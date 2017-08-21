@@ -4,16 +4,16 @@
   "description": "This script provides a unified module definition for the Requirejs and AMDefine syntax while staying seamlessly compliant with the r.js optimizer and factory based Objects.",
   "main": "lib/exporter.js",
   "dependencies": {
-    "command-exists": "^1.2.2",
     "commander": "^2.11.0"
   },
   "devDependencies": {
-    "amdefine": "^1.0.1",
     "chai": "^3.5.0",
     "mocha": "^3.5.0",
     "requirejs": "^2.3.3",
+    "amdefine": "^1.0.1",
     "mocha-maybe": "^0.1.0",
-    "uglify-js": "^3.0.25"
+    "uglify-js": "^3.0.25",
+    "command-exists": "^1.2.2"
   },
   "scripts": {
     "test": "mocha"

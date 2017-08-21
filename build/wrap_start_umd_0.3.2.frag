@@ -6,47 +6,47 @@
         define: o,
         e: e,
         o: e && e.exports || n,
-        i: [ 'requirejs', 'define', 'require', 'factory' ],
+        i: [ "requirejs", "define", "require", "factory" ],
         force_type: r.force_type,
-        n: [ 'config', 'nextTick', 'version', 'jsExtRegExp', 'isBrowser', 's', 'toUrl', 'undef', 'defined', 'specified', 'onError', 'createNode', 'load', 'exec' ],
-        r: [ 'amd', 'require' ],
+        n: [ "config", "nextTick", "version", "jsExtRegExp", "isBrowser", "s", "toUrl", "undef", "defined", "specified", "onError", "createNode", "load", "exec" ],
+        r: [ "amd", "require" ],
         t: function() {
             if (t.e && !t.define) try {
-                t.define = t.e.require('amdefine')(t.e);
+                t.define = t.e.require("amdefine")(t.e);
                 for (var e in t.define) t.t[e] = t.define[e];
             } catch (e) {
                 console.log(e.message);
             }
             var o = t.define || t.factory;
-            o == t.define ? console.log('Using proxied amdefine definition.') : console.log('Using factory proxied from amdefine call.'), 
+            o == t.define ? console.log("Using proxied amdefine definition.") : console.log("Using factory proxied from amdefine call."), 
             o.apply(o.prototype, arguments);
         },
         s: function() {
             if (t.e && !t.requirejs) try {
-                t.requirejs = t.e.require('requirejs');
+                t.requirejs = t.e.require("requirejs");
                 for (var e in t.requirejs) t.s[e] = t.requirejs[e];
             } catch (e) {
                 console.log(e.message);
             }
-            console.log('Using proxied requirejs method.');
+            console.log("Using proxied requirejs method.");
             var o = t.requirejs || t.factory;
             o.apply(o.prototype, arguments);
         }
     };
     for (var s in t.r) t.t.__defineGetter__(t.r[s], function(e) {
         if (t.e && !t.define) try {
-            t.define = t.e.require('amdefine')(t.e);
+            t.define = t.e.require("amdefine")(t.e);
             for (var o in t.define) delete this[o], this[o] = t.define[o];
-            return console.log('Using proxied amdefine method.'), t.define[e];
+            return console.log("Using proxied amdefine method."), t.define[e];
         } catch (e) {
             return console.log(e.message);
         }
     }.bind(null, t.r[s]));
     for (var s in t.n) t.s.__defineGetter__(t.n[s], function(e) {
         if (t.e && !t.requirejs) try {
-            t.requirejs = t.e.require('requirejs');
+            t.requirejs = t.e.require("requirejs");
             for (var o in t.requirejs) delete this[o], this[o] = t.requirejs[o];
-            return console.log('Using proxied requirejs method.'), t.requirejs[o];
+            return console.log("Using proxied requirejs method."), t.requirejs[o];
         } catch (e) {
             return console.log(e.message);
         }
@@ -54,14 +54,14 @@
     t.factory = t.o && function(e, o, i, n) {
         if (e && e.constructor === Array && this.e) {
             var r = e, t = dependency;
-            n = n, i = i, dependency = r, e = this.e.d || '';
+            n = n, i = i, dependency = r, e = this.e.d || "";
         }
-        'string' != typeof e ? console.log('The factory Object is being used but the module does not supply an id parameter. Skipping loading of the module.') : o.every(function(o) {
-            return o in this.o || !!console.log('The dependency', o, 'is not loaded into the factory. Skipping loading of the module', e);
+        "string" != typeof e ? console.log("The factory Object is being used but the module does not supply an id parameter. Skipping loading of the module.") : o.every(function(o) {
+            return o in this.o || !!console.log("The dependency", o, "is not loaded into the factory. Skipping loading of the module", e);
         }, this) && (this.o[e] = i.apply(i.prototype, o.map(function(e, o) {
             return this.o[e];
         }, this)));
-    }.bind(t), t.force_type && (new RegExp(t.force_type + ',+').test(t.i.join(',') + ',') ? t[t.force_type] ? (console.log('Forcing use of the definition type', t.force_type), 
-    t.requirejs = t.require = t.define = t.factory = t[t.force_type]) : console.log('The forced type', t.force_type, 'is not available.') : console.log('The force_type', t.force_type, 'specified as an option is not supported by Brace UMD. Supported types are:', t.i.join(', '))), 
+    }.bind(t), t.force_type && (new RegExp(t.force_type + ",+").test(t.i.join(",") + ",") ? t[t.force_type] ? (console.log("Forcing use of the definition type", t.force_type), 
+    t.requirejs = t.require = t.define = t.factory = t[t.force_type]) : console.log("The forced type", t.force_type, "is not available.") : console.log("The force_type", t.force_type, "specified as an option is not supported by Brace UMD. Supported types are:", t.i.join(", "))), 
     define = t.define || t.t, requirejs = t.requirejs || t.s, require = t.e && t.e.require || requirejs;
 ;
