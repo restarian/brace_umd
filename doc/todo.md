@@ -16,8 +16,9 @@
 
 **Things to do with Brace UMD**
 * Basic
-	* Add a member to the exported to add options to the end wrap fragment in the r.js build files
 	* Create browser examples
 	* Unit test browser examples
+	* Document options available to script
 * Features
+	* Look into creating a pass_prototype option so that the factory will be called with the same prototype.
 	* Enabling source maps to uglify may be warranted.

@@ -30,7 +30,7 @@ var expect = require("chai").expect,
 	spawn = require("child_process").exec,
 	path = require("path"),
 	fs = require("fs"),
-	method = require(__dirname+"/config/test_method.js"),
+	method = require("process-wrap"),
 	maybe = require("mocha-maybe")
 
 var Spinner = method.Spinner
@@ -38,6 +38,7 @@ var Spinner = method.Spinner
 // of the file is for. The build_umd.js source will run if the spinner command is empty by setting the default_command member.
 Spinner.prototype.default_command = "node" 
 var build_path = path.join(__dirname, "/../", "/bin", "/build_umd.js") 
+var config_dir = path.join(__dirname, "/config") 
 
 var remove_cache = function() {
 
@@ -84,7 +85,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 	  // An array with the values of the test directory is filtered to include all of the files included with the regex.
 	  var config_file = fs.readdirSync(path.join(__dirname, "/config")).filter(function(value) { return RegExp(/^build_config_.*\.json/).test(value) })
 	  config_file.forEach(function(value) {
-		 value = path.join(__dirname, "/config/", value)
+		 value = path.join(config_dir, value)
 		
 		 describe("using config file "+ value, function() {
 
@@ -117,7 +118,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 						// Load the r.js optimized module which contains the dependencies module_one.js and second_module.
 						requirejs(["require", mod_path], 
 							function(req, mod) {
-								//console.log(mod)
+								console.log(mod)
 								done()
 						})
 

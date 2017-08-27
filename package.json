@@ -7,13 +7,13 @@
     "commander": "^2.11.0"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "mocha": "^3.5.0",
-    "requirejs": "^2.3.3",
     "amdefine": "^1.0.1",
+    "mocha": "^3.5.0",
     "mocha-maybe": "^0.1.0",
-    "uglify-js": "^3.0.25",
-    "command-exists": "^1.2.2"
+    "process-wrap": "0.0.1",
+    "requirejs": "^2.3.3",
+    "squirejs": "^0.2.1",
+    "uglify-js": "^3.0.25"
   },
   "scripts": {
     "test": "mocha"
