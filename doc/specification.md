@@ -5,10 +5,11 @@
 ------
 
 ### Document pages
-* [Synopsis](https://github.com/restarian/brace_umd/blob/master/README.md)
-* [Building UMD source](https://github.com/restarian/brace_umd/blob/master/doc/build.md)
-* [Using with r.js](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md)
-* [Licenses](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
+* [Module synopsis](https://github.com/restarian/brace_umd/blob/master/doc/README.md)
+* [(Re)building the source](https://github.com/restarian/brace_umd/blob/master/doc/build.md)
+* [Exported build data](https://github.com/restarian/brace_umd/blob/master/doc/export.md)
+* [License information](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
+* [Using Brace UMD with the Requirejs optimizer](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md)
 * [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 
 ----
@@ -18,7 +19,7 @@
 
 * License: [MIT](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
 * Dependencies: [Commander](https://www.npmjs.com/package/commander)
-* Development dependencies: [Mocha](https://www.npmjs.com/package/mocha), [Chai](https://www.npmjs.com/package/chai),  [UglifyJS-3](https://www.npmjs.com/package/uglify-js), [RequireJs](https://www.npmjs.com/package/requirejs)   
+* Development dependencies: [Mocha](https://www.npmjs.com/package/mocha), [Chai](https://www.npmjs.com/package/chai),  [UglifyJS-3](https://www.npmjs.com/package/uglify-js), [RequireJs](https://www.npmjs.com/package/requirejs), [Mocha-maybe](https://www.npmjs.com/package/mocha-maybe) 
 * Platform support: Windows 10, Ubuntu 16 *Apple products and other versions require an* [issue](https://github.com/restarian/brace_umd/issues) *submission if one is found*
 * Installer support: [npm](https://npmjs.org) *version 5 was used*
 

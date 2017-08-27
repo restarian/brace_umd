@@ -26,29 +26,31 @@ SOFTWARE.
  Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com>
 */
 
-var expect = require("chai").expect,
+var expect = require("chai").expect
 	path = require("path"),
 	fs = require("fs"),
-	method = require(__dirname+"/config/test_method.js"),
+	method = require("process-wrap"),
 	maybe = require("mocha-maybe")
 
 var Spinner = method.Spinner
 // Adding node to the command string will help windows know to use node with the file name. The unix shell knows what the #! at the beginning
 // of the file is for. The build_umd.js source will run if the spinner command is empty by setting the default_command member.
 Spinner.prototype.default_command = "node" 
-var build_path = path.join(__dirname, "/..", "/bin", "/build_umd.js") 
+var build_path = path.join(__dirname, "/../", "/bin", "/build_umd.js") 
+var config_dir = path.join(__dirname, "/config") 
 
 var remove_cache = function() {
 
 	// The amdefine module need to be reloaded again so that the previous module data which is stored in the amdefine loader cache will be removed.
 	// All subsequent tests after the first one to verify if modules are available would pass or fail if the amdefine loader cache was not removed.
 	for ( var id in require.cache )
-	  if ( path.basename(id) === "entry.js" || path.basename(id) === "r.js" )
+	  if ( path.basename(id) === "entry.js" )
 	    delete require.cache[id]
 
 }
 
 describe("Using stop further progression methodology for file dependencies: "+path.basename(__filename), function() { 
+
 
 	// The stop property of the first describe enclosure is used to control test skipping.
 	this.stop = false
@@ -81,10 +83,11 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 	describe("nodejs require loading after r_js optimization on modules using the factory", function() {
 
 	  // An array with the values of the test directory is filtered to include all of the files included with the regex.
-	  fs.readdirSync(path.join(__dirname, "/config")).filter(function(value) { return RegExp(/^build_config_.*\.json/).test(value) })
+	  fs.readdirSync(config_dir)
+	  .filter(function(value) { return RegExp(/^build_config_.*\.json/).test(value) })
 	  .forEach(function(value) {
 
-		 value = path.join(__dirname, "/config/", value)
+		 value = path.join(config_dir, value)
 			
 		 describe("using config file "+ value + " with r_js", function() {
 		
@@ -109,14 +112,13 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				function(done) {
 
 					new Spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function() {
-
 						var mod_path = path.join(example_module_dir, "/build", "/entry.js")
 
 						var entry = require(mod_path)
-						console.log(entry.module_one)
-						expect(entry).to.be.an("object")
-						expect(entry.module_one).to.deep.equal({"id": "module_one"}) 
-						expect(entry.second_module).to.deep.equal({"id": "second_module"}) 
+						expect(entry).to.nested.include({'module_one.id': "module_one"})
+						expect(entry).to.nested.include({'second_module.id': "second_module"})
+						expect(entry).to.nested.include({"entry.id": "entry"}).that.deep.nested.include({"entry.module_one": {id: "module_one"}} )
+
 						done()
 
 					}, function() {

@@ -1,7 +1,7 @@
 
 var expect = require("chai").expect
 	path = require("path"),
-	method = require(__dirname+"/config/test_method.js")
+	method = require("process-wrap")
 	//maybe = require("mocha-maybe")
 
 var Spinner = method.Spinner
@@ -15,7 +15,6 @@ describe("This test is ran to build the project source back to the default becau
   	it("this test is to build the project as the doc pages were", function(done) {
 
       new Spinner("node", [build_path, "--config-file", path.join(__dirname, "/../", "/doc", "/doc_config.json")], undefined, function(exit_code) {
-			console.log(this.stdout)
         expect(parseInt(exit_code)).to.equal(5)
         done()
 

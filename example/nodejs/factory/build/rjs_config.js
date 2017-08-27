@@ -2,14 +2,14 @@
 	"baseUrl": "./",
   	"dir": "build",
 	"optimize": "uglify2",
-	"uglify2": nodeRequire("brace_umd").build_option,
+	"uglify2": nodeRequire("brace_umd").build_option_extend({mangle: false, output: {beautify: true}}),
 	"modules": [
 		{ "name": "entry" },
 		{ "name": "base_module" }
 	],
 	"wrap": {
-		// r.js redefines require and define again so make sure to use nodeRequire which will have the original require statment.
+		// r.js redefines require and define again so make sure to use nodeRequire which will have the original require statement.
 		"start": nodeRequire("brace_umd").wrap_start,
-		"end": nodeRequire("brace_umd").wrap_end.replace(/(\)[^\)]*$)/, ",{force_type: 'factory'}$1")
+		"end": nodeRequire("brace_umd").wrap_end_option({force_type: "factory"})
 	}
 }

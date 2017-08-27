@@ -1,38 +1,21 @@
+var path = require("path"),
+	maybe = require("mocha-maybe"),
+	Spinner = require("process-wrap").Spinner,
+	requirejs = require("requirejs")
 
-const { spawn } = require('child_process');
-const subprocess = spawn('bad_command');
+// Adding node to the command string will help windows know to use node with the file name. The unix shell knows what the #! at the beginning
+// of the file is for but windows will complain. The build_umd.js source will run if the spinner command is empty by setting the default_command member.
+Spinner.prototype.default_command = "node" 
 
-subprocess.on('error', (err) => {
-  console.log('Failed to start subprocess.');
-});
+var example_module_dir = "./example/nodejs/factory/"
 
-process.exit()
-//require("./example/nodejs/amdefine/build/entry.js")
-//require("./test.js")
-
-//console.log(define.global)
-var expect = require("chai").expect
-//	spawn = require("child_process").exec,
-var	path = require("path")
-//	fs = require("fs")
-
-var requirejs = require("requirejs")
-requirejs.config({nodeRequire: require})
+///requirejs.optimize({}, function() { console.log(111, arguments) }, function() { console.log(222, arguments) })
 
 
-it("ddd", function(done) { 
-		
-		//var example_module_dir = path.join(process.cwd(), "/example", "/nodejs/", "/amdefine")
-		var example_module_dir = path.join("./example", "/nodejs/", "/amdefine")
-			
-		var mod_path = path.join(example_module_dir, "/build", "/entry.js")
+new Spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function() { 
 
-		requirejs(["require", mod_path], function(req) {
-
-			console.log(1111, req("module_one"))		    	
-		//	done()
-//			expect(false).to.equal(false)
-		})
-
-
+	console.log("111111111111fffdeee", this.stdout)
+}, function(err) {
+	
+	console.log("222222222222222", err, this.stdout, this.stderr)
 })

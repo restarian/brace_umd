@@ -30,7 +30,7 @@ var expect = require("chai").expect,
 	spawn = require("child_process").exec,
 	path = require("path"),
 	fs = require("fs"),
-	method = require(__dirname+"/config/test_method.js"),
+	method = require("process-wrap"),
 	maybe = require("mocha-maybe")
 
 var Spinner = method.Spinner
@@ -38,6 +38,7 @@ var Spinner = method.Spinner
 // of the file is for. The build_umd.js source will run if the spinner command is empty by setting the default_command member.
 Spinner.prototype.default_command = "node" 
 var build_path = path.join(__dirname, "/../", "/bin", "/build_umd.js") 
+var config_dir = path.join(__dirname, "/config") 
 
 var remove_cache = function() {
 
@@ -82,7 +83,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 	describe("Requirejs module loading after using r_js optimization on amdefined modules", function() {
 
 	  // An array with the values of the test directory is filtered to include all of the files included with the regex.
-	  var config_file = fs.readdirSync(path.join(__dirname, "/config")).filter(function(value) { return RegExp(/^build_config_.*\.json/).test(value) })
+	  var config_file = fs.readdirSync(config_dir).filter(function(value) { return RegExp(/^build_config_.*\.json/).test(value) })
 	  config_file.forEach(function(value) {
 		 value = path.join(__dirname, "/config/", value)
 		
@@ -122,9 +123,9 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 								var mod_two = req("second_module")
 								var entry = req("entry")
 
-								expect(mod_one).to.be.an("object").that.deep.equal({ id: "module_one" })
-								expect(mod_two).to.be.an("object").that.deep.equal({ id: "second_module" })
-								expect(entry).to.be.an("object").that.deep.equal({id: "entry", module_one: {id: "module_one"}, second_module: {id: "second_module"}})
+								expect(mod_one).to.deep.equal({ id: "module_one" })
+								expect(mod_two).to.deep.equal({ id: "second_module" })
+								expect(entry).to.deep.equal({id: "entry", module_one: {id: "module_one"}, second_module: {id: "second_module"}})
 								done()
 						})
 

@@ -1,1 +1,1 @@
-}('object' == typeof module && module.exports && module || void 0, 'string' == typeof __filename && __filename || '', 'string' == typeof __dirname && __dirname || '', 'function' == typeof define && define || void 0, 'function' == typeof requirejs && requirejs || void 0, this);
+}("object" == typeof module && module.exports && module || void 0, "string" == typeof __filename && __filename || "", "string" == typeof __dirname && __dirname || "", "function" == typeof define && define || void 0, "function" == typeof requirejs && requirejs || void 0, this);

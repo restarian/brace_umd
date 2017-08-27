@@ -466,7 +466,8 @@ if ( build_option.mangle ) {
 		// This call will inject the reserved names that are required when mangle-props is used.
 		// The property name "require" should be reserved if mangle properties are used so that module.require can be used by the original namespace.
 		// force_type is optionally set and therefore needs to be preserved inside the script.
-		build_option.mangle.properties.reserved = build_option.mangle.properties.reserved.concat(["define", "require", "requirejs", "factory", "force_type"])
+		build_option.mangle.properties.reserved = build_option.mangle.properties.reserved.concat(["define", "require", "requirejs", "factory", 
+																							"force_type", "filename", "dirname"])
 	}
 }
 

@@ -4,10 +4,11 @@
 ------
 
 ### Document pages
-* [Synopsis](https://github.com/restarian/brace_umd/blob/master/README.md)
-* [Building UMD source](https://github.com/restarian/brace_umd/blob/master/doc/build.md)
-* [Using with r.js](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md)
-* [Specification](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
+* [Module synopsis](https://github.com/restarian/brace_umd/blob/master/doc/README.md)
+* [(Re)building the source](https://github.com/restarian/brace_umd/blob/master/doc/build.md)
+* [Exported build data](https://github.com/restarian/brace_umd/blob/master/doc/export.md)
+* [Using Brace UMD with the Requirejs optimizer](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md)
+* [Specifications](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
 * [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 
 ----
