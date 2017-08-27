@@ -10,9 +10,8 @@
     "amdefine": "^1.0.1",
     "mocha": "^3.5.0",
     "mocha-maybe": "^0.1.0",
-    "process-wrap": "0.0.1",
+    "process-wrap": "^0.0.3",
     "requirejs": "^2.3.3",
-    "squirejs": "^0.2.1",
     "uglify-js": "^3.0.25",
     "chai": "^4.1.1"
   },
