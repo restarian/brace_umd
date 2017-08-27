@@ -13,7 +13,8 @@
     "process-wrap": "0.0.1",
     "requirejs": "^2.3.3",
     "squirejs": "^0.2.1",
-    "uglify-js": "^3.0.25"
+    "uglify-js": "^3.0.25",
+    "chai": "^4.1.1"
   },
   "scripts": {
     "test": "mocha"
