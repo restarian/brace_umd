@@ -15,6 +15,7 @@ describe("This test is ran to build the project source back to the default becau
   	it("this test is to build the project as the doc pages were", function(done) {
 
       new Spinner("node", [build_path, "--config-file", path.join(__dirname, "/../", "/doc", "/doc_config.json")], undefined, function(exit_code) {
+	      	console.log(this.stdout, this.stderr)
         expect(parseInt(exit_code)).to.equal(5)
         done()
 
