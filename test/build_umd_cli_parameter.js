@@ -69,7 +69,6 @@ describe("The build script", function() {
   	it("should provide a warning message when non-tested options which are attempted to be set", function(done) {
 
       new Spinner("node", [build_path, "--tested-options", path.join(config_dir, "/unit_tested_option_a.json"), "--compress", "unused,unsafe"], undefined, function(exit_code) {
-			console.log(this.stderr)
         expect(parseInt(exit_code)).to.equal(5)
         var tested_file = require("../").build_information.tested_options_file
         expect(this.stdout).to.include("Option compress.unsafe is not defined in the tested options file: " + tested_file + " -- Therefore it is not safe to use and will be skipped.")
@@ -125,14 +124,14 @@ describe("The build script", function() {
       })
 	})
 
-  	it("a config file with non-uglify options erros and exits with code 11", function(done) {
+  	it("a config file with non-uglify options errors and exits with code 11", function(done) {
 
       new Spinner("node", [build_path, "--config-file", path.join(config_dir, "/build_config_b.json"), "--tested-options", path.join(config_dir, "/unit_tested_option_a.json")], undefined,
       function(exit_code) {
 			// return code 11 is an uglify-js error
-         expect(parseInt(exit_code)).to.equal(11)
+			expect(parseInt(exit_code)).to.equal(11)
 			expect(this.stdout).to.include("DefaultsError: `test` is not a supported option")
-			expect(this.stdout).to.include("Option mangle.test.cools is not defined in the tested options file: /home/wasman/Restarian/brace_umd/test/config/unit_tested_option_a.json -- Therefore it is not safe to use and will be skipped.")
+			expect(this.stdout).to.include("Option mangle.test.cools is not defined in the tested options file: " + path.join(config_dir, "/unit_tested_option_a.json") + " -- Therefore it is not safe to use and will be skipped.")
 			done()	
 		})
 	})
@@ -176,7 +175,7 @@ describe("The build script", function() {
 		function(exit_code) {
         expect(parseInt(exit_code)).to.equal(5)
         var export_option = require("../").build_option
-		  expect(this.stdout).to.include("Option compress.unused is not defined in the tested options file: /home/wasman/Restarian/brace_umd/test/config/unit_tested_option_a.json -- Therefore it is not safe to use and will be skipped.")
+		  expect(this.stdout).to.include("Option compress.unused is not defined in the tested options file: " + path.join(config_dir, "/unit_tested_option_a.json") + " -- Therefore it is not safe to use and will be skipped.")
         expect(export_option).to.be.an("object")
         expect(export_option.output).to.have.any.keys("preamble")
         expect(export_option.compress).to.include({sequences: true}).that.not.have.any.keys("nah")
