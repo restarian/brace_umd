@@ -2,7 +2,7 @@
 	"baseUrl": "./",
   	"dir": "build",
 	"optimize": "uglify2",
-	"uglify2": nodeRequire("brace_umd").build_option_extend({mangle: false, output: {beautify: true}}),
+	"uglify2": nodeRequire("brace_umd").build_option,
 	"modules": [
 		{ "name": "entry" },
 		{ "name": "base_module" }

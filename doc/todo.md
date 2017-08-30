@@ -17,8 +17,9 @@
 **Things to do with Brace UMD**
 * Basic
 	* Create browser examples
-	* Unit test browser examples
+	* Create export wrap_end_option unit tests
 	* Document options available to script
+	* Unit test browser examples
 * Features
 	* Look into creating a pass_prototype option so that the factory will be called with the same prototype.
 	* Enabling source maps to uglify may be warranted.

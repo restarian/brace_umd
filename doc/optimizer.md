@@ -31,12 +31,13 @@ Below is an example r.js build config json file where the umd source fragments a
     // r.js redefines require and define again so make sure to use nodeRequire which will have the original require statement.
     start: nodeRequire("brace_umd").wrap_start,
     end: nodeRequire("brace_umd").wrap_end
- 	 // end: nodeRequire("brace_umd").wrap_end.add_option({force_type: "factory"})
+	 // This is how options are added via r.js build config.
+ 	 // end: nodeRequire("brace_umd").wrap_end_option({force_type: "factory"})
   }
 }
 ```
 
-The example above also displays the use of add_option to the wrap_end string exported by brace_umd. The wrap_end string is a String Object which has a add_option member. The function itself runs a fairly simple regex on the wrap_end fragment string (found in the build/wrap_end_umd_*[package version]*.frag file), which adds the option as the last argument of UMD enclosure function (see [definition types](https://github.com/restarian/brace_umd/blob/master/doc/definitions.md). Note: the add_option functionality does not work file locations when using *nodeRequire("brace_umd").wrap_end* for the *wrap.endFile* in the build config so it is best to always use the wrap_end string.
+The example above also displays the use of add_option to the wrap_end string exported by brace_umd. The wrap_end string is a String Object which has a add_option member. The function itself runs a fairly simple regex on the wrap_end fragment string (found in the build/wrap_end_umd_*[package version]*.frag file), which adds the option as the last argument of UMD enclosure function (see [definition types](https://github.com/restarian/brace_umd/blob/master/doc/definitions.md). Note: the wrap_end_option functionality does not work file locations when using *nodeRequire("brace_umd").wrap_end* for the *wrap.endFile* in the build config so it is best to always use the wrap_end string.
 
 
 The wrap file location can be used instead of the string like below but the *add_option* member will not be available.

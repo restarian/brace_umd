@@ -471,7 +471,6 @@ if ( build_option.mangle ) {
 	}
 }
 
-
 var data = ""
 try { data = fs.readFileSync(lib + "umd.js") }
 catch(e) { console.log(e); process.exit(7) }
@@ -513,7 +512,7 @@ console.log("Exported umb build information data file:", location)
 
 // Find the first character which starts the closing bracket and function execution parenthesis to to separate them into two fragments. This 
 // separates the function into two parts so that script can be injected into the function at the very bottom.
-var close_index = out.search(/\}[^\}]*$/)
+var close_index = out.search(/\}[^\}]*\{\}\)[\s,\;]*$/)
 
 // Write out the wrapping fragment for use with the requirejs optimizer (r.js). This should go in the {wrap {start: []} } part of the r.js optimizer 
 // build file.
