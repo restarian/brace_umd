@@ -441,6 +441,7 @@ if ( !build_option.mangle )
 	build_option.mangle = false
 
 build_option.compress.unused = false
+build_option.compress.dead_code = false
 
 // The preamble options is little special. A default string will be provided if the output.preamble option is set to true. Setting it to false will disable
 // it like in Uglify-js. Setting a string will use that for the preamble.
@@ -461,13 +462,13 @@ if ( build_option.mangle ) {
 	 build_option.mangle.reserved = []
 
 	// The umd script will not work if these namespaces are mangled.
-	build_option.mangle.reserved = build_option.mangle.reserved.concat(["define", "require", "requirejs", "__dirname", "__filename"])
+	build_option.mangle.reserved = build_option.mangle.reserved.concat(["define", "require", "requirejs", "module", "__dirname", "__filename"])
 	if ( build_option.mangle.properties ) {
 		// This call will inject the reserved names that are required when mangle-props is used.
 		// The property name "require" should be reserved if mangle properties are used so that module.require can be used by the original namespace.
 		// force_type is optionally set and therefore needs to be preserved inside the script.
 		build_option.mangle.properties.reserved = build_option.mangle.properties.reserved.concat(["define", "require", "requirejs", "factory", 
-																							"force_type", "filename", "dirname"])
+																							"force_type", "filename", "dirname", "auto_anonymouse"])
 	}
 }
 
@@ -485,12 +486,13 @@ if ( out.error ) {
 }
 out = out.code
 
-// The compress.unused option needs to be set back to the way it was originally If the compress option is set. This needs to be done so that unused
+console.log("Options to be used with uglify-js:\n", build_option)
+
+// The compress.unused option needs to be set back to the way it was originally if the compress option is set. This needs to be done so that unused
 // code is not removed until after the module code in inserted.
 build_option.compress = compress_option
 build_option.mangle = mangle_option
 
-console.log("Options to be used with uglify-js:\n", build_option)
 console.log("Exporting data to build directory:", build_dir)
 
 var location = build_dir + "build_options_" + info.version + ".json"
@@ -512,18 +514,20 @@ console.log("Exported umb build information data file:", location)
 
 // Find the first character which starts the closing bracket and function execution parenthesis to to separate them into two fragments. This 
 // separates the function into two parts so that script can be injected into the function at the very bottom.
-var close_index = out.search(/\}[^\}]*\{\}\)[\s,\;]*$/)
+
+var close_index = out.match(/([\n,\r,\,]+)[\s,\n,\r]*([a-z,\_,\-]+\.[a-z,\_,\-]+\.length\s*\&\&[\s,\n,\r]*define\([\s,\n,\r]*\[[^\]]+\][^\)]+\)[^\}]+[\s,\n,\r]*\}[\s,\n,\r]*\)\;*[\s,\n,\r]*\}[^\}]*\{\}\)[\s,\;]*)$/)
+//console.log(close_index)
 
 // Write out the wrapping fragment for use with the requirejs optimizer (r.js). This should go in the {wrap {start: []} } part of the r.js optimizer 
 // build file.
 location = build_dir + "wrap_start_umd_"+info.version+".frag"
-try { fs.writeFileSync(location, out.substr(0, close_index) + ";") }
+try { fs.writeFileSync(location, out.substr(0, out.indexOf(close_index[0])) + ";") }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js build end wrap:", location)
 
 // Also create the closing wrapper which is pulled from the minified source and write it to the build directory.
 location = build_dir + "wrap_end_umd_"+info.version+".frag"
-try { fs.writeFileSync(location, out.substr(close_index)) }
+try { fs.writeFileSync(location, close_index[2]) }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js build end wrap:", location)
 

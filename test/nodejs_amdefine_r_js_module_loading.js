@@ -45,7 +45,7 @@ var remove_cache = function() {
 	// The amdefine module need to be reloaded again so that the previous module data which is stored in the amdefine loader cache will be removed.
 	// All subsequent tests after the first one to verify if modules are available would pass or fail if the amdefine loader cache was not removed.
 	for ( var id in require.cache ) 
-	  if ( path.basename(id) === "entry.js" || path.basename(id) === "r.js" ) 
+	  if ( path.basename(id) === "entry.js" || path.basename(id) === "r.js" || path.basename(id) === "amdefine.js" ) 
 	    delete require.cache[id]
 }
 
@@ -106,25 +106,15 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 			var example_module_dir = path.join(__dirname, "/../", "/example", "/nodejs/", "/amdefine")
 
 			it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
-				" load using amdefine", 
+				" load using amdefine with the make_anonymouse option used", 
 				function(done) {
-					new Spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function() {
+					new Spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config_auto_anonymouse.js")], undefined, 
+					function() {
 
-						var requirejs = require("requirejs")
-						// Set the baseUrl to the build directory so that any modules not found there will be loaded via the node require instead (which
-						// is requirejs best practice).
-						requirejs.config({baseUrl: path.join(example_module_dir, "/build"), nodeRequire: require})
+						var define = require("amdefine")(module)
+						define(["require", path.join(example_module_dir, "/build", "/entry.js")], 
+							function(req, entry) {
 
-						// Load the r.js optimized module which contains the dependencies module_one.js and second_module.
-						requirejs(["require", "entry"], 
-							function(req) {
-
-								var mod_one = req("module_one")
-								var mod_two = req("second_module")
-								var entry = req("entry")
-
-								expect(mod_one).to.deep.equal({ id: "module_one" })
-								expect(mod_two).to.deep.equal({ id: "second_module" })
 								expect(entry).to.deep.equal({id: "entry", module_one: {id: "module_one"}, second_module: {id: "second_module"}})
 								done()
 						})
@@ -134,6 +124,28 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 					  done()
 					})
 				})
+
+			it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
+				" load using amdefine", 
+				function(done) {
+
+					new Spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config.js")], undefined, 
+					function() {
+
+						var define = require("amdefine")(module)
+						define(["require", path.join(example_module_dir, "/build", "/entry.js")], 
+							function(req, entry) {
+
+								expect(entry).to.deep.equal({})
+								done()
+						})
+					}, function(err) {
+					  expect(false, err).to.equal(true)
+					  done()
+					})
+				})
+
+
 			})
 		})
 	})
