@@ -1,22 +1,20 @@
-
 # Brace UMD
 ### (Re)building the source
 
 ----
 ### Document pages
 
-* [Module synopsis](https://github.com/restarian/brace_umd/blob/master/doc/README.md)
-* [Exported build data](https://github.com/restarian/brace_umd/blob/master/doc/export.md)
+* [Synopsis](https://github.com/restarian/brace_umd/blob/master/doc/README.md)
 * [License information](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
 * [Using Brace UMD with the Requirejs optimizer](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md)
+* [Available option data](https://github.com/restarian/brace_umd/blob/master/doc/options.md)
+* [Passing in option data](https://github.com/restarian/brace_umd/blob/master/doc/passing_option_data.md)
 * [Specifications](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
 * [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 
 ----
 
-
-
-Brace UMD is built with UglifyJS-3 and is tested on Windows 10 and Ubuntu 16. The command line program *(bin/build_umd)* accepts the exact same parameters as UglifyJS-3 does. E.g.
+Brace UMD is built using Uglify-JS version 3 and is tested on Windows 10 and Ubuntu 16. The command line program *(bin/build_umd)* accepts the exact same parameters as Uglify-JS does. E.g.
 
     build_umd --beautify comments="all",beautify=false
 

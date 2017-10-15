@@ -6,16 +6,17 @@
 ------
 
 ### Document pages
-* [Module synopsis](https://github.com/restarian/brace_umd/blob/master/doc/README.md)
+* [Synopsis](https://github.com/restarian/brace_umd/blob/master/doc/README.md)
 * [(Re)building the source](https://github.com/restarian/brace_umd/blob/master/doc/build.md)
-* [Exported build data](https://github.com/restarian/brace_umd/blob/master/doc/export.md)
 * [License information](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
+* [Available option data](https://github.com/restarian/brace_umd/blob/master/doc/options.md)
+* [Passing in option data](https://github.com/restarian/brace_umd/blob/master/doc/passing_option_data.md)
 * [Specifications](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
 * [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 
 ----
 
-The *r.js* program also uses *uglify-js* so the options used in building the umd.js source are imported from the build directory which also contains the wrapping fragments. * Note: *Brace UMD* uses UglifyJS-3 and is not compatible with any other major versions.
+The *r.js* (requires optimizer), script also uses *uglify-js* so the options used in building the umd.js source are imported from the build directory which also contains the wrapping fragments. * Note: *Brace UMD* uses UglifyJS-3 and is not compatible with any other major versions.
 
 Below is an example r.js build config json file where the umd source fragments and the build options which created the source are used. It is necessary to use *nodeRequire* and not *require* when fetching the brace_umd package because the r.js script creates an atypical require function for use internally which will not have the correct path available to find the brace_umd package.
 

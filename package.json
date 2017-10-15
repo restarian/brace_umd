@@ -1,7 +1,7 @@
 {
   "name": "brace_umd",
   "version": "0.5.1",
-  "description": "This script provides a unified module definition for the Requirejs and AMDefine syntax while staying seamlessly compliant with the r.js optimizer and factory based Objects.",
+  "description": "This module provides a unified module definition for Requirejs and AMDefine definitions while staying seamlessly compliant with the requirejs optimizer and factory based Objects.",
   "main": "lib/exporter.js",
   "dependencies": {
     "commander": "^2.11.0"
@@ -13,7 +13,8 @@
     "process-wrap": "^0.0.3",
     "requirejs": "^2.3.3",
     "uglify-js": "^3.0.25",
-    "chai": "^4.1.1"
+    "chai": "^4.1.1",
+    "brace_navlink": "^0.2.0"
   },
   "scripts": {
     "test": "mocha"
