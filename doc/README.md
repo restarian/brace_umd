@@ -118,6 +118,11 @@ Note: it is acceptable to use mangle and mangle properties with the umd source a
         }
     }.bind(null, n.d[s]));
     __filename = this.e && module.filename || void 0, __dirname = this.e && module.require('path').dirname(__filename) || void 0, 
+
+// Add module definitions here ----------------
+
+// --------------------------------------------
+
     n.n(), n.i.length && define([ n.i ], function(e) {
         return e;
     });
