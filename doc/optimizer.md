@@ -1,6 +1,4 @@
-
 # Brace UMD
-
 ### Using Brace UMD with the Requirejs optimizer
 
 ------
@@ -16,7 +14,7 @@
 
 ----
 
-The *r.js* (requires optimizer), script also uses *uglify-js* so the options used in building the umd.js source are imported from the build directory which also contains the wrapping fragments. * Note: *Brace UMD* uses UglifyJS-3 and is not compatible with any other major versions.
+The *r.js* (requirejs optimizer), script also uses *uglify-js* so the options used in building the umd.js source are imported from the build directory which also contains the wrapping fragments. * Note: *Brace UMD* uses UglifyJS-3 and is not compatible with any other major versions.
 
 Below is an example r.js build config json file where the umd source fragments and the build options which created the source are used. It is necessary to use *nodeRequire* and not *require* when fetching the brace_umd package because the r.js script creates an atypical require function for use internally which will not have the correct path available to find the brace_umd package.
 

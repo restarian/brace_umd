@@ -108,7 +108,7 @@ program.option("--config-file <file>", "Read Uglify options from JSON file.");
 //program.option("--name-cache <file>", "File to hold mangled name mappings.");
 //program.option("--self", "Build UglifyJS as a library (implies --wrap UglifyJS)");
 //program.option("--source-map [options]", "Enable source map/specify source map options.", parse_source_map());
-//program.option("--timings", "Display operations run time on STDERR.")
+program.option("--timings", "Display operations run time on STDERR.")
 //program.option("--toplevel", "Compress and/or mangle variables in toplevel scope.");
 program.option("--verbose", "Print diagnostic messages.");
 program.option("--warn", "Print warning messages.");
@@ -350,9 +350,9 @@ SOFTWARE.
  Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com>
 */
 
-// The only options that are known to be configurable (via the unit tests), go in the tested-options json file. Any options (properties), added to this json data will
-// be unsafe (any option property already listed there can be changed however). The json file for the tested_option file is kept in the project lib directory. The unit tests
-// specify other files for testing purposes only.
+// The only options that are known to be configurable (via the unit tests), go in the tested-options json file. Any options (properties), added 
+// to this json data will be unsafe (any option property already listed there can be changed however). The json file for the tested_option file 
+// is kept in the project lib directory. The unit tests specify other files for testing purposes only.
 tested_option_file = tested_option_file || (lib + ".unit_tested_option.js")
 try { var tested_option = fs.readFileSync(tested_option_file).toString() }
 catch(e) { console.log(e); process.exit(7) }
@@ -372,8 +372,8 @@ catch(e) { console.log(e); process.exit(7) }
 var build_option = {}
 
 var parse_option_as_object = function(opt, build_obj, test_obj, prefix) {
-  // The job of this is iterate over the entire options Object and set all of the data which is contained in the tested_option Object to the build_option Object.
-  // This way only options which are known to be safe with the umd exporter are used.
+  // The job of this is iterate over the entire options Object and set all of the data which is contained in the tested_option Object to the build_option 
+// Object. This way only options which are known to be safe with the umd exporter are used.
 
   for ( var a in opt )
     if ( typeof test_obj !== "object" || !(a in test_obj) ) {
@@ -461,7 +461,7 @@ if ( build_option.mangle ) {
 	if ( ! ("reserved" in build_option.mangle) || !(build_option.mangle.reserved instanceof Array) )
 	 build_option.mangle.reserved = []
 
-	// The umd script will not work if these namespaces are mangled.
+	// The umd script will not work if these namespaces are mangledG
 	build_option.mangle.reserved = build_option.mangle.reserved.concat(["define", "require", "requirejs", "module", "__dirname", "__filename"])
 	if ( build_option.mangle.properties ) {
 		// This call will inject the reserved names that are required when mangle-props is used.
@@ -486,14 +486,14 @@ if ( out.error ) {
 }
 out = out.code
 
-console.log("Options to be used with uglify-js:\n", build_option)
 
 // The compress.unused option needs to be set back to the way it was originally if the compress option is set. This needs to be done so that unused
 // code is not removed until after the module code in inserted.
 build_option.compress = compress_option
 build_option.mangle = mangle_option
 
-console.log("Exporting data to build directory:", build_dir)
+console.log("Options which will be used with uglify-js for module definitions:\n", build_option)
+console.log("\nExporting data to build directory:", build_dir)
 
 var location = build_dir + "build_options_" + info.version + ".json"
 try { fs.writeFileSync(location, JSON.stringify(build_option, null, " ")) }
@@ -506,17 +506,21 @@ try { fs.writeFileSync(location, out) }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js primary script build:", location)
 
+// Assemble build meta data and store it in the build_information file.
 location = build_dir + "build_information_"+info.version+".json"
-var build_info = { tested_options_file: tested_option_file, version: info.version.toString() }
+var build_info = { 
+	tested_options_file: tested_option_file, 
+	version: info.version.toString(),
+	build_directory: build_dir
+}
+
 try { fs.writeFileSync(location, JSON.stringify(build_info, null, " ")) }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported umb build information data file:", location)
 
 // Find the first character which starts the closing bracket and function execution parenthesis to to separate them into two fragments. This 
 // separates the function into two parts so that script can be injected into the function at the very bottom.
-
 var close_index = out.match(/([\n,\r,\,]+)[\s,\n,\r]*([a-z,\_,\-]+\.[a-z,\_,\-]+\.length\s*\&\&[\s,\n,\r]*define\([\s,\n,\r]*\[[^\]]+\][^\)]+\)[^\}]+[\s,\n,\r]*\}[\s,\n,\r]*\)\;*[\s,\n,\r]*\}[^\}]*\{\}\)[\s,\;]*)$/)
-//console.log(close_index)
 
 // Write out the wrapping fragment for use with the requirejs optimizer (r.js). This should go in the {wrap {start: []} } part of the r.js optimizer 
 // build file.

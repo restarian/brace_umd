@@ -107,11 +107,11 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 			// The current working directory of npm test commands is the module root which is what process.cwd() returns.
 			var example_module_dir = path.join(__dirname, "/..", "/example", "/nodejs/", "/factory")
 
-			it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
-				" load using nodejs require", 
+			it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file with force type of factory" +
+				" and the correct module values will load using commonjs require.", 
 				function(done) {
 
-					new Spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function() {
+					new Spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config_force_factory.js")], undefined, function() {
 						var mod_path = path.join(example_module_dir, "/build", "/entry.js")
 
 						var entry = require(mod_path)

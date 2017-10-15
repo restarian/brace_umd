@@ -126,6 +126,22 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				})
 
 			it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
+				" load using commonjs require with the make_anonymous option used", 
+				function(done) {
+					new Spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config_auto_anonymous.js")], undefined, 
+					function() {
+
+						var entry = require(path.join(example_module_dir, "/build", "/entry.js"))
+						expect(entry).to.deep.equal({id: "entry", module_one: {id: "module_one"}, second_module: {id: "second_module"}})
+						done()
+
+					}, function(err) {
+					  expect(false, err).to.equal(true)
+					  done()
+					})
+				})
+
+			it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
 				" load using amdefine", 
 				function(done) {
 
@@ -136,6 +152,8 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 						define([path.join(example_module_dir, "/build", "/entry.js")], 
 							function(entry) {
 
+								// There is no way to retrieve the module data if all id's were used via amdefine so it should return an empty Object to
+								// show that everything went well.
 								expect(entry).to.deep.equal({})
 								done()
 						})

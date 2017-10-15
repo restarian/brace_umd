@@ -17,8 +17,8 @@
 
 **Things to do with Brace UMD**
 * Basic
+	* Create module export data unit tests
 	* Create browser examples
-	* Create export wrap_end_option unit tests
-	* Unit test browser examples
+	* Add unit testing for browsers
 * Features
 	* Enabling source maps to uglify may be warranted.
