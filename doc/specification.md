@@ -25,7 +25,7 @@
 * Platform support: Windows 10, Ubuntu 16 *Apple products and other versions require an* [issue](https://github.com/restarian/brace_umd/issues) *submission if one is found*
 * Installer support: [npm](https://npmjs.org) *version 5 was used*
 
-** Technologies used in development**
+**Technologies used in development**
 
 * [Windows 10](https://www.microsoft.com/en-us/software-download/windows10)
 * [Ubuntu 16](https://www.ubuntu.com/download/desktop)
