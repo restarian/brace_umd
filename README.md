@@ -29,17 +29,21 @@
 **License: MIT**
 
 **Bonuses:**
-* Provides automatic anonymous module creation for amdefine modules.
-* Well commented, professional code
-* Thoroughly documented
-* Vast and deep unit tests on Windows 10 and Ubuntu 16.04
+* Adds zero new namespaces
+* Provides automatic anonymous module creation for amdefine modules
+* Provides a way to switch between definition types without altering source code
+* Allows for almost total minification of wrapped source code using most of the uglify-js options
+* Expands to incorporate other definitions
+* Well commented, professionally engineered and thoroughly documented code
+* Vast and deep unit tests on Windows 10 and Ubuntu 16
 
 **Caveats:**
   * Requires nodejs version 5 or greater
-  * An id string must be used in order to have native global Object support in environments other than nodejs. Otherwise, it can be omitted to supply the other definitions. However, this is not an issue if the module is ran through the requirejs optimizer.
+  * An id string must be used in order to have native global Object support in environments other than nodejs. Otherwise, it can be omitted to work with the other definitions. However, this is not an issue if the module is ran through the requirejs optimizer (which adds ids to all modules).
 
-Brace UMD is better than other more simple module definition wrappers by enabling uglifyjs functionality. This allows for use of the r.js optimizer regardless of what definitions are contained within the module. The module definition is only loaded and used if the correlated call to it is contained within the script. E.g. The amdefine module is not loaded unless a call to define is inside of the script. Otherwise, a proxy function is supplied for the supported definitions.
-Note: it is acceptable to use mangle and mangle properties with the umd source and in the r.js optimizing process. This is done through the use of build config which can be passed to the r.js build config file (see [use with r.js](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md), for more information.
+**Brace UMD is better than other more simple module definition wrappers** by enabling uglifyjs functionality and option data. This allows for use of the requirejs optimizer regardless of what definitions are contained within the module. An AMD library is only loaded and used if the correlated call to it is contained within the script. E.g. The *amdefine* module is not loaded unless a call to *define* is inside of the script. Otherwise, a proxy function is supplied for the supported definitions.
+
+**Note**: it is acceptable to use mangle and mangle properties with the UMD source and in the requirejs optimizing process. This is done by storing the build config options used and then passing them back into uglify-js via the r.js build config file (see [using with requirejs](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md), for more information.
 
 **Below is the UMD script. The following code will work in nodejs or the browser with and can use any of the supported definitions:**
 

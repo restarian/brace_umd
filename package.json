@@ -1,8 +1,8 @@
 {
   "name": "brace_umd",
   "version": "0.5.4",
-  "description": "This module provides a unified module definition for Requirejs and AMDefine definitions while staying seamlessly compliant with the requirejs optimizer and factory based Objects.",
-  "main": "lib/exporter.js",
+  "description": "Provides a unified module definition wrapper for RequireJS and AMDefine definitions while staying seamlessly compliant with the RequireJS optimizer and factory based Objects.",
+  "main": "lib/brace_umd.js",
   "dependencies": {
     "commander": "^2.11.0"
   },
@@ -16,6 +16,13 @@
     "chai": "^4.1.1",
     "brace_navlink": "^0.2.0"
   },
+	"bugs": { 
+		"url": "https://github.com/restarian/brace_umd/issues",
+		"email": "RobertSteckroth@gmail.com"
+	},
+   "engines" : { 
+	  "node" : ">=0.5.0" 
+  },
   "scripts": {
     "test": "mocha"
   },
@@ -23,16 +30,14 @@
     "build_umd": "./bin/build_umd.js"
   },
   "keywords": [
-    "umd",
     "brace",
+    "umd",
     "unified",
     "amd",
-    "define",
+    "module",
     "definition",
     "requirejs",
-    "r.js",
-    "r_js",
-    "module"
+    "amdefine"
   ],
   "repository": {
     "type": "git",
@@ -45,14 +50,5 @@
       "email": "robertsteckroth@gmail.com"
     }
   ],
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/restarian/brace_umd/blob/master/doc/license.md"
-    },
-    {
-      "type": "BSD",
-      "url": "https://github.com/mishoo/UglifyJS2/blob/master/LICENSE"
-    }
-  ]
+  "license": "(MIT WITH BSD)"
 }

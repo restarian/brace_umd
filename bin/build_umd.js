@@ -373,7 +373,7 @@ var build_option = {}
 
 var parse_option_as_object = function(opt, build_obj, test_obj, prefix) {
   // The job of this is iterate over the entire options Object and set all of the data which is contained in the tested_option Object to the build_option 
-// Object. This way only options which are known to be safe with the umd exporter are used.
+// Object. This way only options which are known to be safe with the umd export data is used.
 
   for ( var a in opt )
     if ( typeof test_obj !== "object" || !(a in test_obj) ) {
@@ -511,7 +511,7 @@ location = build_dir + "build_information_"+info.version+".json"
 var build_info = { 
 	tested_options_file: tested_option_file, 
 	version: info.version.toString(),
-	build_directory: build_dir
+	directory: build_dir
 }
 
 try { fs.writeFileSync(location, JSON.stringify(build_info, null, " ")) }

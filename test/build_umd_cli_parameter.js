@@ -43,13 +43,14 @@ var config_dir = path.join(__dirname, "/config")
 
 describe("The build script", function() {
 
-  afterEach(function(){
+	afterEach(function(){
 
-    // The module need to be reloaded again so that it is idempotent after changes are made to it.
-    for ( var id in require.cache )
-      if ( path.basename(id) === "exporter.js" )
-        delete require.cache[id]
-
+		// Remove the brace_umd export module cache
+		for ( var id in require.cache )
+			if ( /brace_umd\.js$/.test(id) ) {
+				delete require.cache[id]
+				break
+			}
 	})
 
   	it("should export the correct build file with only the preamble option set to false", function(done) {

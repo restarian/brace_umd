@@ -1,13 +1,13 @@
 {
   "output": {
-    "beautify": true,
+    "beautify": false,
     "quote_keys": false,
     "semicolons": true,
     "quote_style": 1,
     "preamble": true,
     "comments": false
   },
-  "compress": false,
+  "compress": true,
   "warnings": true,
   "mangle": { "properties": true }
 }
