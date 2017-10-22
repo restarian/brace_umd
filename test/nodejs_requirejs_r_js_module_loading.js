@@ -26,28 +26,23 @@ SOFTWARE.
  Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com>
 */
 
+
 var expect = require("chai").expect,
-	spawn = require("child_process").exec,
 	path = require("path"),
 	fs = require("fs"),
-	method = require("process-wrap"),
+	test_help = require("test_help"),
 	maybe = require("mocha-maybe")
 
-var Spinner = method.Spinner
+var Spinner = test_help.Spinner,
+	remove_cache = test_help.remove_cache.bind(null, "entry.js", "r.js")
+
 // Adding node to the command string will help windows know to use node with the file name. The unix shell knows what the #! at the beginning
 // of the file is for. The build_umd.js source will run if the spinner command is empty by setting the default_command member.
 Spinner.prototype.default_command = "node" 
+Spinner.prototype.log_stdout = true 
+
 var build_path = path.join(__dirname, "/../", "/bin", "/build_umd.js") 
 var config_dir = path.join(__dirname, "/config") 
-
-var remove_cache = function() {
-
-	// The amdefine module need to be reloaded again so that the previous module data which is stored in the amdefine loader cache will be removed.
-	// All subsequent tests after the first one to verify if modules are available would pass or fail if the amdefine loader cache was not removed.
-	for ( var id in require.cache ) 
-	  if ( path.basename(id) === "entry.js" || path.basename(id) === "r.js" ) 
-	    delete require.cache[id]
-}
 
 describe("Using stop further progression methodology for file dependencies: "+path.basename(__filename), function() { 
 
@@ -116,10 +111,8 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 						var mod_path = path.join(example_module_dir, "/build", "/entry.js")
 
 						// Load the r.js optimized module which contains the dependencies module_one.js and second_module.
-						requirejs(["require", mod_path], 
-							function(req, mod) {
-								console.log(mod)
-								done()
+						requirejs(["require", mod_path], function(req, mod) {
+							done()
 						})
 
 					}, function(err) {
