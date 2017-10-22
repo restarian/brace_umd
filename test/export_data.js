@@ -30,13 +30,17 @@ SOFTWARE.
 var expect = require("chai").expect,
 	path = require("path"),
 	fs = require("fs"),
-	method = require("process-wrap"),
+	test_help = require("test_help"),
 	maybe = require("mocha-maybe")
 
-var Spinner = method.Spinner
+var Spinner = test_help.Spinner,
+	remove_cache = test_help.remove_cache.bind(null, "brace_umd.js", "package.json")
+
 // Adding node to the command string will help windows know to use node with the file name. The unix shell knows what the #! at the beginning
 // of the file is for. The build_umd.js source will run if the spinner command is empty by setting the default_command member.
 Spinner.prototype.default_command = "node" 
+Spinner.prototype.log_stdout = true 
+
 var build_path = path.join(__dirname, "/../", "/bin", "/build_umd.js") 
 var config_dir = path.join(__dirname, "/config") 
 
@@ -61,15 +65,6 @@ describe("Using stop further progression methodology for dependencies in: "+path
 		})
 
 	})
-
-	var remove_cache = function() {
-		// Remove the brace_umd export module cache
-		for ( var id in require.cache )
-			if ( /brace_umd\.js$|package\.json$/.test(id) ) {
-				delete require.cache[id]
-				break
-			}
-	}
 
 	describe("Brace UMD module export data", function() {
 
