@@ -360,7 +360,7 @@ catch(e) { console.log(e); process.exit(7) }
 
 // This loops through the entire generated options object (via commander), and verifies that the Object qualifiers are contained in the tested_option
 // Object. A warning is emitted and the options is not transferred to the tested_option Object if it is not set prior to this loop.
-var tested_option = UglifyJS.minify("var a="+tested_option, {compress: false, output: {semicolons: false, quote_keys: true, quote_style: 2}})
+var tested_option = UglifyJS.minify("var a="+tested_option, {compress: false, mangle: false, output: {semicolons: false, quote_keys: true, quote_style: 2}})
 if ( tested_option.error ) {
   console.log(tested_option.error)
   process.exit(7)
@@ -372,22 +372,25 @@ catch(e) { console.log(e); process.exit(7) }
 var build_option = {}
 
 var parse_option_as_object = function(opt, build_obj, test_obj, prefix) {
-  // The job of this is iterate over the entire options Object and set all of the data which is contained in the tested_option Object to the build_option 
-// Object. This way only options which are known to be safe with the umd export data is used.
+// The job of this loop is to iterate over the entire options Object and set all of the data which is contained in the tested_option Object to the 
+// build_option Object. This way only options which are known to be safe with the umd export data via the unit tests is used. The prefix is used
+// for the logging text to include the Object hierarchy.
 
   for ( var a in opt )
-    if ( typeof test_obj !== "object" || !(a in test_obj) ) {
-      console.log("Option", prefix + (prefix&&"."||"") + a, "is not defined in the tested options file:", tested_option_file, "-- Therefore it is not safe to use and will be skipped.")
-    } else if ( typeof opt[a] !== "object" || opt[a].constructor === Array ) {
+    if ( (typeof test_obj !== "object" && test_obj !== null) || !(a in test_obj) ) {
+      console.log("Option", prefix + (prefix&&"."||"") + a, "is not defined in the tested options file:", tested_option_file,
+						 "-- Therefore it is not safe to use and will be skipped.")
+    } else if ( opt[a] === null || typeof opt[a] !== "object" || opt[a].constructor === Array ) {
       build_obj[a] = opt[a]
     } else {
       // constructor is either a Object or an Array. It is ok if the Object is non-literal (e.g. new String()).
       build_obj[a] = opt[a].constructor()
       for ( var qualifier in opt[a] )
         if ( typeof test_obj[a] !== "object" || !(qualifier in test_obj[a]) ) {
-          console.log("Option", prefix + (prefix&&"."||"") + a + "." + qualifier, "is not defined in the tested options file:", tested_option_file, "-- Therefore it is not safe to use and will be skipped.")
+          console.log("Option", prefix + (prefix&&"."||"") + a + "." + qualifier, "is not defined in the tested options file:", tested_option_file,
+							 "-- Therefore it is not safe to use and will be skipped.")
         }
-        else if ( typeof opt[a][qualifier] === "object" && !(opt[a][qualifier] instanceof Array) ) {
+        else if ( (typeof opt[a][qualifier] === "object" && opt[a][qualifier] !== null) && !(opt[a][qualifier] instanceof Array) ) {
           build_obj[a][qualifier] = opt[a][qualifier].constructor()
           parse_option_as_object(opt[a][qualifier], build_obj[a][qualifier], test_obj[a][qualifier], prefix + (prefix&&"."||"") + a + "." + qualifier)
         }
@@ -401,7 +404,7 @@ var parse_option_as_object = function(opt, build_obj, test_obj, prefix) {
 parse_option_as_object(options, build_option, tested_option, "")
 
 var compress_option = false
-// The JSON parsing is used to create a deep Object copy so that the original data can be stored after any internal options are set and removed (like
+// The JSON parsing is used to create a deep Object copy so that the original data can be stored after any internal options are set and removed (as in
 // the compress.unused option).
 if ( build_option.compress ) 
 	compress_option = JSON.parse(JSON.stringify(build_option.compress))
@@ -427,7 +430,6 @@ if ( build_option.mangle ) {
 	}
 	mangle_option = JSON.parse(JSON.stringify(build_option.mangle))
 }
-
 
 // The compress.unused option is set if the compress option is set to true or with additional options. This is only necessary when building the udm.js
 // source the first time because uglify-js will find code that is unused. It is fine to remove unused code after the module code is inserted and 
@@ -456,19 +458,18 @@ if ( !options.output || !("preamble" in options.output) || options.output.preamb
 // These can not be changed so it is provided after the input parsing happens (it should not be defined in tested_option.json).
 if ( build_option.mangle ) {
 	if ( typeof build_option.mangle !== "object" )
-	build_option.mangle = {reserved: []}
+		build_option.mangle = {reserved: []}
 
 	if ( ! ("reserved" in build_option.mangle) || !(build_option.mangle.reserved instanceof Array) )
-	 build_option.mangle.reserved = []
+		build_option.mangle.reserved = []
 
-	// The umd script will not work if these namespaces are mangledG
-	build_option.mangle.reserved = build_option.mangle.reserved.concat(["define", "require", "requirejs", "module", "__dirname", "__filename"])
-	if ( build_option.mangle.properties ) {
-		// This call will inject the reserved names that are required when mangle-props is used.
+	// The umd script will not work if these namespaces are mangled.
+	build_option.mangle.reserved = build_option.mangle.reserved.concat(["define", "require", "requirejs", "module", "factory", "__dirname", "__filename"]) 
+	if ( build_option.mangle.properties ) { // This call will inject the reserved names that are required when mangle-props is used.
 		// The property name "require" should be reserved if mangle properties are used so that module.require can be used by the original namespace.
 		// force_type is optionally set and therefore needs to be preserved inside the script.
 		build_option.mangle.properties.reserved = build_option.mangle.properties.reserved.concat(["define", "require", "requirejs", "factory", 
-																							"force_type", "filename", "dirname", "auto_anonymous"])
+																							"force_type", "filename", "dirname", "basename", "auto_anonymous"])
 	}
 }
 
@@ -479,13 +480,14 @@ catch(e) { console.log(e); process.exit(7) }
 // Fetch the build source and run it through the minifier. Note: It is is fine to use the source code in the lib directory (umd.js), instead of the 
 // built file (umd_[version].js), if the wrappers for r.js and uglifyjs minification are not needed. Uglify-js will mutate the options Object passed
 // into the minify function so a JSON copy is used.
+
+//console.log(data.toString())
 var out = UglifyJS.minify(data.toString(), JSON.parse(JSON.stringify(build_option)))
 if ( out.error ) {
-  console.log(out.error)
-  process.exit(11)
+	console.log(out.error)
+	process.exit(11)
 }
 out = out.code
-
 
 // The compress.unused option needs to be set back to the way it was originally if the compress option is set. This needs to be done so that unused
 // code is not removed until after the module code in inserted.
@@ -520,7 +522,7 @@ console.log("Exported umb build information data file:", location)
 
 // Find the first character which starts the closing bracket and function execution parenthesis to to separate them into two fragments. This 
 // separates the function into two parts so that script can be injected into the function at the very bottom.
-var close_index = out.match(/([\n,\r,\,]+)[\s,\n,\r]*([a-z,\_,\-]+\.[a-z,\_,\-]+\.length\s*\&\&[\s,\n,\r]*define\([\s,\n,\r]*\[[^\]]+\][^\)]+\)[^\}]+[\s,\n,\r]*\}[\s,\n,\r]*\)\;*[\s,\n,\r]*\}[^\}]*\{\}\)[\s,\;]*)$/)
+var close_index = out.match(/([\;,\n,\r,\,]+)[\s,\n,\r]*([a-z,\_,\-]+\.[a-z,\_,\-]+\.length\s*\&\&[\s,\n,\r]*define\([\s,\n,\r]*\[[^\]]+\][^\)]+\)[^\}]+[\s,\n,\r]*\}[\s,\n,\r]*\)\;*[\s,\n,\r]*\}[^\}]*\{\}\)[\s,\;]*)$/)
 
 // Write out the wrapping fragment for use with the requirejs optimizer (r.js). This should go in the {wrap {start: []} } part of the r.js optimizer 
 // build file.

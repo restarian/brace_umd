@@ -35,7 +35,7 @@ Below is an example requirejs build config json file where the umd source fragme
  	 // end: nodeRequire("brace_umd").wrap_end_option({force_type: "factory"})
   }
 }
-``
+```
 
 The example above also displays the use of *wrap_end_option* member exported by Brace umd to add option data to the UMD script. The function itself runs a fairly simple regex on the *wrap_end* String (found in the build/wrap_end_umd_*[package version]*.frag file), which adds the option as the last argument of UMD calling parenthesis (see [Exported module data ](https://github.com/restarian/brace_umd/blob/master/doc/exported_data.md)). 
 
