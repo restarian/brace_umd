@@ -119,8 +119,15 @@
             return console.log("Unable to find requirejs module.", e.message);
         }
     }.bind(null, n.r[s]));
-    __filename = n.e && module.filename || "", __dirname = n.e && module.require("path").dirname(__filename) || "", 
-    n.t(), n.e && (n.filename = module.require("path").basename(__filename)), n.i.length && define([ n.i ], function(e) {
+    __filename = n.e && module.filename || "", __dirname = n.e && module.require("path").dirname(__filename) || "",
+	n.t(), n.e && (n.filename = module.require("path").basename(__filename))
+
+	// Add module definitions here ----------------
+
+ 
+	// --------------------------------------------
+
+    n.i.length && define([ n.i ], function(e) {
         return e;
     });
 }(this, "function" == typeof define && define || void 0, "function" == typeof requirejs && requirejs || void 0, {});

@@ -21,7 +21,7 @@
 
 * License: [MIT](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
 * Dependencies: [Commander](https://www.npmjs.com/package/commander)
-* Development dependencies: [Brace_navlink](https://github.com/restarian/brace_navlink), [Mocha](https://www.npmjs.com/package/mocha), [Chai](https://www.npmjs.com/package/chai),  [UglifyJS-3](https://www.npmjs.com/package/uglify-js), [RequireJs](https://www.npmjs.com/package/requirejs), [Mocha-maybe](https://www.npmjs.com/package/mocha-maybe) 
+* Development dependencies: [Brace_navlink](https://github.com/restarian/brace_navlink), [Mocha](https://www.npmjs.com/package/mocha), [Chai](https://www.npmjs.com/package/chai),  [UglifyJS-3](https://www.npmjs.com/package/uglify-js), [RequireJs](https://www.npmjs.com/package/requirejs), [Mocha-maybe](https://www.npmjs.com/package/mocha-maybe),  [Intercept-stdout](https://www.npmjs.com/package/intercept-stdout)
 * Platform support: Windows 10, Ubuntu 16 *Apple products and other versions require an* [issue](https://github.com/restarian/brace_umd/issues) *submission if one is found*
 * Installer support: [npm](https://npmjs.org) *version 5 was used*
 

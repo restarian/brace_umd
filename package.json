@@ -13,7 +13,6 @@
     "intercept-stdout": "^0.1.2",
     "mocha": "^3.5.0",
     "mocha-maybe": "^0.1.0",
-    "process-wrap": "^0.0.3",
     "requirejs": "^2.3.3",
     "uglify-js": "^3.0.25"
   },
