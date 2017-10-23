@@ -59,7 +59,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				done()
 			}, function(err) {
 				This.stop = true 
-				expect(false).to.equal(true)
+				expect(false, "r_js is not found in system path").to.equal(true)
 				done()
 			})
 		})

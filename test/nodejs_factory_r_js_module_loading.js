@@ -60,7 +60,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				done()
 			}, function(err) {
 				This.stop = true 
-				expect(false).to.equal(true)
+				expect(false, "r_js is not found in system path").to.equal(true)
 				done()
 			})
 		})
@@ -68,7 +68,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 		it_might("has all module dependencies available", function(done) {
 
 			this.stop = true 
-			expect(require, "nodejs require was mot available").to.be.a("function")
+			expect(require, "nodejs require was not available").to.be.a("function")
 			this.stop = false 
 			done()
 		})

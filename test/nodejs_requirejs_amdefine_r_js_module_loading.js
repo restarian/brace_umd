@@ -34,7 +34,6 @@ var expect = require("chai").expect,
 	maybe = require("mocha-maybe"),
 	maybe = require("mocha-maybe")
 
-
 var Spinner = test_help.Spinner,
 	remove_cache = test_help.remove_cache.bind(null, "entry.js", "r.js")
 
@@ -61,7 +60,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				done()
 			}, function(err) {
 				This.stop = true 
-				expect(false).to.equal(true)
+				expect(false, "r_js is not found in system path").to.equal(true)
 				done()
 			})
 		})
@@ -91,7 +90,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 				it_might("after building the brace umd source", function(done) {
 					// A new umd.js source build is created with the various config files in the test directory.
-					new Spinner("node", [build_path, "--config-file", config_path], undefined, function(exit_code) {
+					new Spinner("", [build_path, "--config-file", config_path], undefined, function(exit_code) {
 						done()
 					}, function(err) { 
 						expect(false).to.equal(true); 
