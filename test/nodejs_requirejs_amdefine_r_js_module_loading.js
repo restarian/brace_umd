@@ -34,6 +34,7 @@ var expect = require("chai").expect,
 	maybe = require("mocha-maybe"),
 	maybe = require("mocha-maybe")
 
+
 var Spinner = test_help.Spinner,
 	remove_cache = test_help.remove_cache.bind(null, "entry.js", "r.js")
 
