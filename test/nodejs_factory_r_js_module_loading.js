@@ -55,14 +55,10 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		it_might("finds r_js in the system as a program", function(done) {
 
-			var This = this
-			new Spinner("r_js", [], undefined, function() {
-				done()
-			}, function(err) {
-				This.stop = true 
-				expect(false, "r_js is not found in system path").to.equal(true)
-				done()
-			})
+			this.stop = true 
+			expect(fs.existsSync(path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js")), "could not find r.js dependency").to.be.true
+			this.stop = false 
+			done()
 		})
 
 		it_might("has all module dependencies available", function(done) {
@@ -101,7 +97,8 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file with force type of factory" +
 							" and the correct module values will load using commonjs require.", function(done) {
 
-					new Spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config_force_factory.js")], undefined, function() {
+					new Spinner("", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
+									"-o", path.join(example_module_dir, "/rjs_config_force_factory .js")], undefined, function() {
 
 						var module_path = path.join(example_module_dir, "/build", "/entry.js")
 						var entry = require(module_path)

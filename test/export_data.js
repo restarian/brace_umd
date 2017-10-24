@@ -54,14 +54,10 @@ describe("Using stop further progression methodology for dependencies in: "+path
 
 		it_might("r_js in the system as a program", function(done) {
 
-			var This = this
-			new Spinner("r_js", [], undefined, function() {
-				done()
-			}, function(err) {
-				This.stop = true 
-				expect(false).to.equal(true)
-				done()
-			})
+			this.stop = true 
+			expect(fs.existsSync(path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js")), "could not find r.js dependency").to.be.true
+			this.stop = false 
+			done()
 		})
 
 	})
@@ -69,7 +65,7 @@ describe("Using stop further progression methodology for dependencies in: "+path
 	describe("Brace UMD module export data", function() {
 
 		// An array with the values of the test directory is filtered to include all of the files included with the regex.
-		var config_file = fs.readdirSync(config_dir).filter(function(value) { return RegExp(/^build_config_.*\.json/).test(value) })
+		var config_file = fs.readdirSync(config_dir).filter(function(value) { return /^build_config_.*\.json/.test(value) })
 		config_file.forEach(function(value) {
 
 			value = path.join(__dirname, "/config/", value)
@@ -77,7 +73,7 @@ describe("Using stop further progression methodology for dependencies in: "+path
 			it_might("built using config file "+ value, function(done) {
 
 				// A new umd.js source build is created with the various config files in the test directory.
-				new Spinner("node", [build_path, "--config-file", value], undefined, function(exit_code) {
+				new Spinner("", [build_path, "--config-file", value], undefined, function(exit_code) {
 					expect(parseInt(exit_code)).to.equal(5)
 					done()
 				}, function(err) { 

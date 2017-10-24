@@ -40,6 +40,7 @@ var Spinner = test_help.Spinner,
 // of the file is for. The build_umd.js source will run if the spinner command is empty by setting the default_command member.
 Spinner.prototype.default_command = "node" 
 Spinner.prototype.log_stdout = true 
+
 var build_path = path.join(__dirname, "/../", "/bin", "/build_umd.js") 
 var config_dir = path.join(__dirname, "/config") 
 
@@ -53,14 +54,10 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		it_might("finds r_js in the system as a program", function(done) {
 
-			var This = this
-			new Spinner("r_js", [], undefined, function() {
-				done()
-			}, function(err) {
-				This.stop = true 
-				expect(false, "r_js is not found in system path").to.equal(true)
-				done()
-			})
+			this.stop = true 
+			expect(fs.existsSync(path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js")), "could not find r.js dependency").to.be.true
+			this.stop = false 
+			done()
 		})
 
 		it_might("has all module dependencies available", function(done) {
@@ -78,7 +75,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		// An array with the values of the test directory is filtered to include all of the files included with the regex.
 		var config_file = fs.readdirSync(config_dir).filter(function(value) { return /^build_config_.*\.json/.test(value) })
-		config_file.slice(4, 5).forEach(function(value) {
+		config_file.forEach(function(value) {
 			value = path.join(__dirname, "/config/", value)
 		
 			describe("using config file "+ value, function() {
@@ -88,7 +85,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 				it_might("will build the Brace umd source using the build_umd program", function(done) {
 					// A new umd.js source build is created with the various config files in the test directory.
-					new Spinner("node", [build_path, "--config-file", value], undefined, function(exit_code) {
+					new Spinner("", [build_path, "--config-file", value], undefined, function(exit_code) {
 						expect(exit_code).to.equal(5)
 						done()
 					}, function(err) { 
@@ -103,7 +100,8 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				it_might("the example module at " + example_module_dir + " will build using the rjs_config_auto_anonymous.js file and the correct" +
 							" module values will load using amdefine with the make_anonymous option used", function(done) {
 
-					new Spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config_auto_anonymous.js")], undefined, function() {
+					new Spinner("", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
+										  "-o", path.join(example_module_dir, "/rjs_config_auto_anonymous.js")], undefined, function() {
 
 						var define = require("amdefine")(module)
 						define([path.join(example_module_dir, "/build", "/entry.js")], function(entry) {
@@ -121,7 +119,8 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				it_might("the example module at " + example_module_dir + " will build using the rjs_config_auto_anonymous.js file and the correct" +
 							" module values will load using commonjs require with the make_anonymous option used", function(done) {
 
-					new Spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config_auto_anonymous.js")], undefined, function() {
+					new Spinner("", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
+										  "-o", path.join(example_module_dir, "/rjs_config_auto_anonymous.js")], undefined, function() {
 
 						var entry = require(path.join(example_module_dir, "/build", "/entry.js"))
 						expect(entry).to.deep.equal({id: "entry", module_one: {id: "module_one"}, second_module: {id: "second_module"}})
@@ -136,7 +135,8 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
 							" load using amdefine", function(done) {
 
-					new Spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function() {
+					new Spinner("node", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
+												"-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function() {
 
 						var define = require("amdefine")(module)
 						define([path.join(example_module_dir, "/build", "/entry.js")], function(entry) {

@@ -54,14 +54,10 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		it_might("finds r_js in the system as a program", function(done) {
 
-			var This = this
-			new Spinner("r_js", [], undefined, function() {
-				done()
-			}, function(err) {
-				This.stop = true 
-				expect(false, "r_js is not found in system path").to.equal(true)
-				done()
-			})
+			this.stop = true 
+			expect(fs.existsSync(path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js")), "could not find r.js dependency").to.be.true
+			this.stop = false 
+			done()
 		})
 
 		it_might("has all module dependencies available", function(done) {
@@ -77,33 +73,35 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 	describe("Requirejs module loading after using r_js optimization on amdefined modules", function() {
 
-	  // An array with the values of the test directory is filtered to include all of the files included with the regex.
-	  var config_file = fs.readdirSync(path.join(__dirname, "/config")).filter(function(value) { return RegExp(/^build_config_.*\.json/).test(value) })
-	  config_file.forEach(function(value) {
-		 value = path.join(config_dir, value)
+		// An array with the values of the test directory is filtered to include all of the files included with the regex.
+		var config_file = fs.readdirSync(path.join(__dirname, "/config")).filter(function(value) { return /^build_config_.*\.json/.test(value) })
+		config_file.forEach(function(value) {
+
+			value = path.join(config_dir, value)
 		
-		 describe("using config file "+ value, function() {
+			describe("using config file "+ value, function() {
 
-			// Remove the amdefine and module cache from the testing module.
-			beforeEach(remove_cache)
+				// Remove the amdefine and module cache from the testing module.
+				beforeEach(remove_cache)
 
-			it_might("after building the brace umd source", function(done) {
-				// A new umd.js source build is created with the various config files in the test directory.
-				new Spinner("node", [build_path, "--config-file", value], undefined, function(exit_code) {
-					done()
-				}, function(err) { 
-					expect(false).to.equal(true); 
-					done()
+				it_might("after building the brace umd source", function(done) {
+					// A new umd.js source build is created with the various config files in the test directory.
+					new Spinner("node", [build_path, "--config-file", value], undefined, function(exit_code) {
+						done()
+					}, function(err) { 
+						expect(false).to.equal(true); 
+						done()
+					})
 				})
-			})
 
-			// The current working directory of npm test commands is the module root which is what process.cwd() returns.
-			var example_module_dir = path.join(__dirname, "/../", "/example", "/nodejs/", "/requirejs_amdefine")
+				// The current working directory of npm test commands is the module root which is what process.cwd() returns.
+				var example_module_dir = path.join(__dirname, "/../", "/example", "/nodejs/", "/requirejs_amdefine")
 
-			it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
-				" load using amdefine", 
-				function(done) {
-					new Spinner("r_js", ["-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function() {
+				it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
+							" load using amdefine", function(done) {
+
+					new Spinner("", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
+									"-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function() {
 
 						var requirejs = require("requirejs")
 						requirejs.config({baseUrl: path.join(example_module_dir, "/build"), nodeRequire: require})
