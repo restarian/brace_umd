@@ -1,7 +1,7 @@
 # Brace UMD
 ### Synopsis
 
-#### A unified module definition script to support Requirejs and AMDefine definitions while working seamlessly with the requirejs optimizer and a native global Object.
+#### A unified module definition script to support Requirejs and AMDefine definitions while working seamlessly with the RequireJs optimizer and native global Objects.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/j9w4v3romfw971y9/branch/master?svg=true)](https://ci.appveyor.com/project/restarian/brace-umd/branch/master) [![Build Status](https://travis-ci.org/restarian/brace_umd.svg?branch=master)](https://travis-ci.org/restarian/brace_umd) [![Downloads](https://img.shields.io/npm/dm/brace_umd.svg?svg=true)](https://npmjs.org/package/brace_umd)
 
@@ -24,24 +24,23 @@
 
 [![Bash on Windows](https://raw.githubusercontent.com/restarian/brace_umd/master/doc/image/ubuntu_windows_logo.png)](https://github.com/Microsoft/BashOnWindows)
 
-**Author: Robert Steckroth, Bust0ut**
-
-**License: MIT**
+**Author: Robert Steckroth, _Bust0ut_ [<RobertSteckroth@gmail.com>](mailto:robertsteckroth@gmail.com)**
+**Licensed under: MIT WITH BSD-2-Clause**
 
 **Bonuses:**
-* Adds zero new namespaces
+* Adds only one new namespace (umd), by using a self-destructing proxy method
 * Provides automatic anonymous module creation for amdefine modules
 * Provides a way to switch between definition types without altering source code
-* Allows for almost total minification of wrapped source code using most of the uglify-js options
-* Expands to incorporate other definitions
+* Allows for almost total minification of wrapped source code using almost all of the uglify-js options
+* Expands to incorporate other asynchronous module definitions
 * Well commented, professionally engineered and thoroughly documented code
-* Vast and deep unit tests on Windows 10 and Ubuntu 16
+* Vast and deep unit tests on Windows 10 and Ubuntu 16 with multiple browsers.
 
 **Caveats:**
   * Requires nodejs version 5 or greater
-  * An id string must be used in order to have native global Object support in environments other than nodejs. Otherwise, it can be omitted to work with the other definitions. However, this is not an issue if the module is ran through the requirejs optimizer (which adds ids to all modules).
+  * An id string must be used in order to have native global Object support in environments other than nodejs when the requirejs optimizer is not going to be used. Otherwise, the id can be omitted when working with the other definitions. However, this is not an issue if the module is ran through the requirejs optimizer (which will add a id to all the modules).
 
-**Brace UMD is better than other more simple module definition wrappers** by enabling uglifyjs functionality and option data. This allows for use of the requirejs optimizer regardless of what definitions are contained within the module. An AMD library is only loaded and used if the correlated call to it is contained within the script. E.g. The *amdefine* module is not loaded unless a call to *define* is inside of the script. Otherwise, a proxy function is supplied for the supported definitions.
+**Brace UMD is better than other more simple module definitions** by providing _uglify-js_ functionality and option passing. The AMD library is only loaded and used if the correlated call to it is contained within the script. E.g. The *amdefine* module is not loaded unless a call to *define* is inside of the script. Otherwise, a proxy function is supplied for the supported definitions.
 
 **Note**: it is acceptable to use mangle and mangle properties with the UMD source and in the requirejs optimizing process. This is done by storing the build config options used and then passing them back into uglify-js via the r.js build config file (see [using with requirejs](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md), for more information.
 

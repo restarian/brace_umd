@@ -1,6 +1,6 @@
 
 # Brace UMD
-### Specifications
+### Module Specifications
 
 ------
 
@@ -17,13 +17,15 @@
 ----
 
 **The breakdown**
-  * Note: all packages are tested with the latest available versions. Submit an [issue](https://github.com/restarian/brace_umd/issues) if any versions you use break any the unit tests. Brace UMD uses Uglify version 3 so only issues using minor versions therein will be processed.
+  * Note: all packages are tested with the latest available versions. Submit an [issue](https://github.com/restarian/brace_umd/issues) if any versions or environments break any of the unit tests. Brace UMD uses Uglify version 3 so only issues using minor or patch versions of Uglify-js will be valid.
 
 * License: [MIT](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
+* Sub-license: Some parts of the Brace_UMD source include code licensed under the BDS-2-Clause license. The license will be stated and clearly marked wherever this happens.
 * Dependencies: [Commander](https://www.npmjs.com/package/commander)
-* Development dependencies: [Brace_navlink](https://github.com/restarian/brace_navlink), [Mocha](https://www.npmjs.com/package/mocha), [Chai](https://www.npmjs.com/package/chai),  [UglifyJS-3](https://www.npmjs.com/package/uglify-js), [RequireJs](https://www.npmjs.com/package/requirejs), [Mocha-maybe](https://www.npmjs.com/package/mocha-maybe),  [Intercept-stdout](https://www.npmjs.com/package/intercept-stdout)
+* Development dependencies: [Brace_navlink](https://github.com/restarian/brace_navlink), [Mocha](https://www.npmjs.com/package/mocha), [Chai](https://www.npmjs.com/package/chai),  [UglifyJS-3](https://www.npmjs.com/package/uglify-js), [RequireJs](https://www.npmjs.com/package/requirejs), [AMDefine](https://www.npmjs.com/package/amdefine), [Mocha-maybe](https://www.npmjs.com/package/mocha-maybe),  [Intercept-stdout](https://www.npmjs.com/package/intercept-stdout)
 * Platform support: Windows 10, Ubuntu 16 *Apple products and other versions require an* [issue](https://github.com/restarian/brace_umd/issues) *submission if one is found*
 * Installer support: [npm](https://npmjs.org) *version 5 was used*
+* Supported Nodejs versions: only supports nodejs versions ^5.x.x
 
 **Technologies used in development**
 
@@ -32,7 +34,7 @@
 * [Ubuntu on Windows](https://github.com/Microsoft/BashOnWindows) *for easy cross platform development*
 * [VIM](www.vim.org) *As an IDE (ha)*
 * [Git/Github](https://github.com) *for repository management and storage*
-* [npm](https://www.npmjs.com) *for package management*
+* [NPM](https://www.npmjs.com) *for package management*
 * [Appveyor](https://www.appveyor.com) *for windows unit testing with older versions of things*
 * [Travis Cl](https://travis-ci.org) *for ubuntu unit testing with older versions of things*
 * [Blender](https://www.blender.org) *for 3d art creation*

@@ -1,4 +1,5 @@
 /*
+MIT License
 Copyright (c) 2017 Robert Edward Steckroth
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,7 +26,6 @@ SOFTWARE.
 
  Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com>
 */
-
 
 var expect = require("chai").expect,
 	path = require("path"),

@@ -28,8 +28,10 @@
 
 
 
+
 //Cool joes
 /*
+MIT License
 Copyright (c) 2017 Robert Steckroth <RobertSteckroth@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -66,7 +68,7 @@ SOFTWARE.
 // The _define property should be passed the amdefine module or undefined. The _requirejs argument should be the requirejs Object or undefined. The 
 // last argument is the options Object. This data controls behaviors of the script (available options can be studied in the documentation).
 // Other definition types can be added by copying the template from the others and supplying the correlating data.
-var __filename,__dirname,define,requirejs,require,n={
+var __filename,__dirname,define,requirejs,require,umd={
 
 // This will store the last id used in define calls (not forcing factory), so that an anonymous module can be created from the entry point.
 "e":"object"==typeof module,
@@ -74,15 +76,15 @@ var __filename,__dirname,define,requirejs,require,n={
 "filename":"",
 
 // _factory is the default definition type and thusly is expected to exist.
-"factory":function(i,o,t,s){
+"factory":function(i,o,t,n){
 
 // This method will add the module to the native global Object (or whatever the first parameter is). The dependencies will have to be already 
 // added to the Object before this module is called. The module will fail to load with a message if ANY dependencies are unavailable. It is then 
 // up to the developer to re-order the modules so they load in the correct order. A string id is required to define the module if the platform 
 // is a browser.
-i&&i.constructor===Array&&n.e&&(
+i&&i.constructor===Array&&umd.e&&(
 // Shift the arguments over sense the id string is not always required.
-s=t,t=o,o=i,i=n.filename),"string"!=typeof i?console.log("The factory Object is being used but the module does not supply an id parameter. Skipping loading of the module."):o.every(function(o){
+n=t,t=o,o=i,i=umd.filename),"string"!=typeof i?console.log("The factory Object is being used but the module does not supply an id parameter. Skipping loading of the module."):o.every(function(o){
 return o in e||!!console.log("The dependency",o,"is not loaded into the factory. Skipping loading of the module",i)
 })&&(e[i]=t.apply(t.prototype,o.map(function(e,i){
 return this[e]
@@ -124,7 +126,7 @@ console.log("Forcing use of the definition type",i),e.requirejs=e.require=e.defi
 
 // This member will load the module using the requested definition type if it does not exist yet. If the definition type is not found in the 
 // environment than the factory will be used (the factory is the default definition type).
-if(n.e&&!this.define){
+if(umd.e&&!this.define){
 try{
 this.define=module.require("amdefine")(module)
 
@@ -169,52 +171,51 @@ this.s=i,i.apply(i.prototype,arguments)
 
 ;// These two loops will set the properties of the wrapping functions of requirejs and define above to load the module if it does not exist and than 
 // return the request property.
-for(var s in n.d){
-n.n.__defineGetter__(n.d[s],function(e){
-if(commonjs_available&&!n.define){
+for(var n in umd.d){
+umd.n.__defineGetter__(umd.d[n],function(e){
+if(commonjs_available&&!umd.define){
 try{
-n.define=module.require("amdefine")(module)
+umd.define=module.require("amdefine")(module)
 
 
 ;// This will actually set the property of this property which is a getter. The new property will be the module property. The updated property 
 // value is available immediately and this function will be garbage collected by the ecma engine as soon as it returns (this can only happen 
 // if the property is set via a function).
-for(var i in n.define){
+for(var i in umd.define){
 
 // The getter must first be deleted before a standard property is set to this Object or the property will not be overwritten.
-delete this[i],this[i]=n.define[i]
+delete this[i],this[i]=umd.define[i]
 }
-return console.log("Using proxied amdefine method."),n.define[e]
+return console.log("Using proxied amdefine method."),umd.define[e]
 }catch(o){
 
 // console.log returns undefined which is what is desired
 return console.log("Unable to find amdefine module.",o.message)
 }
 }
-}.bind(null,n.d[s]))
+}.bind(null,umd.d[n]))
 }
 // The requirejs constructor is also provided for convenience.
 // ----- This is the same design as above so comments are omitted.
-for(var s in n.r){
-n.s.__defineGetter__(n.r[s],function(e){
-if(commonjs_available&&!n.requirejs){
+for(var n in umd.r){
+umd.s.__defineGetter__(umd.r[n],function(e){
+if(commonjs_available&&!umd.requirejs){
 try{
-n.requirejs=module.require("requirejs")
+umd.requirejs=module.require("requirejs")
 
-for(var i in n.requirejs){
-delete this[i],this[i]=n.requirejs[i]
+for(var i in umd.requirejs){
+delete this[i],this[i]=umd.requirejs[i]
 }
-return console.log("Using proxied requirejs method."),n.requirejs[i]
+return console.log("Using proxied requirejs method."),umd.requirejs[i]
 }catch(o){
 return console.log("Unable to find requirejs module.",o.message)
 }
 }
-}.bind(null,n.r[s]))
+}.bind(null,umd.r[n]))
 }
-__filename=n.e&&module.filename||"",__dirname=n.e&&module.require("path").dirname(__filename)||"",n.t(),
+__filename=umd.e&&module.filename||"",__dirname=umd.e&&module.require("path").dirname(__filename)||"",umd.t(),
 // The file name using commonjs path module. Otherwise, the factory will require an id to work in non-nodejs environments.
-n.e&&(n.filename=module.require("path").basename(__filename)),
-
+umd.e&&(umd.filename=module.require("path").basename(__filename)),
 
 // ---- Module definitions are added here.
 // ----------------------
@@ -243,7 +244,7 @@ define(["first", "nope", "second"], function(first, second) {
 		second: second
 	}
 })
-n.i.length&&define([n.i],function(e){
+umd.i.length&&define([umd.i],function(e){
 return e
 })
 })(this,"function"==typeof define&&define||void 0,"function"==typeof requirejs&&requirejs||void 0,{"force_type":"factory"})

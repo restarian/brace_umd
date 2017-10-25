@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /*
+MIT License
 Copyright (c) 2017 Robert Steckroth <RobertSteckroth@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,6 +27,7 @@ SOFTWARE.
 
  Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com>
 */
+
 
 var path = require("path"),
 fs = require("fs"),
@@ -464,7 +466,7 @@ if ( build_option.mangle ) {
 		build_option.mangle.reserved = []
 
 	// The umd script will not work if these namespaces are mangled.
-	build_option.mangle.reserved = build_option.mangle.reserved.concat(["define", "require", "requirejs", "module", "factory", "__dirname", "__filename"]) 
+	build_option.mangle.reserved = build_option.mangle.reserved.concat(["umd", "define", "require", "requirejs", "module", "factory", "__dirname", "__filename"]) 
 	if ( build_option.mangle.properties ) { // This call will inject the reserved names that are required when mangle-props is used.
 		// The property name "require" should be reserved if mangle properties are used so that module.require can be used by the original namespace.
 		// force_type is optionally set and therefore needs to be preserved inside the script.

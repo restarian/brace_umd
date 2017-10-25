@@ -8,7 +8,6 @@
   },
   "devDependencies": {
     "amdefine": "^1.0.1",
-    "brace_navlink": "^0.2.0",
     "chai": "^4.1.1",
     "intercept-stdout": "^0.1.2",
     "mocha": "^3.5.0",
@@ -16,6 +15,9 @@
     "requirejs": "^2.3.3",
     "uglify-js": "^3.0.25"
   },
+	"optionalDependencies": {
+		 "brace_navlink": "^0.2.0"
+	},
   "bugs": {
     "url": "https://github.com/restarian/brace_umd/issues",
     "email": "RobertSteckroth@gmail.com"
@@ -50,5 +52,5 @@
       "email": "robertsteckroth@gmail.com"
     }
   ],
-  "license": "(MIT WITH BSD)"
+  "license": "(MIT WITH BSD-2-Clause)"
 }

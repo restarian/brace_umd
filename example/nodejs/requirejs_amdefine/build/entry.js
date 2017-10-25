@@ -28,8 +28,10 @@
 
 
 
+
 //Cool joes
 /*
+MIT License
 Copyright (c) 2017 Robert Steckroth <RobertSteckroth@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -184,8 +186,7 @@ var __filename,__dirname,define,requirejs,require,
 
 
 
-
-o,r={
+o,umd={
 
 // This will store the last id used in define calls (not forcing factory), so that an anonymous module can be created from the entry point.
 "i":"object"==typeof module,
@@ -199,7 +200,7 @@ o,r={
 // added to the Object before this module is called. The module will fail to load with a message if ANY dependencies are unavailable. It is then 
 // up to the developer to re-order the modules so they load in the correct order. A string id is required to define the module if the platform 
 // is a browser.
-if(e&&e.constructor===Array&&r.i){
+if(e&&e.constructor===Array&&umd.i){
 
 // Shift the arguments over sense the id string is not always required.
 o=s
@@ -208,7 +209,7 @@ s=t
 
 t=e
 
-e=r.filename
+e=umd.filename
 }
 if("string"!==typeof e){
 void 0
@@ -269,7 +270,7 @@ var i,e
 
 ;// This member will load the module using the requested definition type if it does not exist yet. If the definition type is not found in the 
 // environment than the factory will be used (the factory is the default definition type).
-if(r.i&&!this.define){
+if(umd.i&&!this.define){
 try{
 this.define=module.require("amdefine")(module)
 
@@ -331,66 +332,66 @@ e.apply(e.prototype,arguments)
 
 ;// These two loops will set the properties of the wrapping functions of requirejs and define above to load the module if it does not exist and than 
 // return the request property.
-for(o in r.f){
-r.o.__defineGetter__(r.f[o],function(i){
-if(commonjs_available&&!r.define){
+for(o in umd.f){
+umd.o.__defineGetter__(umd.f[o],function(i){
+if(commonjs_available&&!umd.define){
 try{
-r.define=module.require("amdefine")(module)
+umd.define=module.require("amdefine")(module)
 
 
 ;// This will actually set the property of this property which is a getter. The new property will be the module property. The updated property 
 // value is available immediately and this function will be garbage collected by the ecma engine as soon as it returns (this can only happen 
 // if the property is set via a function).
-for(var e in r.define){
+for(var e in umd.define){
 
 // The getter must first be deleted before a standard property is set to this Object or the property will not be overwritten.
 delete this[e]
 
-this[e]=r.define[e]
+this[e]=umd.define[e]
 }
 void 0
 
-return r.define[i]
+return umd.define[i]
 }catch(t){
 
 // console.log returns undefined which is what is desired
 return
 }
 }
-}.bind(null,r.f[o]))
+}.bind(null,umd.f[o]))
 }
 // The requirejs constructor is also provided for convenience.
 // ----- This is the same design as above so comments are omitted.
-for(o in r.n){
-r.r.__defineGetter__(r.n[o],function(i){
-if(commonjs_available&&!r.requirejs){
+for(o in umd.n){
+umd.r.__defineGetter__(umd.n[o],function(i){
+if(commonjs_available&&!umd.requirejs){
 try{
-r.requirejs=module.require("requirejs")
+umd.requirejs=module.require("requirejs")
 
-for(var e in r.requirejs){
+for(var e in umd.requirejs){
 delete this[e]
 
-this[e]=r.requirejs[e]
+this[e]=umd.requirejs[e]
 }
 void 0
 
-return r.requirejs[e]
+return umd.requirejs[e]
 }catch(t){
 return
 }
 }
-}.bind(null,r.n[o]))
+}.bind(null,umd.n[o]))
 }
-__filename=r.i&&module.filename||""
+__filename=umd.i&&module.filename||""
 
-__dirname=r.i&&module.require("path").dirname(__filename)||""
+__dirname=umd.i&&module.require("path").dirname(__filename)||""
 
-r.s()
+umd.s()
 
 
 ;// The file name using commonjs path module. Otherwise, the factory will require an id to work in non-nodejs environments.
-if(r.i){
-r.filename=module.require("path").basename(__filename)
+if(umd.i){
+umd.filename=module.require("path").basename(__filename)
 }
 // ---- Module definitions are added here.
 // ----------------------
@@ -435,7 +436,7 @@ requirejs(["module_one", "second_module"], function(one, two) {
 ;
 define("entry", function(){});
 
-r.e.length&&define([r.e],function(i){
+umd.e.length&&define([umd.e],function(i){
 return i
 })
 })(this,"function"===typeof define&&define||undefined,"function"===typeof requirejs&&requirejs||undefined,{})
