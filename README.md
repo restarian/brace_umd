@@ -25,6 +25,7 @@
 [![Bash on Windows](https://raw.githubusercontent.com/restarian/brace_umd/master/doc/image/ubuntu_windows_logo.png)](https://github.com/Microsoft/BashOnWindows)
 
 **Author: Robert Steckroth, _Bust0ut_ [<RobertSteckroth@gmail.com>](mailto:robertsteckroth@gmail.com)**
+
 **Licensed under: MIT WITH BSD-2-Clause**
 
 **Bonuses:**

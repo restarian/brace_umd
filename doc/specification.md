@@ -22,7 +22,8 @@
 * License: [MIT](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
 * Sub-license: Some parts of the Brace_UMD source include code licensed under the BDS-2-Clause license. The license will be stated and clearly marked wherever this happens.
 * Dependencies: [Commander](https://www.npmjs.com/package/commander)
-* Development dependencies: [Brace_navlink](https://github.com/restarian/brace_navlink), [Mocha](https://www.npmjs.com/package/mocha), [Chai](https://www.npmjs.com/package/chai),  [UglifyJS-3](https://www.npmjs.com/package/uglify-js), [RequireJs](https://www.npmjs.com/package/requirejs), [AMDefine](https://www.npmjs.com/package/amdefine), [Mocha-maybe](https://www.npmjs.com/package/mocha-maybe),  [Intercept-stdout](https://www.npmjs.com/package/intercept-stdout)
+* Development dependencies: [Mocha](https://www.npmjs.com/package/mocha), [Chai](https://www.npmjs.com/package/chai),  [UglifyJS-3](https://www.npmjs.com/package/uglify-js), [RequireJs](https://www.npmjs.com/package/requirejs), [AMDefine](https://www.npmjs.com/package/amdefine), [Mocha-maybe](https://www.npmjs.com/package/mocha-maybe),  [Intercept-stdout](https://www.npmjs.com/package/intercept-stdout)
+* Optional dependencies: [Brace_navlink](https://github.com/restarian/brace_navlink)
 * Platform support: Windows 10, Ubuntu 16 *Apple products and other versions require an* [issue](https://github.com/restarian/brace_umd/issues) *submission if one is found*
 * Installer support: [npm](https://npmjs.org) *version 5 was used*
 * Supported Nodejs versions: only supports nodejs versions ^5.x.x
