@@ -1,6 +1,6 @@
 {
   "name": "brace_umd",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Provides a unified module definition wrapper for RequireJS and AMDefine definitions while staying seamlessly compliant with the RequireJS optimizer and factory based Objects.",
   "main": "lib/brace_umd.js",
   "dependencies": {
@@ -15,9 +15,9 @@
     "requirejs": "^2.3.3",
     "uglify-js": "^3.0.25"
   },
-	"optionalDependencies": {
-		 "brace_navlink": "^0.2.0"
-	},
+  "optionalDependencies": {
+    "brace_navlink": "^0.2.0"
+  },
   "bugs": {
     "url": "https://github.com/restarian/brace_umd/issues",
     "email": "RobertSteckroth@gmail.com"
