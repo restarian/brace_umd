@@ -1,6 +1,6 @@
 {
   "output": {
-    "beautify": true,
+    "beautify": false,
     "quote_keys": false,
     "semicolons": true,
     "quote_style": 1,
