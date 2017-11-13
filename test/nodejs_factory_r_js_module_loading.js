@@ -101,7 +101,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 							" and the correct module values will load using commonjs require.", function(done) {
 
 					new Spinner("", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
-									"-o", path.join(example_module_dir, "/rjs_config_force_factory .js")], undefined, function() {
+									"-o", path.join(example_module_dir, "/rjs_config_force_factory.js")], undefined, function() {
 
 						var module_path = path.join(example_module_dir, "/build", "/entry.js")
 						var entry = require(module_path)
