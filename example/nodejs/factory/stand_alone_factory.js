@@ -84,9 +84,19 @@ var __filename,__dirname,define,requirejs,require,umd={
 // is a browser.
 i&&i.constructor===Array&&umd.e&&(
 // Shift the arguments over sense the id string is not always required.
-n=t,t=o,o=i,i=umd.filename),"string"!=typeof i?console.log("The factory Object is being used but the module does not supply an id parameter. Skipping loading of the module."):o.every(function(o){
+n=t,t=o,o=i,
+//	An id should be available if the environment was commonjs.
+i=umd.filename),
+// The factory mandates that the amd call used an id parameter or that one is available otherwise.			
+"string"!=typeof i?console.log("The factory Object is being used but the module does not supply an id parameter. Skipping loading of the module."):o.every(function(o){
+if("factory"===umd.o.force_type&&!(o in e)||umd.e&&!(o in module)||!(o in e)){
 return o in e||!!console.log("The dependency",o,"is not loaded into the factory. Skipping loading of the module",i)
-})&&(e[i]=t.apply(t.prototype,o.map(function(e,i){
+}
+})&&(umd.e?
+// Use the module exporter if the environment has one or simply use the global instance passed in the umd.
+module.exports[i]=t.apply(t.prototype,o.map(function(e,i){
+return this[e]
+},e)):e[i]=t.apply(t.prototype,o.map(function(e,i){
 return this[e]
 },e)))
 },
@@ -107,7 +117,7 @@ var e={
 
 // auto_anonymous relies on define_proxy do it must be used if that option is set.
 "define":!this.o.auto_anonymous&&this.define||this.n.bind(this),
-"requirejs":this.requirejs||this.s.bind(this),
+"requirejs":this.requirejs||this.r.bind(this),
 "require":this.requirejs||this.e&&module.require||this.factory,
 "factory":this.factory
 },i=this.o.force_type&&this.o.force_type.toString()||""
@@ -120,7 +130,7 @@ console.log("Forcing use of the definition type",i),e.requirejs=e.require=e.defi
 // It is not an issue if extra keys are put here that are not defined in the current version of requirejs or amdefine. If any older versions 
 // of the definition scripts contain different property namespace, than they can be included in the Array as well. The purpose of these it to 
 // load the modules if they are passed into the main enclosure as undefined.
-"r":["config","nextTick","version","jsExtRegExp","isBrowser","s","toUrl","undef","defined","specified","onError","createNode","load","exec"],
+"s":["config","nextTick","version","jsExtRegExp","isBrowser","s","toUrl","undef","defined","specified","onError","createNode","load","exec"],
 "d":["amd","require"],
 "n":function(){
 
@@ -149,13 +159,13 @@ i==this.define&&this.o.auto_anonymous?!0!==this.i&&arguments.length>2?this.i=arg
 // Resetting the global variable data is necessary when reassigning proxy data.
 this.t()),i.apply(i.prototype,arguments)
 },
-"s":function(){
+"r":function(){
 if(commonjs_available&&!this.requirejs){
 try{
-this.requirejs=this.a.require("requirejs")
+this.requirejs=this.f.require("requirejs")
 
 for(var e in this.requirejs){
-this.s[e]=this.requirejs[e]
+this.r[e]=this.requirejs[e]
 }
 }catch(o){
 console.log("Unable to find requirejs module.",o.message)
@@ -165,7 +175,7 @@ console.log("Using proxied requirejs method.")
 
 var i=this.requirejs||this.factory
 
-this.s=i,i.apply(i.prototype,arguments)
+this.r=i,i.apply(i.prototype,arguments)
 }
 }
 
@@ -197,8 +207,8 @@ return console.log("Unable to find amdefine module.",o.message)
 }
 // The requirejs constructor is also provided for convenience.
 // ----- This is the same design as above so comments are omitted.
-for(var n in umd.r){
-umd.s.__defineGetter__(umd.r[n],function(e){
+for(var n in umd.s){
+umd.r.__defineGetter__(umd.s[n],function(e){
 if(commonjs_available&&!umd.requirejs){
 try{
 umd.requirejs=module.require("requirejs")
@@ -211,7 +221,7 @@ return console.log("Using proxied requirejs method."),umd.requirejs[i]
 return console.log("Unable to find requirejs module.",o.message)
 }
 }
-}.bind(null,umd.r[n]))
+}.bind(null,umd.s[n]))
 }
 __filename=umd.e&&module.filename||"",__dirname=umd.e&&module.require("path").dirname(__filename)||"",umd.t(),
 // The file name using commonjs path module. Otherwise, the factory will require an id to work in non-nodejs environments.

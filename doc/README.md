@@ -3,10 +3,12 @@
 
 #### A unified module definition script to support Requirejs and AMDefine definitions while working seamlessly with the RequireJs optimizer and native global Objects.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/j9w4v3romfw971y9/branch/master?svg=true)](https://ci.appveyor.com/project/restarian/brace-umd/branch/master) [![Build Status](https://travis-ci.org/restarian/brace_umd.svg?branch=master)](https://travis-ci.org/restarian/brace_umd) [![Downloads](https://img.shields.io/npm/dm/brace_umd.svg?svg=true)](https://npmjs.org/package/brace_umd)
+[![Build status](https://ci.appveyor.com/api/projects/status/8ou8s3c7ocq0972h/branch/master?svg=true)](https://ci.appveyor.com/project/restarian/brace-umd/branch/master) [![Build Status](https://travis-ci.org/restarian/brace_umd.svg?branch=master)](https://travis-ci.org/restarian/brace_umd) [![Downloads](https://img.shields.io/npm/dm/brace_umd.svg?svg=true)](https://npmjs.org/package/brace_umd)
 
-..part of the [Brace suite](https://github.com/restarian/restarian/blob/master/brace/README.md)
-![Brace](https://raw.githubusercontent.com/restarian/restarian/master/brace/doc/image/brace_logo_small.png)
+
+| A part of the [Brace suite](https://github.com/restarian/restarian/blob/master/brace/README.md)| Developed with Windows 10 and Ubuntu 16 
+| ---- | ----
+| ![Brace](https://raw.githubusercontent.com/restarian/restarian/master/brace/doc/image/brace_logo_small.png) | [![Ubuntu on Windows](https://raw.githubusercontent.com/restarian/restarian/master/doc/image/ubuntu_windows_logo.png)](https://github.com/Microsoft/BashOnWindows) | 
 
 ------
 
@@ -21,8 +23,6 @@
 * [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 
 ----
-
-[![Bash on Windows](https://raw.githubusercontent.com/restarian/brace_umd/master/doc/image/ubuntu_windows_logo.png)](https://github.com/Microsoft/BashOnWindows)
 
 **Author: Robert Steckroth, _Bust0ut_ [<RobertSteckroth@gmail.com>](mailto:robertsteckroth@gmail.com)**
 

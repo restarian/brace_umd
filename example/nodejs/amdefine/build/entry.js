@@ -186,6 +186,15 @@ var __filename,__dirname,define,requirejs,require,
 
 
 
+
+
+
+
+
+
+
+
+
 o,umd={
 
 // This will store the last id used in define calls (not forcing factory), so that an anonymous module can be created from the entry point.
@@ -209,16 +218,27 @@ s=t
 
 t=e
 
+
+;//	An id should be available if the environment was commonjs.
 e=umd.filename
 }
+// The factory mandates that the amd call used an id parameter or that one is available otherwise.			
 if("string"!==typeof e){
 void 0
 }else if(t.every(function(e){
 return e in i||!!void 0
 })){
+if(umd.i){
+
+// Use the module exporter if the environment has one or simply use the global instance passed in the umd.
+module.exports[e]=s.apply(s.prototype,t.map(function(i,e){
+return this[i]
+},i))
+}else{
 i[e]=s.apply(s.prototype,t.map(function(i,e){
 return this[i]
 },i))
+}
 }
 },
 

@@ -41,6 +41,8 @@ var Spinner = test_help.Spinner,
 // of the file is for. The build_umd.js source will run if the spinner command is empty by setting the default_command member.
 Spinner.prototype.default_command = "node" 
 Spinner.prototype.log_stdout = true 
+Spinner.prototype.log_stderr = true 
+Spinner.prototype.log_err = true 
 
 var build_path = path.join(__dirname, "/../", "/bin", "/build_umd.js"),
 	config_dir = path.join(__dirname, "/config") 
