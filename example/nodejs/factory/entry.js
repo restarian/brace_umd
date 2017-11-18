@@ -3,10 +3,10 @@ if (typeof define !== 'function') {
 }
 
 define("entry", ["module_one", "second_module"], function(one, two) {
-  var id = "entry"
-  console.log(id + " has initialized.")
+
+  console.log("entry has initialized.")
   var mod = {}
-  mod.id = id
+  mod.id = "entry" 
   mod[one.id] = one
   mod[two.id] = two
   return mod

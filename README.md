@@ -25,23 +25,26 @@
 
 ----
 
-
 **Author: Robert Steckroth, _Bust0ut_ [<RobertSteckroth@gmail.com>](mailto:robertsteckroth@gmail.com)**
 
 **Licensed under: MIT WITH BSD-2-Clause**
 
 **Bonuses:**
+* Creates zero dependency modules (_not even amdefine_)
+* Can create automatic anonymous modules creation for amdefine and commonjs modules at run-time
+* Expands to incorporate other asynchronous module definitions
 * Adds only one new namespace (umd), by using a self-destructing proxy method
-* Provides automatic anonymous module creation for amdefine modules
 * Provides a way to switch between definition types without altering source code
 * Allows for almost total minification of wrapped source code using almost all of the uglify-js options
-* Expands to incorporate other asynchronous module definitions
-* Well commented, professionally engineered and thoroughly documented code
+* Well commented, professionally engineered, and thoroughly documented code
 * Vast and deep unit tests on Windows 10 and Ubuntu 16 with multiple browsers.
 
 **Caveats:**
-  * Requires nodejs version 5 or greater
-  * An id string must be used in order to have native global Object support in environments other than nodejs when the requirejs optimizer is not going to be used. Otherwise, the id can be omitted when working with the other definitions. However, this is not an issue if the module is ran through the requirejs optimizer (which will add a id to all the modules).
+* Is not yet tested in browser environments
+* Has a smidgen of execution overhead
+* Requires nodejs version 5 or greater
+
+Note: An id string must be used in order to have native global Object support in environments other than nodejs when the requirejs optimizer is not going to be used. Otherwise, the id can be omitted when working with the other definitions. However, this is not an issue if the module is ran through the requirejs optimizer (which will add a id to all the modules).
 
 **Brace UMD is better than other more simple module definitions** by providing _uglify-js_ functionality and option passing. The AMD library is only loaded and used if the correlated call to it is contained within the script. E.g. The *amdefine* module is not loaded unless a call to *define* is inside of the script. Otherwise, a proxy function is supplied for the supported definitions.
 

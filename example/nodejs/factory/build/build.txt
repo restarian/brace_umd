@@ -7,5 +7,4 @@ entry.js
 
 base_module.js
 ----------------
-second_module.js
 base_module.js

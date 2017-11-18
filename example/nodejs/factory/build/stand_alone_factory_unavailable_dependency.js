@@ -79,32 +79,30 @@
         }
     }.bind(null, umd.requirejs_proxy_key[o]));
     umd.set_global();
-    define("module_one", [], function() {
-        var id = "module_one";
-        console.log(id + " has initialized.");
-        var mod = {};
-        mod.id = id;
+define("first", [], function() {
+	
+	return {
+		id: "first"
+	}
+
+})
+
+define("second", [], function() {
+	
+	return {
+		id: "second"
+	}
+
+})
+
+define(["first", "nope", "second"], function(first, second) {
+
+	return {
+		first: first,
+		second: second
+	}
+})
+umd._last_define_id.length && define([ umd._last_define_id ], function(mod) {
         return mod;
     });
-    define("second_module", [], function() {
-        var id = "second_module";
-        console.log(id + " has initialized.");
-        var mod = {};
-        mod.id = id;
-        return mod;
-    });
-    define("entry", [ "module_one", "second_module" ], function(one, two) {
-        console.log("entry has initialized.");
-        var mod = {};
-        mod.id = "entry";
-        mod[one.id] = one;
-        mod[two.id] = two;
-        return mod;
-    });
-    umd._last_define_id.length && define([ umd._last_define_id ], function(mod) {
-        return mod;
-    });
-}(module.exports, "function" == typeof define && define || void 0, "function" == typeof requirejs && requirejs || void 0, {
-    force_type: "factory",
-    auto_anonymous: true
-});
+}(module.exports, "function" == typeof define && define || void 0, "function" == typeof requirejs && requirejs || void 0,{"force_type":"factory"});

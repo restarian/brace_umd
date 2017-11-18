@@ -60,69 +60,288 @@ SOFTWARE.
 */
 // Global property namespace will be used inside this function so it is necessary to pass any globally defined properties into the function
 // because of how variable hosting works. The namespace would be immediately overwritten if it wasn't pre-defined as argument data.
-!(function(i,e,t,r){
+!(function(i,e,t,s){
+var define,requirejs,require,
 
-// This is the unified module definition script. It wraps the other module definition syntax and applies the appropriate mechanism to it. The parameters
-// are named the same as the providing namespace of the definition with a underbar prepended to avoid hoisting overwrite.
-// The first parameter passed in is the global Object to use as the factory if all the other types are not available.
-// The _define property should be passed the amdefine module or undefined. The _requirejs argument should be the requirejs Object or undefined. The 
-// last argument is the options Object. This data controls behaviors of the script (available options can be studied in the documentation).
-// Other definition types can be added by copying the template from the others and supplying the correlating data.
-var __filename,__dirname,define,requirejs,require,umd={
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+r,umd={
 
 // This will store the last id used in define calls (not forcing factory), so that an anonymous module can be created from the entry point.
 "i":"object"==typeof module,
 "e":false,
-"filename":"",
+"factory":function(e,t,s,r){
 
 // _factory is the default definition type and thusly is expected to exist.
-"factory":function(e,t,r,s){
+// This method will add the module to the native global Object (or whatever the first parameter is) or module.exports if in a commonjs environment.
+// The dependencies will have to be already added to the Object before this module is called (which requirejs does nicely). The module 
+// will fail to load with a message if any dependencies are unavailable. It is then up to the developer to re-order the modules so they load 
+// in the correct order. A string id is required to define the module if the platform is a browser.
+// These checks shift the arguments sense an id string and dependency array are not mandatory.
+if(e&&e.constructor===Array){
 
-// This method will add the module to the native global Object (or whatever the first parameter is). The dependencies will have to be already 
-// added to the Object before this module is called. The module will fail to load with a message if ANY dependencies are unavailable. It is then 
-// up to the developer to re-order the modules so they load in the correct order. A string id is required to define the module if the platform 
-// is a browser.
-if(e&&e.constructor===Array&&this.i){
+// Here the dependencies and callbacks were only specified.
+r=s
 
-// Shift the arguments over sense the id string is not always required.
-s=r
-
-r=t
+s=t
 
 t=e
 
+e=""
+}else if("string"!==typeof e){
 
-;//	An id should be available if the environment was commonjs.
-e=this.filename
+// ..and only if a function was passed in.
+e=""
+
+t=[]
+
+r=t
+
+callack=e
 }
-// The factory mandates that the amd call used an id parameter or that one is available otherwise.			
-if("string"!==typeof e){
-void 0
-}else if(t.every(function(e){
+// callback = typeof callback = function && callback || function(){}
+// A module definition is created with an empty id and one dependency if the auto_anonymous option is used. The primary module (which is passed
+// in as the only dependency of the newly created module), is identified as the last module found in the definition sequences. Note: using the 
+// requirejs optimizer ensures that this happens.
+var factory=this.i&&module.exports||i,n=[],o=/^\.[\/,\\]/,f=false
+
+if(true!==this.e){
+if(e){
+this.e=e
+
+f=false
+}else{
+this.e=true
+
+
+;// This can be a thing in browsers as long as the native object is passed in empty
+if(!this.i){
+//|| !Object.keys(factory).length !== this._total_modules ) 
+return!!void 0
+}else{
+
+// Gather the objects listed as dependencies from the factory and store them in a temporary array. These will be passed to the new factory
+// object as parameters but will not be delete sense the parameters will hold individual links to the modules. Note: the modules passed in 
+// as dependencies will be garbage once the function scope is lost which may not be desirable from a program execution design standpoint.
+f=true
+
+n=t.map(function(i,e){
+return this[i.replace(o,"")]
+},factory)
+
+
+;// The factory now contains the anonymous module with the dependencies stored in link limbo via the arguments object.
+if(this.i){
+module.exports=s.apply(s.prototype,n)
+}else{
+i=s.apply(s.prototype,n)
+}
+}
+}
+}
+if(!f&&t.every(function(i){
 
 // Remove the ./ at the front of the dependency id. This can be done sense it is superfluous in AMD module syntax but the requirejs
 // optimizer will add it to the build file define structure it generates.
-if("require"===e){
-return true
-}
-e=e.replace(/^\.[\/,\\]/,"")
+i=i.replace(o,"")
 
-if("factory"===this.t.force_type&&!(e in i)||this.i&&!(e in module.exports)||!(e in i)){
-return!!void 0
-}
+if("require"===i){
 return true
+}else if(!(i in factory)){
+
+// returns false
+return!!void 0
+}else{
+return true
+}
 },this)){
 
 // Use the module exporter if the environment has one or simply use the global instance passed in the umd.
-if(this.i){
-module.exports[e]=r.apply(r.prototype,t.map(function(i,e){
-return this[i.replace(/^\.[\/,\\]/,"")]
-},module.exports))
-}else{
-i[e]=r.apply(r.prototype,t.map(function(i,e){
-return this[i.replace(/^\.[\/,\\]/,"")]
-},i))
-}
+factory[e]=s.apply(s.prototype,t.map(function(i,e){
+return this[i.replace(o,"")]
+},factory))
 }
 },
 
@@ -132,16 +351,16 @@ return this[i.replace(/^\.[\/,\\]/,"")]
 "define":e,
 
 // option data is generally set with require("brace_umd").wrap_end_option({})
-"t":"object"==typeof r&&r||{},
+"t":"object"==typeof s&&s||{},
 
 // The support simply lists the available definition types (only the qualifier is used), in the script which can change by adding a few pieces of data.
-"r":function(){
+"s":function(){
 var i={
 
 // auto_anonymous relies on define_proxy do it must be used if that option is set.
-"define":!this.t.auto_anonymous&&this.define||this.s.bind(this),
-"requirejs":this.requirejs||this.u.bind(this),
-"require":this.requirejs||this.i&&module.require||this.factory.bind(this),
+"define":!this.t.auto_anonymous&&this.define||this.r.bind(this),
+"requirejs":this.requirejs||this.n.bind(this),
+"require":this.requirejs||this.i&&module.require||this.factory,
 "factory":this.factory.bind(this)
 },e=this.t.force_type&&""+this.t.force_type||""
 
@@ -162,96 +381,134 @@ requirejs=i.requirejs
 
 require=i.require
 },
-get"s"(){
 
-// This member will load the module using the requested definition type if it does not exist yet. If the definition type is not found in the 
+// It is not an issue if extra keys are put here that are not defined in the current version of requirejs or amdefine. If any older versions 
+// of the definition scripts contain different property namespace, than they can be included in the Array as well. The purpose of these it to 
+// load the modules if they are passed into the main enclosure as undefined.
+"o":["config","nextTick","version","jsExtRegExp","isBrowser","s","toUrl","undef","defined","specified","onError","createNode","load","exec"],
+"f":["amd","require"],
+"r":function(){
+var i,e
+
+
+;// This member will load the module using the requested definition type if it does not exist yet. If the definition type is not found in the 
 // environment than the factory will be used (the factory is the default definition type).
-if(this.i&&!this.define){
+if(umd.i&&!this.define){
 try{
 this.define=module.require("amdefine")(module)
-}catch(e){
+
+for(i in this.define){
+this.r[i]=this.define[i]
+}
+}catch(t){
 void 0
 }
 }
 // Use the module or use the factory (unless force type is set).
-var i=this.define||this.factory.bind(this)
+e=this.define||this.factory.bind(this)
 
 
 ;// This can be verbose logging
-if(i==this.define){
+if(e==this.define){
 void 0
 }else{
 void 0
 }
 // Turn the proxy function back into the original one. This function will never be called again sense it is overwritten here. This can only
 // happen if auto_anonymous is not set sense that relies on the proxy to function.
-if(i!=this.define||!this.t.auto_anonymous){
-Object.defineProperty(this,"define_proxy",{
-"h":true,
-"n":true,
-"o":true,
-"f":i
-})
+if(e!=this.define||!this.t.auto_anonymous){
+this.r=e
 
 
 ;// Resetting the global variable data is necessary when reassigning proxy data.
-this.r()
-
-return i
-}else{
-return function(){
-if(true!==this.e&&arguments.length>2){
+this.s()
+}else if(true!==this.e&&arguments.length>2){
 this.e=arguments[0]
 }else if(arguments.length<=2){
 this.e=true
 }
-return i.apply(i.prototype,arguments)
-}.bind(this)
-}
+e.apply(e.prototype,arguments)
 },
-get"u"(){
+"n":function(){
+var i,e
+
 if(this.i&&!this.requirejs){
 try{
-this.requirejs=module.require("requirejs")
-}catch(e){
+this.requirejs=this.h.require("requirejs")
+
+for(i in this.requirejs){
+this.n[i]=this.requirejs[i]
+}
+}catch(t){
 void 0
 }
 }
-var i=this.requirejs||this.factory.bind(this)
-
-if(i==this.requirejs){
 void 0
-}else{
+
+e=this.requirejs||this.factory
+
+this.n=e
+
+e.apply(e.prototype,arguments)
+}
+}
+
+;// These two loops will set the properties of the wrapping functions of requirejs and define above to load the module if it does not exist and than 
+// return the request property.
+for(r in umd.f){
+umd.r.__defineGetter__(umd.f[r],function(i){
+if(this.i&&!umd.define){
+try{
+umd.define=module.require("amdefine")(module)
+
+
+;// This will actually set the property of this property which is a getter. The new property will be the module property. The updated property 
+// value is available immediately and this function will be garbage collected by the ecma engine as soon as it returns (this can only happen 
+// if the property is set via a function).
+for(var e in umd.define){
+
+// The getter must first be deleted before a standard property is set to this Object or the property will not be overwritten.
+delete this[e]
+
+this[e]=umd.define[e]
+}
 void 0
-}
-if(i!=this.requirejs){
-Object.defineProperty(this,"requirejs_proxy",{
-"h":true,
-"n":true,
-"o":true,
-"f":i
-})
 
+return umd.define[i]
+}catch(t){
 
-;// Resetting the global variable data is necessary when reassigning proxy data.
-this.r()
-}
-return i
+// console.log returns undefined which is what is desired
+return
 }
 }
-__filename=umd.i&&module.filename||""
-
-__dirname=umd.i&&module.require("path").dirname(__filename)||""
-
-umd.r()
-
-
-;// The file name using commonjs path module. Otherwise, the factory will require an id to work in non-nodejs environments.
-if(umd.i){
-umd.filename=module.require("path").basename(__filename)
+}.bind(null,umd.f[r]))
 }
-// ---- Module definitions are added here.
-// ----------------------
+// The requirejs constructor is also provided for convenience.
+// ----- This is the same design as above so comments are omitted.
+for(r in umd.o){
+umd.n.__defineGetter__(umd.o[r],function(i){
+if(this.i&&!umd.requirejs){
+try{
+umd.requirejs=module.require("requirejs")
+
+for(var e in umd.requirejs){
+delete this[e]
+
+this[e]=umd.requirejs[e]
+}
+void 0
+
+return umd.requirejs[e]
+}catch(t){
+return
+}
+}
+}.bind(null,umd.o[r]))
+}
+umd.s()
+
+
+;// ---- Module definitions are added here.
 // Code below here is put into the wrap_end fragment. -------------------------------------------------------
 // If _last_define_id is a string (which has a length), than an anonymous module needs to be made.;
 
@@ -278,4 +535,4 @@ define('base_module',["second_module"], function(dependency) {
 umd.e.length&&define([umd.e],function(i){
 return i
 })
-})(this,"function"===typeof define&&define||undefined,"function"===typeof requirejs&&requirejs||undefined,{})
+})(module.exports,"function"===typeof define&&define||undefined,"function"===typeof requirejs&&requirejs||undefined,{})

@@ -10,6 +10,6 @@
 	"wrap": {
 		// r.js redefines require and define again so make sure to use nodeRequire which will have the original require statement.
 		"start": nodeRequire("../../../").wrap_start,
-		"end": nodeRequire("../../../").wrap_end_option({"auto_anonymous": true})
+		"end": nodeRequire("../../../").wrap_end_option({force_type: "factory", auto_anonymous: true})
 	}
 }
