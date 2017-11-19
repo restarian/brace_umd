@@ -1,7 +1,5 @@
 
-var requirejs = require("requirejs")
-
-requirejs.config({baseUrl: __dirname, nodeRequire: require})
+requirejs.config({baseUrl: "./", nodeRequire: require})
 
 requirejs(["module_one", "second_module"], function(one, two) {
 

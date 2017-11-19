@@ -32,7 +32,8 @@ var expect = require("chai").expect,
 	path = require("path"),
 	fs = require("fs"),
 	test_help = require("test_help"),
-	maybe = require("mocha-maybe")
+	maybe = require("mocha-maybe"),
+	intercept = require("intercept-stdout")
 
 var Spinner = test_help.Spinner,
 	remove_cache = test_help.remove_cache.bind(null, "entry.js", "r.js")
@@ -77,9 +78,9 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 	describe("Requirejs module loading after using r_js optimization on amdefined modules", function() {
 
+		fs.readdirSync(config_dir)
 		// An array with the values of the test directory is filtered to include all of the files included with the regex.
-		var config_file = fs.readdirSync(path.join(__dirname, "/config")).filter(function(value) { return /^build_config_.*\.json/.test(value) })
-		config_file.forEach(function(value) {
+		.filter(function(config_path) { return /^build_config_.*\.json/.test(config_path) }).slice(0,1).forEach(function(value) {
 
 			value = path.join(config_dir, value)
 		
@@ -88,34 +89,61 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				// Remove the amdefine and module cache from the testing module.
 				beforeEach(remove_cache)
 
-				it_might("after building the brace umd source", function(done) {
+				it_might.only("after building the brace umd source", function(done) {
 					// A new umd.js source build is created with the various config files in the test directory.
 					new Spinner("node", [build_path, "--config-file", value], undefined, function(exit_code) {
 						done()
 					}, function(err) { 
 						expect(false).to.equal(true); 
 						done()
-					})
-				})
+					}) })
 
-				// The current working directory of npm test commands is the module root which is what process.cwd() returns.
 				var example_module_dir = path.join(__dirname, "/../", "/example", "/nodejs/", "/requirejs_amdefine")
 
 				it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
-							" load using amdefine", function(done) {
+							" load using requirejs", function(done) {
 
 					new Spinner("", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
 									"-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function() {
 
+						var captured_text = ""
+						var unhook_intercept = intercept(function(txt) { captured_text += txt })
+
 						var requirejs = require("requirejs")
 						requirejs.config({baseUrl: path.join(example_module_dir, "/build"), nodeRequire: require})
 
-						var mod_path = path.join(example_module_dir, "/build", "/entry.js")
+						// Load the r.js optimized module which contains the dependencies module_one.js and second_module.
+						requirejs(["require", "entry"], function(req) {
+							var module_one = req("module_one")
+							expect(module_one).to.include({"id": "module_one"})
+							setTimeout(function() {
+								unhook_intercept()
+								expect(captured_text).to.include("{ id: 'module_one' } { id: 'second_module' }")
+								expect(captured_text).to.include("Using proxied amdefine definition.")
+								expect(captured_text).to.include("Using proxied requirejs method.")
+								done()
+							}, 0)
+						})
+
+					}, function(err) {
+					  expect(false, err).to.equal(true)
+					  done()
+					})
+				})
+
+				// The current working directory of npm test commands is the module root which is what process.cwd() returns.
+				it_might.only("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
+							" load using commonjs", function(done) {
+
+					new Spinner("", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
+									"-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function() {
+
+						//var requirejs = require("requirejs")
+						//var define = require("requirejs")
+						//requirejs.config({baseUrl: path.join(example_module_dir, "/build"), nodeRequire: require})
 
 						// Load the r.js optimized module which contains the dependencies module_one.js and second_module.
-						requirejs(["require", mod_path], function(req, mod) {
-							done()
-						})
+						require(path.join(example_module_dir, "/build", "/entry.js"))
 
 					}, function(err) {
 					  expect(false, err).to.equal(true)

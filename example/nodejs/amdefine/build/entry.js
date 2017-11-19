@@ -60,7 +60,7 @@ SOFTWARE.
 */
 // Global property namespace will be used inside this function so it is necessary to pass any globally defined properties into the function
 // because of how variable hosting works. The namespace would be immediately overwritten if it wasn't pre-defined as argument data.
-!(function(i,e,t,s){
+!(function(i,e,t,r){
 var define,requirejs,require,
 
 
@@ -247,12 +247,22 @@ var define,requirejs,require,
 
 
 
-r,umd={
+
+
+
+
+
+
+
+
+
+
+s,umd={
 
 // This will store the last id used in define calls (not forcing factory), so that an anonymous module can be created from the entry point.
 "i":"object"==typeof module,
 "e":false,
-"factory":function(e,t,s,r){
+"factory":function(e,t,r,s){
 
 // _factory is the default definition type and thusly is expected to exist.
 // This method will add the module to the native global Object (or whatever the first parameter is) or module.exports if in a commonjs environment.
@@ -263,9 +273,9 @@ r,umd={
 if(e&&e.constructor===Array){
 
 // Here the dependencies and callbacks were only specified.
-r=s
+s=r
 
-s=t
+r=t
 
 t=e
 
@@ -273,13 +283,13 @@ e=""
 }else if("string"!==typeof e){
 
 // ..and only if a function was passed in.
-e=""
+s=t
+
+r=e
 
 t=[]
 
-r=t
-
-callack=e
+e=""
 }
 // callback = typeof callback = function && callback || function(){}
 // A module definition is created with an empty id and one dependency if the auto_anonymous option is used. The primary module (which is passed
@@ -290,9 +300,9 @@ var factory=this.i&&module.exports||i,n=[],o=/^\.[\/,\\]/,f=false
 if(true!==this.e){
 if(e){
 this.e=e
-
-f=false
 }else{
+
+// This halts the process as the _last_define_id is expected to be used or not before this occurs.
 this.e=true
 
 
@@ -305,6 +315,19 @@ return!!void 0
 // Gather the objects listed as dependencies from the factory and store them in a temporary array. These will be passed to the new factory
 // object as parameters but will not be delete sense the parameters will hold individual links to the modules. Note: the modules passed in 
 // as dependencies will be garbage once the function scope is lost which may not be desirable from a program execution design standpoint.
+if(!t.every(function(i){
+i=i.replace(o,"")
+
+if("require"===i||!(i in factory)){
+
+// returns false
+return!!void 0
+}else{
+return true
+}
+})){
+return null
+}
 f=true
 
 n=t.map(function(i,e){
@@ -314,9 +337,9 @@ return this[i.replace(o,"")]
 
 ;// The factory now contains the anonymous module with the dependencies stored in link limbo via the arguments object.
 if(this.i){
-module.exports=s.apply(s.prototype,n)
+module.exports=r.apply(r.prototype,n)
 }else{
-i=s.apply(s.prototype,n)
+i=r.apply(r.prototype,n)
 }
 }
 }
@@ -336,10 +359,10 @@ return!!void 0
 }else{
 return true
 }
-},this)){
+})){
 
 // Use the module exporter if the environment has one or simply use the global instance passed in the umd.
-factory[e]=s.apply(s.prototype,t.map(function(i,e){
+factory[e]=r.apply(r.prototype,t.map(function(i,e){
 return this[i.replace(o,"")]
 },factory))
 }
@@ -351,14 +374,14 @@ return this[i.replace(o,"")]
 "define":e,
 
 // option data is generally set with require("brace_umd").wrap_end_option({})
-"t":"object"==typeof s&&s||{},
+"t":"object"==typeof r&&r||{},
 
 // The support simply lists the available definition types (only the qualifier is used), in the script which can change by adding a few pieces of data.
-"s":function(){
+"r":function(){
 var i={
 
 // auto_anonymous relies on define_proxy do it must be used if that option is set.
-"define":!this.t.auto_anonymous&&this.define||this.r.bind(this),
+"define":!this.t.auto_anonymous&&this.define||this.s.bind(this),
 "requirejs":this.requirejs||this.n.bind(this),
 "require":this.requirejs||this.i&&module.require||this.factory,
 "factory":this.factory.bind(this)
@@ -387,7 +410,7 @@ require=i.require
 // load the modules if they are passed into the main enclosure as undefined.
 "o":["config","nextTick","version","jsExtRegExp","isBrowser","s","toUrl","undef","defined","specified","onError","createNode","load","exec"],
 "f":["amd","require"],
-"r":function(){
+"s":function(){
 var i,e
 
 
@@ -398,7 +421,7 @@ try{
 this.define=module.require("amdefine")(module)
 
 for(i in this.define){
-this.r[i]=this.define[i]
+this.s[i]=this.define[i]
 }
 }catch(t){
 void 0
@@ -417,11 +440,11 @@ void 0
 // Turn the proxy function back into the original one. This function will never be called again sense it is overwritten here. This can only
 // happen if auto_anonymous is not set sense that relies on the proxy to function.
 if(e!=this.define||!this.t.auto_anonymous){
-this.r=e
+this.s=e
 
 
 ;// Resetting the global variable data is necessary when reassigning proxy data.
-this.s()
+this.r()
 }else if(true!==this.e&&arguments.length>2){
 this.e=arguments[0]
 }else if(arguments.length<=2){
@@ -434,7 +457,7 @@ var i,e
 
 if(this.i&&!this.requirejs){
 try{
-this.requirejs=this.h.require("requirejs")
+this.requirejs=this.u.require("requirejs")
 
 for(i in this.requirejs){
 this.n[i]=this.requirejs[i]
@@ -455,8 +478,8 @@ e.apply(e.prototype,arguments)
 
 ;// These two loops will set the properties of the wrapping functions of requirejs and define above to load the module if it does not exist and than 
 // return the request property.
-for(r in umd.f){
-umd.r.__defineGetter__(umd.f[r],function(i){
+for(s in umd.f){
+umd.s.__defineGetter__(umd.f[s],function(i){
 if(this.i&&!umd.define){
 try{
 umd.define=module.require("amdefine")(module)
@@ -481,12 +504,12 @@ return umd.define[i]
 return
 }
 }
-}.bind(null,umd.f[r]))
+}.bind(null,umd.f[s]))
 }
 // The requirejs constructor is also provided for convenience.
 // ----- This is the same design as above so comments are omitted.
-for(r in umd.o){
-umd.n.__defineGetter__(umd.o[r],function(i){
+for(s in umd.o){
+umd.n.__defineGetter__(umd.o[s],function(i){
 if(this.i&&!umd.requirejs){
 try{
 umd.requirejs=module.require("requirejs")
@@ -503,9 +526,9 @@ return umd.requirejs[e]
 return
 }
 }
-}.bind(null,umd.o[r]))
+}.bind(null,umd.o[s]))
 }
-umd.s()
+umd.r()
 
 
 ;// ---- Module definitions are added here.

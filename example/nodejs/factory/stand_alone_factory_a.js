@@ -15,11 +15,10 @@ define("second", [], function() {
 
 })
 
-define(["first", "nope", "second"], function(first, second) {
+define(function(require) {
 
 	return {
-		id: "unmet",
-		first: first,
-		second: second
+		id: "stand_alone",
+		require: require
 	}
 })
