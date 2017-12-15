@@ -1,6 +1,6 @@
 {
   "name": "brace_umd",
-  "version": "0.6.3",
+  "version": "0.7.0",
   "description": "Provides a unified module definition wrapper for RequireJS and AMDefine definitions while staying seamlessly compliant with the RequireJS optimizer and factory based Objects.",
   "main": "lib/brace_umd.js",
   "dependencies": {
