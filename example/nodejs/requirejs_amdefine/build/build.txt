@@ -1,7 +1,6 @@
 
 entry.js
 ----------------
-module_one.js
 second_module.js
 entry.js
 

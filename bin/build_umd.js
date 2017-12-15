@@ -539,5 +539,5 @@ try { fs.writeFileSync(location, close_index[2]) }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js build end wrap:", location)
 
-// This will signal that the script has ended successfully. The unit tests rely on this returning 5 to indicate a successful run.
-process.exit(5)
+// This will signal that the script has ended successfully. Note: the unit tests rely on this returning 0 to indicate a successful run.
+process.exit(0)

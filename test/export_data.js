@@ -27,7 +27,6 @@ SOFTWARE.
  Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com>
 */
 
-
 var expect = require("chai").expect,
 	path = require("path"),
 	fs = require("fs"),
@@ -77,7 +76,7 @@ describe("Using stop further progression methodology for dependencies in: "+path
 
 				// A new umd.js source build is created with the various config files in the test directory.
 				new Spinner("", [build_path, "--config-file", value], undefined, function(exit_code) {
-					expect(parseInt(exit_code)).to.equal(5)
+					expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 					done()
 				}, function(err) { 
 					expect(false).to.equal(true)

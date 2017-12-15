@@ -31,6 +31,7 @@ var expect = require("chai").expect,
 	path = require("path"),
 	fs = require("fs"),
 	test_help = require("test_help"),
+	intercept = require("intercept-stdout"),
 	maybe = require("mocha-maybe")
 
 var Spinner = test_help.Spinner,
@@ -89,7 +90,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				it_might("will build the Brace umd source using the build_umd program", function(done) {
 					// A new umd.js source build is created with the various config files in the test directory.
 					new Spinner("", [build_path, "--config-file", value], undefined, function(exit_code) {
-						expect(exit_code).to.equal(5)
+						expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 						done()
 					}, function(err) { 
 						expect(false).to.equal(true); 
@@ -104,8 +105,9 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 							" module values will load using amdefine with the make_anonymous option used", function(done) {
 
 					new Spinner("", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
-										  "-o", path.join(example_module_dir, "/rjs_config_auto_anonymous.js")], undefined, function() {
+										  "-o", path.join(example_module_dir, "/rjs_config_auto_anonymous.js")], undefined, function(exit_code) {
 
+						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
 						var define = require("amdefine")(module)
 						define([path.join(example_module_dir, "/build", "/entry.js")], function(entry) {
 
@@ -123,8 +125,9 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 							" module values will load using commonjs require with the make_anonymous option used", function(done) {
 
 					new Spinner("", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
-										  "-o", path.join(example_module_dir, "/rjs_config_auto_anonymous.js")], undefined, function() {
+										  "-o", path.join(example_module_dir, "/rjs_config_auto_anonymous.js")], undefined, function(exit_code) {
 
+						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
 						var entry = require(path.join(example_module_dir, "/build", "/entry.js"))
 						expect(entry).to.deep.equal({id: "entry", module_one: {id: "module_one"}, second_module: {id: "second_module"}})
 						done()
@@ -139,7 +142,9 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 							" load using amdefine", function(done) {
 
 					new Spinner("node", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
-												"-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function() {
+												"-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function(exit_code) {
+						
+						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
 
 						var define = require("amdefine")(module)
 						define([path.join(example_module_dir, "/build", "/entry.js")], function(entry) {

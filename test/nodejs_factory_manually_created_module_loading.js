@@ -78,18 +78,20 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		fs.readdirSync(config_dir)
 		// An array with the values of the test directory is filtered to include all of the files included with the regex.
-		.filter(function(config_path) { return /^build_config_.*\.json/.test(config_path) }).slice(0,1).forEach(function(value) {
+		.filter(function(config_path) { return /^build_config_.*\.json/.test(config_path) }).forEach(function(value) {
 
 			value = path.join(config_dir, value)
 		
 			describe("using config file "+ value, function() {
 
-				// Remove the amdefine and module cache from the testing module.
 				beforeEach(remove_cache)
 
 				it_might("after building the brace umd source", function(done) {
-					// A new umd.js source build is created with the various config files in the test directory.
-					new Spinner("node", [build_path, "--config-file", value], undefined, function(exit_code) {
+
+					// This will re-build the umd source with the config file but also keep the drop_console option to false to that the intercept-stdout 
+					// can be tested against what is logged in the non-minified source.
+					new Spinner("", [build_path, "--config-file", value, "--compress", "drop_console=false"], undefined, function(exit_code) {
+						expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 						done()
 					}, function(err) { 
 						expect(false).to.equal(true); 
@@ -103,9 +105,6 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 				it_might("A non-requirejs-optimized factory implementation with and without the auto_anonymous option set will return the correct data" +
 								  " when using only a callback as the definition parameter", function(done) {
-
-					// This will re-build the umd source with the config file but also keep the drop_console option to false to that the intercept-stdout 
-					// can be tested against what is logged in the non-minified source.
 
 					var umd = require("../")
 					var non_wrapped_path = path.join(example_module_dir, "/stand_alone_factory_a.js")
@@ -144,9 +143,6 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				})
 
 				it_might("A non-requirejs-optimized factory implementation without the auto_anonymous option set will return the correct data", function(done) {
-
-					// This will re-build the umd source with the config file but also keep the drop_console option to false to that the intercept-stdout 
-					// can be tested against what is logged in the non-minified source.
 
 					var umd = require("../")
 					var non_wrapped_path = path.join(example_module_dir, "/stand_alone_factory.js")

@@ -89,7 +89,10 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				it_might("after building the brace umd source", function(done) {
 					// A new umd.js source build is created with the various config files in the test directory.
 					new Spinner("", [build_path, "--config-file", config_path, "--compress", "drop_console=false"], undefined, function(exit_code) {
-						expect(parseInt(exit_code)).to.equal(5)
+						expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
+						done()
+					}, function(err) { 
+						expect(false).to.equal(true); 
 						done()
 					})
 				})
@@ -101,7 +104,9 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 							" and the correct module values will load using commonjs require.", function(done) {
 
 					new Spinner("", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
-									"-o", path.join(example_module_dir, "/rjs_config_force_factory.js")], undefined, function() {
+									"-o", path.join(example_module_dir, "/rjs_config_force_factory.js")], undefined, function(exit_code) {
+
+						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
 
 						var module_path = path.join(example_module_dir, "/build", "/entry.js")
 						var base_path = path.join(example_module_dir, "/build", "/base_module.js")
@@ -126,9 +131,10 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 									 "file with force type of factory and the correct module values will load using commonjs require.", function(done) {
 
 					new Spinner("", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
-									"-o", path.join(example_module_dir, "/rjs_config_force_factory_auto_anonymous.js")], undefined, function() {
+									"-o", path.join(example_module_dir, "/rjs_config_force_factory_auto_anonymous.js")], undefined, function(exit_code) {
 									//"-o", path.join(example_module_dir, "/rjs_config_force_factory_auto_anonymous.js")], undefined, function() {
 
+						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
 						
 						var entry_path = path.join(example_module_dir, "/build", "/entry.js")
 						var base_path = path.join(example_module_dir, "/build", "/base_module.js")

@@ -27,15 +27,17 @@ SOFTWARE.
  Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com>
 */
 
+
 var expect = require("chai").expect,
 	spawn = require("child_process").exec,
 	path = require("path"),
 	fs = require("fs"),
 	test_help = require("test_help"),
+	intercept = require("intercept-stdout"),
 	maybe = require("mocha-maybe")
 
 var Spinner = test_help.Spinner,
-	remove_cache = test_help.remove_cache.bind(null, "entry.js", "r.js")
+	remove_cache = test_help.remove_cache.bind(null, "entry.js", "r.js", "amdefine.js")
 
 // Adding node to the command string will help windows know to use node with the file name. The unix shell knows what the #! at the beginning
 // of the file is for. The build_umd.js source will run if the spinner command is empty by setting the default_command member.
@@ -90,9 +92,10 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				it_might("after building the brace umd source", function(done) {
 					// A new umd.js source build is created with the various config files in the test directory.
 					new Spinner("", [build_path, "--config-file", config_path], undefined, function(exit_code) {
+						expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 						done()
 					}, function(err) { 
-						expect(false).to.equal(true); 
+						expect(false).to.equal(true) 
 						done()
 					})
 				})
@@ -101,13 +104,16 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				var example_module_dir = path.join(__dirname, "/../", "/example", "/nodejs/", "/requirejs_amdefine")
 
 				it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
-							" load using amdefine", function(done) {
+							" load using requirejs", function(done) {
 
 					new Spinner("", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
-									"-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function() {
+									"-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function(exit_code) {
+
+						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
+						this.log_stdout = true
 
 						var requirejs = require("requirejs")
-
+						
 						// Set the baseUrl to the build directory so that any modules not found there will be loaded via the node require instead (which
 						// is requirejs best practice).
 						requirejs.config({baseUrl: path.join(example_module_dir, "/build"), nodeRequire: require})
@@ -123,6 +129,64 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 					  done()
 					})
 				})
+
+				it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
+							" load using amdefine", function(done) {
+
+					new Spinner("", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
+									"-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function(exit_code) {
+
+						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
+						this.log_stdout = true
+
+						var define = require("amdefine")(module)
+						
+						var captured_text = "", unhook_intercept = intercept(function(txt) { captured_text += txt })
+
+						define(["require", path.join(example_module_dir, "/build", "/entry")], function(req, mod) { 
+							expect(mod).to.deep.equal({ id: "entry" })
+
+							setTimeout(function() {
+								unhook_intercept()
+								expect(captured_text).to.include("requirejs entry has initialized.")
+								done()
+							}, 200)
+						})
+
+					}, function(err) {
+					  expect(false, err).to.equal(true)
+					  done()
+					})
+				})
+
+				it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
+							" load using amdefine", function(done) {
+
+					new Spinner("", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
+									"-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function(exit_code) {
+
+						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
+
+						var define = require("amdefine")(module)
+						
+						var captured_text = "", unhook_intercept = intercept(function(txt) { captured_text += txt })
+
+						define(["require", path.join(example_module_dir, "/build", "/entry")], function(req, mod) { 
+							expect(mod).to.deep.equal({ id: "entry" })
+
+							setTimeout(function() {
+								unhook_intercept()
+								expect(captured_text).to.include("requirejs entry has initialized.")
+								done()
+							}, 200)
+						})
+
+					}, function(err) {
+					  expect(false, err).to.equal(true)
+					  done()
+					})
+				})
+
 			})
 		})
 	})
