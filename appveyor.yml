@@ -1,6 +1,7 @@
 version: 1.0.{build}
 
 clone_depth: 1
+clone_folder: c:\projects\brace_umd
 notifications:
 - provider: Email
   to:
