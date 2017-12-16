@@ -35,7 +35,7 @@ var expect = require("chai").expect,
 	maybe = require("mocha-maybe")
 
 var Spinner = test_help.Spinner,
-	remove_cache = test_help.remove_cache.bind(null, "entry.js", "amdefine.js")
+	remove_cache = test_help.remove_cache.bind(null, "brace_umd.js", "entry.js", "base_module.js", "amdefine.js", "r.js")
 
 // Adding node to the command string will help windows know to use node with the file name. The unix shell knows what the #! at the beginning
 // of the file is for. The build_umd.js source will run if the spinner command is empty by setting the default_command member.
@@ -44,8 +44,11 @@ Spinner.prototype.log_stdout = true
 Spinner.prototype.log_stderr = true 
 Spinner.prototype.log_err = true 
 
-var build_path = path.join(__dirname, "/../", "/bin", "/build_umd.js") 
-var config_dir = path.join(__dirname, "/config") 
+module.paths.unshift(path.join(__dirname, "/..", "/../"))
+
+var build_path = path.join(__dirname, "/..", "/bin", "/build_umd.js"),
+	config_dir = path.join(__dirname, "/config"),
+	rjs_path
 
 describe("Using stop further progression methodology for file dependencies: "+path.basename(__filename), function() { 
 
@@ -55,10 +58,19 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 	describe("Checking for dependencies:", function() { 
 
-		it_might("finds r_js in the system as a program", function(done) {
-
+		it_might("r_js in the system as a program", function(done) {
 			this.stop = true 
-			expect(fs.existsSync(path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js")), "could not find r.js dependency").to.be.true
+			expect(fs.existsSync(rjs_path = require.resolve("requirejs")), "could not find r.js dependency").to.be.true
+			this.stop = false 
+			done()
+		})
+
+		it_might("the build_umd program is available and at the right location", function(done) {
+			this.stop = true 
+			expect((function() { try { return require("brace_umd") }catch(e){} })(), "brace_umd was not found on system").to.be.a("object")
+			expect(fs.existsSync(build_path), "could not find the build_umd.js program").to.be.true
+			expect(build_path, "the expected path of the build_umd program is not the one located by the unit test")
+						.to.equal(require("brace_umd").build_program_path)
 			this.stop = false 
 			done()
 		})
@@ -104,8 +116,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				it_might("the example module at " + example_module_dir + " will build using the rjs_config_auto_anonymous.js file and the correct" +
 							" module values will load using amdefine with the make_anonymous option used", function(done) {
 
-					new Spinner("", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
-										  "-o", path.join(example_module_dir, "/rjs_config_auto_anonymous.js")], undefined, function(exit_code) {
+					new Spinner("", [rjs_path, "-o", path.join(example_module_dir, "/rjs_config_auto_anonymous.js")], undefined, function(exit_code) {
 
 						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
 						var define = require("amdefine")(module)
@@ -124,11 +135,11 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				it_might("the example module at " + example_module_dir + " will build using the rjs_config_auto_anonymous.js file and the correct" +
 							" module values will load using commonjs require with the make_anonymous option used", function(done) {
 
-					new Spinner("", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
-										  "-o", path.join(example_module_dir, "/rjs_config_auto_anonymous.js")], undefined, function(exit_code) {
+					new Spinner("", [rjs_path, "-o", path.join(example_module_dir, "/rjs_config_auto_anonymous.js")], undefined, function(exit_code) {
 
 						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
 						var entry = require(path.join(example_module_dir, "/build", "/entry.js"))
+
 						expect(entry).to.deep.equal({id: "entry", module_one: {id: "module_one"}, second_module: {id: "second_module"}})
 						done()
 
@@ -141,12 +152,11 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				it_might("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
 							" load using amdefine", function(done) {
 
-					new Spinner("node", [path.join(__dirname, "/../", "/node_modules", "/requirejs", "/bin", "/r.js"), 
-												"-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function(exit_code) {
+					new Spinner("node", [rjs_path, "-o", path.join(example_module_dir, "/rjs_config.js")], undefined, function(exit_code) {
 						
 						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
-
 						var define = require("amdefine")(module)
+
 						define([path.join(example_module_dir, "/build", "/entry.js")], function(entry) {
 
 							// There is no way to retrieve the module data if all id's were used via amdefine so it should return an empty Object to
