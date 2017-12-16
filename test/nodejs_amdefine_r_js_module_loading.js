@@ -44,7 +44,7 @@ Spinner.prototype.log_stdout = true
 Spinner.prototype.log_stderr = true 
 Spinner.prototype.log_err = true 
 
-module.paths.unshift(path.join(__dirname, "/..", "/../"))
+module.paths.unshift(path.join(__dirname, "/..", "/.."))
 
 var build_path = path.join(__dirname, "/..", "/bin", "/build_umd.js"),
 	config_dir = path.join(__dirname, "/config"),
@@ -66,8 +66,10 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 		})
 
 		it_might("the build_umd program is available and at the right location", function(done) {
+
+console.log(module.paths)
 			this.stop = true 
-			expect((function() { try { return require("brace_umd") }catch(e){} })(), "brace_umd was not found on system").to.be.a("object")
+			expect((function() { try { return module.require("brace_umd") }catch(e){} })(), "brace_umd was not found on system").to.be.a("object")
 			expect(fs.existsSync(build_path), "could not find the build_umd.js program").to.be.true
 			expect(build_path, "the expected path of the build_umd program is not the one located by the unit test")
 						.to.equal(require("brace_umd").build_program_path)

@@ -45,6 +45,7 @@ Spinner.prototype.log_stderr = true
 Spinner.prototype.log_err = true 
 
 module.paths.unshift(path.join(__dirname, "/..", "/../"))
+
 var build_path = path.join(__dirname, "/..", "/bin", "/build_umd.js")
 
 describe("Using stop further progression methodology for file dependencies: "+path.basename(__filename), function() { 
@@ -92,7 +93,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		it_might("this test is to build the project as the doc pages were", function(done) {
 
-			new Spinner("", [build_path, "--config-file", path.join(__dirname, "/../", "/minified_config.json")], undefined, function(exit_code) {
+			new Spinner("", [build_path, "--config-file", path.join(__dirname, "/..", "/minified_config.json")], undefined, function(exit_code) {
 				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 				done()
 			}, function(err) { 
