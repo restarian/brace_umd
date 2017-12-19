@@ -31,7 +31,7 @@ var expect = require("chai").expect,
 	path = require("path"),
 	fs = require("fs"),
 	test_help = require("test_help"),
-	maybe = require("mocha-maybe")
+	maybe = require("brace_maybe")
 
 var Spinner = test_help.Spinner,
 	remove_cache = test_help.remove_cache.bind(null, "brace_umd.js", "package.json")

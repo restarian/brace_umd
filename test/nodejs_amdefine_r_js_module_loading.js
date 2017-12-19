@@ -32,7 +32,7 @@ var expect = require("chai").expect,
 	fs = require("fs"),
 	test_help = require("test_help"),
 	intercept = require("intercept-stdout"),
-	maybe = require("mocha-maybe")
+	maybe = require("brace_maybe")
 
 var Spinner = test_help.Spinner,
 	remove_cache = test_help.remove_cache.bind(null, "brace_umd.js", "entry.js", "base_module.js", "amdefine.js", "r.js")
@@ -52,6 +52,8 @@ var build_path = path.join(__dirname, "/..", "/bin", "/build_umd.js"),
 
 describe("Using stop further progression methodology for file dependencies: "+path.basename(__filename), function() { 
 
+	beforeEach(remove_cache)
+
 	// The stop property of the first describe enclosure is used to control test skipping.
 	this.stop = false
 	var it_might = maybe(this)	
@@ -67,7 +69,6 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		it_might("the build_umd program is available and at the right location", function(done) {
 
-console.log(module.paths)
 			this.stop = true 
 			expect((function() { try { return module.require("brace_umd") }catch(e){} })(), "brace_umd was not found on system").to.be.a("object")
 			expect(fs.existsSync(build_path), "could not find the build_umd.js program").to.be.true
@@ -97,9 +98,6 @@ console.log(module.paths)
 			value = path.join(__dirname, "/config/", value)
 		
 			describe("using config file "+ value, function() {
-
-				// Remove the amdefine and module cache from the testing module.
-				beforeEach(remove_cache)
 
 				it_might("will build the Brace umd source using the build_umd program", function(done) {
 					// A new umd.js source build is created with the various config files in the test directory.

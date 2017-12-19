@@ -32,7 +32,7 @@ var expect = require("chai").expect,
 	fs = require("fs"),
 	test_help = require("test_help"),
 	intercept = require("intercept-stdout"),
-	maybe = require("mocha-maybe")
+	maybe = require("brace_maybe")
 
 var Spinner = test_help.Spinner,
 	remove_cache = test_help.remove_cache.bind(null, "brace_umd.js", "entry.js", "base_module.js", "amdefine.js", "r.js")
