@@ -57,15 +57,22 @@ wrap: {
 All modules built with Brace UMD (or another UMD wrapper), should have two builds. The first build should contain the UMD wrapper which should also be the main module entry file. The other build file will not incorporate the UMD design practice. The requirejs optimizer build config snippet below shows how to build modules which do not inject dependency module UMD wrappers into new module build. Thusly, the build directory of modules should look like the example below.
 
 
-my_module -
+my_module/
 
  package.json       <- in here should be: {.. main: build/my_module_umd.js ..}
+
  rjs_build.js       <- builds the non-UMD module my_module/build/my_module.js
+
  rjs_build_umd.js   <- builds the UMD wrapped module into my_module/build/my_module_umd.js
+
  lib/
+
  docs/
+
  build/ 
+
   my_module.js      <- contains non-UMD module
+  
   my_module_umd.js  <- contains UMD wrapped module
 
 
