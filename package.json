@@ -10,7 +10,6 @@
     "amdefine": "^1.0.1",
     "brace_maybe": "0.0.3",
     "chai": "^4.1.1",
-    "chromium": "^1.0.2",
     "intercept-stdout": "^0.1.2",
     "mocha": "^3.5.0",
     "requirejs": "^2.3.3",
