@@ -44,7 +44,7 @@ Spinner.prototype.log_stdout = true
 Spinner.prototype.log_stderr = true 
 Spinner.prototype.log_err = true 
 
-module.paths.unshift(path.join(__dirname, "/..", "/../"))
+module.paths.unshift(path.join(__dirname, "/..", "/.."))
 
 var build_path = path.join(__dirname, "/..", "/bin", "/build_umd.js"),
 	config_dir = path.join(__dirname, "/config"),
