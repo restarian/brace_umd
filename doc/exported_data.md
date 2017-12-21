@@ -34,6 +34,8 @@ Below is a description of the available data in the module accessed via *require
 
 	* build_directory: *String* - The directory which contains all of the built umd files and data. All files in this directory will be prefixed with the version.
 
+* build_program_path: "String* - The path to the *build_umd* program used by the module.
+
 * wrap_start_file: *String* - The file location of the starting wrap fragment. This can be used in the requirejs build config as the ```wrap.startfile```option. 
 
 * wrap_end_file: *String* - The file location of the ending wrap fragment. This can be used in the requirejs build config as the ```wrap.endFile```option.

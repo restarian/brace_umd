@@ -15,7 +15,11 @@
 
 ----
 
-The *r.js* (requirejs optimizer), script also uses *uglify-js* so the options used in building the umd.js source are imported from the build directory which also contains the wrapping fragments. * Note: *Brace UMD* uses UglifyJS-3 and is not compatible with any other major versions.
+
+#### Basic usage of Brace UMD with the Requirejs optimizer
+
+The *r.js* (requirejs optimizer), script also uses *uglify-js* so the options used in building the umd.js source are imported from the build directory which also contains the wrapping fragments. 
+**Note:** *Brace UMD* uses UglifyJS-3 and is not compatible with any other major versions of Uglify-js.
 
 Below is an example requirejs build config json file where the umd source fragments and the build options which created the source are used. It is necessary to use *nodeRequire* and not *require* when fetching the brace_umd package because the r.js script creates an atypical require function for use internally which will not have the correct path available to find the brace_umd package.
 
@@ -47,3 +51,39 @@ wrap: {
   end: nodeRequire("brace_umd").wrap_end_option({force_type: "factory", auto_anonymous: true})
 }
 ```
+
+#### Optimizing modules which were built using Brace UMD or another UMD
+
+All modules built with Brace UMD (or another UMD wrapper), should have two builds. The first build should contain the UMD wrapper which should also be the main module entry file. The other build file will not incorporate the UMD design practice. The requirejs optimizer build config snippet below shows how to build modules which do not inject dependency module UMD wrappers into new module build. Thusly, the build directory of modules should look like the example below.
+
+
+my_module -
+
+ package.json       <- in here should be: {.. main: build/my_module_umd.js ..}
+ rjs_build.js       <- builds the non-UMD module my_module/build/my_module.js
+ rjs_build_umd.js   <- builds the UMD wrapped module into my_module/build/my_module_umd.js
+ lib/
+ docs/
+ build/ 
+  my_module.js      <- contains non-UMD module
+  my_module_umd.js  <- contains UMD wrapped module
+
+
+Building modules which are wrapped with UMD script will cause superflurous UMD code to be placed into modules. This will result in multiple UMD wrappers to be placed in modules when the purpose of UMD is to only have one UMD wrapper per module file. However, the solution is simple when using requirejs. The *onBuildRead* configuration option needs to remove files which contain a "_umd.js" suffix and return the build file name which does not contain a UMD wrapper. 
+
+
+```javascript
+
+// A rjs_build.js snippet
+
+"onBuildRead": function (module_name, module_path, content) { 
+	// This is how a module is built which has dependency modules which use brace_umd. The non-brace_umd module version is used instead when a module is 
+	// loaded which was a brace_umd built module (it will contain a _umd.js or -umd.js suffix). It is assumed that any module which contains a
+	// [_,-]umd.js suffix is a UMD wrapped module.
+	return /.+[_,-]umd\.js$/.test(module_path) && nodeRequire("fs").existsSync(module_path.replace(/[_,-]umd\.js$/, ".js")) && 
+			nodeRequire("fs").readFileSync(module_path.replace(/[_,-]umd\.js$/, ".js")).toString() || content
+}
+
+```
+
+

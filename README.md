@@ -37,11 +37,11 @@
 * Allows for almost total minification of wrapped source code using almost all of the uglify-js options
 * Expands to incorporate other asynchronous module definitions
 * Well commented, professionally engineered and thoroughly documented code
-* Vast and deep unit tests on Windows 10 and Ubuntu 16 with multiple browsers.
+* Vast and deep unit tests on Windows 10 and Ubuntu 16
 
 **Caveats:**
   * Requires nodejs version 5 or greater
-  * An id string must be used in order to have native global Object support in environments other than nodejs when the requirejs optimizer is not going to be used. Otherwise, the id can be omitted when working with the other definitions. However, this is not an issue if the module is ran through the requirejs optimizer (which will add a id to all the modules).
+  * An id string must be used in order to have native Object support in environments other than nodejs when the requirejs optimizer is not used. Otherwise, the id can be omitted when working with the other definitions. This is not an issue if the module is ran through the requirejs optimizer (which will add an id to all module dependencies).
 
 **Brace UMD is better than other more simple module definitions** by providing _uglify-js_ functionality and option passing. The AMD library is only loaded and used if the correlated call to it is contained within the script. E.g. The *amdefine* module is not loaded unless a call to *define* is inside of the script. Otherwise, a proxy function is supplied for the supported definitions.
 
