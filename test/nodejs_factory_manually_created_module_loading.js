@@ -94,7 +94,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		fs.readdirSync(config_dir)
 		// An array with the values of the test directory is filtered to include all of the files included with the regex.
-		.filter(function(config_path) { return /^build_config_.*\.json/.test(config_path) }).slice(-1).forEach(function(value) {
+		.filter(function(config_path) { return /^build_config_.*\.json/.test(config_path) }).slice(2,3).forEach(function(value) {
 
 			value = path.join(config_dir, value)
 		
@@ -128,8 +128,8 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 					var module_path_b = path.join(example_module_dir, "/build", "/stand_alone_factory_b.js")
 
 					expect(module_text).to.be.a.instanceof(Buffer)
-					fs.writeFileSync(module_path_a, umd.wrap_start + module_text.toString() + umd.wrap_end_option({force_type: "factory", auto_anonymous: false}))
-					fs.writeFileSync(module_path_b, umd.wrap_start + module_text.toString() + umd.wrap_end_option({force_type: "factory", auto_anonymous: true}))
+					fs.writeFileSync(module_path_a, umd.wrap_start + module_text.toString() + umd.wrap_end_option({print: {title: false, style: false}, force_type: "factory", auto_anonymous: false}))
+					fs.writeFileSync(module_path_b, umd.wrap_start + module_text.toString() + umd.wrap_end_option({print: {title: false, style: false}, force_type: "factory", auto_anonymous: true}))
 
 					var captured_text = ""
 					var unhook_intercept = intercept(function(txt) { captured_text += txt })
@@ -164,7 +164,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 					var module_text = fs.readFileSync(non_wrapped_path)
 
 					expect(module_text).to.be.a.instanceof(Buffer)
-					fs.writeFileSync(module_path, umd.wrap_start + module_text.toString() + umd.wrap_end_option({force_type: "factory"}))
+					fs.writeFileSync(module_path, umd.wrap_start + module_text.toString() + umd.wrap_end_option({print: {title: false, style: false}, force_type: "factory"}))
 
 					var captured_text = ""
 					var unhook_intercept = intercept(function(txt) { captured_text += txt })
@@ -188,8 +188,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 					var module_path = path.join(example_module_dir, "/build", "/stand_alone_factory_unavailable_dependency.js")
 					var module_text = fs.readFileSync(non_wrapped_path)
 					expect(module_text).to.be.a.instanceof(Buffer)
-					console.log(umd.wrap_start + module_text.toString() + umd.wrap_end_option({force_type: "factory"}))
-					fs.writeFileSync(module_path, umd.wrap_start + module_text.toString() + umd.wrap_end_option({force_type: "factory"}))
+					fs.writeFileSync(module_path, umd.wrap_start + module_text.toString() + umd.wrap_end_option({print: {title: false, style: false}, force_type: "factory"}))
 
 					var captured_text = ""
 					var unhook_intercept = intercept(function(txt) { captured_text += txt })
@@ -200,7 +199,6 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 					expect(captured_text).to.include("The dependency nope is not loaded into the factory. Skipping loading of the anonymous module")
 					expect(entry).to.nested.include({'first.id': "first"})
 					expect(entry).to.nested.include({'second.id': "second"})
-					expect(entry).to.not.include.key("id")
 
 					remove_cache("stand_alone_factory_unavailable_dependency.js")
 					done()

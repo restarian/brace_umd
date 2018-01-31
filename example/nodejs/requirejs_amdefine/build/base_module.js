@@ -274,34 +274,30 @@ var define,requirejs,require,
 
 
 
-
-
 r,umd={
 
 // This will store the last id used in define calls (not forcing factory), so that an anonymous module can be created from the entry point.
 "e":"object"==typeof module&&"filename"in module&&"exports"in module,
 "log":function(){
-var e,i=false
+
+// If the bracket_print module is not loaded into the commonjs cache than the console.log function will be used.
+var e=false
 
 if(umd.e){
-for(e in module.children){
-if(/bracket_print_umd\.js$|bracket_print\.js$/.test(module.children[e].id)){
-umd.log=module.children[e].exports().log
+try{
+umd.log=module.require("bracket_print")("Brace_umd",umd.t.print).i().log
 
-i=true
-
-break
-}
-}
+e=true
+}catch(i){}
 }
 // It is necessary to check for console.log function availability sense the uglify-js parser will strip it out if the console-drop option is
 // set. Brace umd still functions without any logging ability.
-if(!i&&!(umd.log=void 0)){
+if(!e&&!(umd.log=void 0)){
 umd.log=function(){}
 }
 return umd.log.apply(umd.log.prototype,arguments)
 },
-"i":false,
+"n":false,
 "factory":function(i,t,n,r){
 
 // _factory is the default definition type and thusly is expected to exist.
@@ -337,19 +333,19 @@ i=""
 // requirejs optimizer ensures that this happens.
 var factory=this.e&&module.exports||e,o=[],u=/^\.[\/,\\]/,f=false
 
-if(true!==this.i){
+if(true!==this.n){
 if(i){
-this.i=i
+this.n=i
 }else{
 
 // This halts the process as the _last_define_id is expected to be used or not before this occurs.
-this.i=true
+this.n=true
 
 
 ;// This can be a thing in browsers as long as the native object is passed in empty
 if(!this.e){
 //|| !Object.keys(factory).length !== this._total_modules ) 
-return!!umd.log("The factory definition is being used outside of a commonjs envrionment and the module does not supply an"+" id parameter. Skipping loading of the module. Note: the last module loaded was",this.i)
+return!!umd.log("The factory definition is being used outside of a commonjs envrionment and the module does not supply an"+" id parameter. Skipping loading of the module. Note: the last module loaded was",this.n)
 }else{
 
 // Gather the objects listed as dependencies from the factory and store them in a temporary array. These will be passed to the new factory
@@ -417,12 +413,12 @@ return this[e.replace(u,"")]
 "t":"object"==typeof n&&n||{},
 
 // The support simply lists the available definition types (only the qualifier is used), in the script which can change by adding a few pieces of data.
-"n":function(){
+"r":function(){
 var e={
 
 // auto_anonymous relies on define_proxy do it must be used if that option is set.
-"define":!this.t.auto_anonymous&&this.define||this.r,
-"requirejs":this.requirejs||this.o,
+"define":!this.t.auto_anonymous&&this.define||this.o,
+"requirejs":this.requirejs||this.u,
 "require":this.requirejs||this.e&&module.require||this.factory.bind(this),
 "factory":this.factory.bind(this)
 },i=this.t.force_type&&""+this.t.force_type||""
@@ -448,9 +444,9 @@ require=e.require
 // It is not an issue if extra keys are put here that are not defined in the current version of requirejs or amdefine. If any older versions 
 // of the definition scripts contain different property namespace, than they can be included in the Array as well. The purpose of these it to 
 // load the modules if they are passed into the main enclosure as undefined.
-"u":["config","nextTick","version","jsExtRegExp","isBrowser","s","toUrl","undef","defined","specified","onError","createNode","load","exec"],
-"f":["amd","require"],
-"r":function(){
+"f":["config","nextTick","version","jsExtRegExp","isBrowser","s","toUrl","undef","defined","specified","onError","createNode","load","exec"],
+"s":["amd","require"],
+"o":function(){
 var e,i
 
 
@@ -461,7 +457,7 @@ try{
 umd.define=module.require("amdefine")(module)
 
 for(e in umd.define){
-umd.r[e]=umd.define[e]
+umd.o[e]=umd.define[e]
 }
 }catch(t){
 umd.log("Brace UMD is unable to find the amdefine module.",t.message)
@@ -480,19 +476,19 @@ umd.log("Using factory proxied from amdefine call.")
 // Turn the proxy function back into the original one. This function will never be called again sense it is overwritten here. This can only
 // happen if auto_anonymous is not set sense that relies on the proxy to function.
 if(i!=umd.define||!umd.t.auto_anonymous){
-umd.r=i
+umd.o=i
 
 
 ;// Resetting the global variable data is necessary when re-assigning umd object data.
-umd.n()
-}else if(true!==umd.i&&"string"===typeof arguments[0]){
-umd.i=arguments[0]
+umd.r()
+}else if(true!==umd.n&&"string"===typeof arguments[0]){
+umd.n=arguments[0]
 }else if("string"!==typeof arguments[0]){
-umd.i=true
+umd.n=true
 }
 i.apply(i.prototype,arguments)
 },
-"o":function(){
+"u":function(){
 if(umd.e){
 try{
 umd.requirejs=module.require("requirejs")
@@ -502,20 +498,20 @@ umd.log("Brace UMD is unable to find the requirejs module.",e.message)
 }
 umd.log("Using proxied requirejs method.")
 
-umd.o=umd.requirejs||umd.factory.bind(umd)
+umd.u=umd.requirejs||umd.factory.bind(umd)
 
 
 ;// Re-setting the global variable data is necessary when re-assigning umd object data.
-umd.n()
+umd.r()
 
-umd.o.apply(umd.o.prototype,arguments)
+umd.u.apply(umd.u.prototype,arguments)
 }
 }
 
 ;// These two loops will set the properties of the wrapping functions of requirejs and define above to load the module if it does not exist and than 
 // return the request property.
-for(r in umd.f){
-umd.r.__defineGetter__(umd.f[r],function(e){
+for(r in umd.s){
+umd.o.__defineGetter__(umd.s[r],function(e){
 if(umd.e&&!umd.define){
 try{
 umd.define=module.require("amdefine")(module)
@@ -540,34 +536,34 @@ return umd.define[e]
 return umd.log("Brace UMD is unable to find the amdefine module.",t.message)
 }
 }
-}.bind(null,umd.f[r]))
+}.bind(null,umd.s[r]))
 }
 // The requirejs constructor is also provided for convenience.
 // ----- This is the same design as above so comments are omitted.
 if(!requirejs){
-for(r in umd.u){
-umd.o.__defineGetter__(umd.u[r],function(e){
+for(r in umd.f){
+umd.u.__defineGetter__(umd.f[r],function(e){
 if(umd.e){
 try{
 umd.requirejs=module.require("requirejs")
 
 umd.log("Using proxied requirejs method to access requirejs."+e)
 
-umd.o=umd.requirejs
+umd.u=umd.requirejs
 
 
 ;// Resetting the global variable data is necessary when re-assigning umd object data.
-umd.n()
+umd.r()
 
 return umd.requirejs[e]
 }catch(i){
 return umd.log("Brace UMD is unable to find the requirejs module.",i.message)
 }
 }
-}.bind(null,umd.u[r]))
+}.bind(null,umd.f[r]))
 }
 }
-umd.n()
+umd.r()
 
 
 ;// ---- Module definitions are added here. ---------------------------------------------------------------
@@ -593,7 +589,7 @@ define('base_module',["second_module"], function(dependency) {
   return mod
 })
 ;
-umd.i.length&&define([umd.i],function(e){
+umd.n.length&&define([umd.n],function(e){
 return e
 })
 })(this,"function"===typeof define&&define||undefined,"function"===typeof requirejs&&requirejs||undefined,{"auto_anonymous":true})

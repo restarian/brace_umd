@@ -15,7 +15,7 @@ define("second", [], function() {
 
 })
 
-define(["first", "nope", "second"], function(first, second) {
+define(["first", "nope", "second"], function(first, nope, second) {
 
 	return {
 		id: "unmet",
