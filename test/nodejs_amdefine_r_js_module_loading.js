@@ -1,6 +1,5 @@
-/*
-MIT License
-Copyright (c) 2017 Robert Edward Steckroth
+/* MIT License
+Copyright (c) 2018 Robert Edward Steckroth
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +23,7 @@ SOFTWARE.
 
   this file is a part of Brace UMD
 
- Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com>
-*/
+ Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com> */
 
 var expect = require("chai").expect,
 	path = require("path"),
@@ -94,7 +92,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		// An array with the values of the test directory is filtered to include all of the files included with the regex.
 		var config_file = fs.readdirSync(config_dir).filter(function(value) { return /^build_config_.*\.json/.test(value) })
-		config_file.forEach(function(value) {
+		config_file.slice(-1).forEach(function(value) {
 			value = path.join(__dirname, "/config/", value)
 		
 			describe("using config file "+ value, function() {

@@ -1,7 +1,6 @@
 #!/usr/bin/env node
-/*
-MIT License
-Copyright (c) 2017 Robert Steckroth <RobertSteckroth@gmail.com>
+/* MIT License
+Copyright (c) 2018 Robert Steckroth <RobertSteckroth@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,8 +24,7 @@ SOFTWARE.
 
   this code segment is a part of Brace UMD
 
- Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com>
-*/
+ Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com> */
 
 
 var path = require("path"),
@@ -466,12 +464,15 @@ if ( build_option.mangle ) {
 		build_option.mangle.reserved = []
 
 	// The umd script will not work if these namespaces are mangled.
-	build_option.mangle.reserved = build_option.mangle.reserved.concat(["umd", "define", "require", "requirejs", "module", "factory", "__dirname", "__filename"]) 
+	build_option.mangle.reserved = build_option.mangle.reserved.concat(
+		["umd", "define", "require", "requirejs", "module", "factory"]
+	) 
 	if ( build_option.mangle.properties ) { // This call will inject the reserved names that are required when mangle-props is used.
 		// The property name "require" should be reserved if mangle properties are used so that module.require can be used by the original namespace.
 		// force_type is optionally set and therefore needs to be preserved inside the script.
-		build_option.mangle.properties.reserved = build_option.mangle.properties.reserved.concat(["define", "require", "requirejs", "factory", 
-																							"force_type", "filename", "dirname", "basename", "auto_anonymous"])
+		build_option.mangle.properties.reserved = build_option.mangle.properties.reserved.concat(
+			["id", "children", "exports", "define", "require", "requirejs", "factory", "force_type", "auto_anonymous", "log"]
+		)
 	}
 }
 
@@ -483,7 +484,6 @@ catch(e) { console.log(e); process.exit(7) }
 // built file (umd_[version].js), if the wrappers for r.js and uglifyjs minification are not needed. Uglify-js will mutate the options Object passed
 // into the minify function so a JSON copy is used.
 
-//console.log(data.toString())
 var out = UglifyJS.minify(data.toString(), JSON.parse(JSON.stringify(build_option)))
 if ( out.error ) {
 	console.log(out.error)
@@ -520,12 +520,16 @@ var build_info = {
 
 try { fs.writeFileSync(location, JSON.stringify(build_info, null, " ")) }
 catch(e) { console.log(e); process.exit(7) }
-console.log("Exported umb build information data file:", location)
+console.log("Exported umd build information data file:", location)
 
 // Find the first character which starts the closing bracket and function execution parenthesis to to separate them into two fragments. This 
 // separates the function into two parts so that script can be injected into the function at the very bottom.
 var close_index = out.match(/([\;,\n,\r,\,]+)[\s,\n,\r]*([a-z,\_,\-]+\.[a-z,\_,\-]+\.length\s*\&\&[\s,\n,\r]*define\([\s,\n,\r]*\[[^\]]+\][^\)]+\)[^\}]+[\s,\n,\r]*\}[\s,\n,\r]*\)\;*[\s,\n,\r]*\}[^\}]*\{\}\)[\s,\;]*)$/)
 
+if ( !close_index || close_index.length < 3 ) {
+	console.log("The umd program was unable to parse the umd.js source code into fragments.")
+	process.exit(7)
+}
 // Write out the wrapping fragment for use with the requirejs optimizer (r.js). This should go in the {wrap {start: []} } part of the r.js optimizer 
 // build file.
 location = build_dir + "wrap_start_umd_"+info.version+".frag"
