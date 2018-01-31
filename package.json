@@ -26,12 +26,12 @@
   "engines": {
     "node": ">=0.5.0"
   },
-  "scripts": {
-    "test": "mocha",
-    "test_threaded": "mocha-parallel-tests"
-  },
   "bin": {
     "build_umd": "./bin/build_umd.js"
+  },
+  "scripts": {
+    "test": "mocha",
+    "build": "./bin/build_umd.js --config-file ./minified_config.json"
   },
   "keywords": [
     "brace",
