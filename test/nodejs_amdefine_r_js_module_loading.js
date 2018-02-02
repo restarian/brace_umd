@@ -34,7 +34,7 @@ var expect = require("chai").expect,
 var Spawner = utils.Spawner,
 	remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "entry.js", "base_module.js", "amdefine.js", "r.js")
 
-Spawner.prototype.log_stdout = !false 
+Spawner.prototype.log_stdout = false 
 Spawner.prototype.log_stderr = true 
 Spawner.prototype.log_err = true 
 
