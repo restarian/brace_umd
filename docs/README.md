@@ -31,19 +31,19 @@
 **Licensed under: MIT WITH BSD-2-Clause**
 
 **Bonuses:**
-* Adds only one new namespace (umd), by using a self-destructing proxy method
+* Allows for zero dependency module creation when used with the r.js optimizer and the built in factory loader
 * Provides automatic anonymous module creation for amdefine modules
+* Adds only one new namespace (umd), by using a self-destructing proxy method
 * Provides a way to switch between definition types without altering source code
 * Allows for almost total minification of wrapped source code using almost all of the uglify-js options
-* Expands to incorporate other asynchronous module definitions
+* Extensible friendly design regarding other asynchronous module definitions
 * Well commented, professionally engineered and thoroughly documented code
 * Vast and deep unit tests on Windows 10 and Ubuntu 16
 
 **Caveats:**
   * Requires nodejs version 5 or greater
-  * An id string must be used in order to have native Object support in environments other than nodejs when the requirejs optimizer is not used. Otherwise, the id can be omitted when working with the other definitions. This is not an issue if the module is ran through the requirejs optimizer (which will add an id to all module dependencies).
 
-**Brace UMD is better than other more simple module definitions** by providing _uglify-js_ functionality and option passing. The AMD library is only loaded and used if the correlated call to it is contained within the script. E.g. The *amdefine* module is not loaded unless a call to *define* is inside of the script. Otherwise, a proxy function is supplied for the supported definitions.
+**Brace UMD is way better than other more simple module definitions** by providing _uglify-js_ functionality and option passing. The AMD library is only loaded and used if the correlated call to it is contained within the script. E.g. The *amdefine* module is not loaded unless a call to *define* is inside of the script. Otherwise, a proxy function is supplied for the supported definitions.
 
 **Note**: it is acceptable to use mangle and mangle properties with the UMD source and in the requirejs optimizing process. This is done by storing the build config options used and then passing them back into uglify-js via the r.js build config file (see [using with requirejs](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md), for more information.
 

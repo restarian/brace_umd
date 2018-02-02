@@ -31,7 +31,8 @@
   },
   "scripts": {
     "test": "mocha",
-    "build": "./bin/build_umd.js --config-file ./minified_config.json"
+    "build": "./bin/build_umd.js --config-file ./minified_config.json",
+    "docs_build": "./bin/build_umd.js --config-file ./docs/doc_config.json"
   },
   "keywords": [
     "brace",
