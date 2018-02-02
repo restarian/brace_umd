@@ -26,19 +26,18 @@ SOFTWARE.
 
  Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com> */
 
-
 var path = require("path"),
 fs = require("fs"),
-lib = path.join(path.dirname(fs.realpathSync(__filename)), "/../lib/"),
-build_dir = path.join(lib, "../build/"),
-info = require(lib + "../package.json"),
+lib = path.join(__dirname, "/..", "/lib"),
+build_dir = path.join(lib, "/..", "/build"),
+info = require(path.join(lib, "/..", "/package.json")),
 UglifyJS = require("uglify-js"),
 program = require("commander"),
 tested_option_file = "",
 bare_mangle_properties = []
 
-// The following program includes code from another module (UglifyJS). The license and code follows until specified otherwise.
-/*
+
+/* The following program includes code from another module (UglifyJS). The license and code follows until specified otherwise.
 UglifyJS is released under the BSD license:
 
 Copyright 2012-2013 (c) Mihai Bazon <mihai.bazon@gmail.com>
@@ -80,6 +79,7 @@ var skip_keys = [ "cname", "enclosed", "parent_scope", "scope", "thedef", "uses_
 var files = {};
 var options = {
 };
+
 program.version(info.name + " " + info.version);
 program.parseArgv = program.parse;
 program.parse = undefined;
@@ -196,7 +196,7 @@ if ( program.testedOptions ) {
   tested_option_file = program.testedOptions
   // The root will be empty if the path is relative so the current working directory of the process is prepended.
   if ( !path.parse(tested_option_file).root )
-    tested_option_file = path.join(process.cwd(), "/"+tested_option_file)
+    tested_option_file = path.join(process.cwd(), "/", tested_option_file)
 }
 var convert_path = function(name) {
     return name;
@@ -321,9 +321,9 @@ function print(txt) {
 
 // End of UglifyJS code -------------------------------------------
 
-// The following code is from this module (Brace UMD), and the license and code follows until otherwise specified.
-/*
-Copyright (c) 2017 Robert Steckroth <RobertSteckroth@gmail.com>
+/* The following code is from this module (Brace UMD), and the license and code follows until otherwise specified.
+  MIT License
+Copyright (c) 2018 Robert Steckroth <RobertSteckroth@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -345,15 +345,14 @@ SOFTWARE.
 
   Brace UMD is a unified module definition script to use when defining javascript modules.
 
-  this code segment is a part of Brace UMD
+  this file is a part of Brace UMD
 
- Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com>
-*/
+ Author: Robert Edward Steckroth, Bustout, <RobertSteckroth@gmail.com> */
 
 // The only options that are known to be configurable (via the unit tests), go in the tested-options json file. Any options (properties), added 
 // to this json data will be unsafe (any option property already listed there can be changed however). The json file for the tested_option file 
 // is kept in the project lib directory. The unit tests specify other files for testing purposes only.
-tested_option_file = tested_option_file || (lib + ".unit_tested_option.js")
+tested_option_file = tested_option_file || path.join(lib, "/.unit_tested_option.js")
 try { var tested_option = fs.readFileSync(tested_option_file).toString() }
 catch(e) { console.log(e); process.exit(7) }
 
@@ -471,19 +470,18 @@ if ( build_option.mangle ) {
 		// The property name "require" should be reserved if mangle properties are used so that module.require can be used by the original namespace.
 		// force_type is optionally set and therefore needs to be preserved inside the script.
 		build_option.mangle.properties.reserved = build_option.mangle.properties.reserved.concat(
-			["define", "require", "exports", "requirejs", "factory", "force_type", "auto_anonymous", "log"]
+			["define", "require", "exports", "requirejs", "factory", "force_type", "auto_anonymous"]
 		)
 	}
 }
 
 var data = ""
-try { data = fs.readFileSync(lib + "umd.js") }
+try { data = fs.readFileSync(path.join(lib, "/umd.js")) }
 catch(e) { console.log(e); process.exit(7) }
 
 // Fetch the build source and run it through the minifier. Note: It is is fine to use the source code in the lib directory (umd.js), instead of the 
 // built file (umd_[version].js), if the wrappers for r.js and uglifyjs minification are not needed. Uglify-js will mutate the options Object passed
 // into the minify function so a JSON copy is used.
-
 var out = UglifyJS.minify(data.toString(), JSON.parse(JSON.stringify(build_option)))
 if ( out.error ) {
 	console.log(out.error)
@@ -499,19 +497,18 @@ build_option.mangle = mangle_option
 console.log("Options which will be used with uglify-js for module definitions:\n", build_option)
 console.log("\nExporting data to build directory:", build_dir)
 
-var location = build_dir + "build_options.json"
+var location = path.join(build_dir, "/build_options.json")
 try { fs.writeFileSync(location, JSON.stringify(build_option, null, " ")) }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported build options:", location)
 
-location = build_dir + "umd.js"
-
+location = path.join(build_dir, "/umd.js")
 try { fs.writeFileSync(location, out) }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js primary script build:", location)
 
 // Assemble build meta data and store it in the build_information file.
-location = build_dir + "build_information.json"
+location = path.join(build_dir, "/build_information.json")
 var build_info = { 
 	tested_options_file: tested_option_file, 
 	version: info.version.toString(),
@@ -532,13 +529,13 @@ if ( !close_index || close_index.length < 3 ) {
 }
 // Write out the wrapping fragment for use with the requirejs optimizer (r.js). This should go in the {wrap {start: []} } part of the r.js optimizer 
 // build file.
-location = build_dir + "wrap_start_umd.frag"
+location = path.join(build_dir, "/wrap_start_umd.frag")
 try { fs.writeFileSync(location, out.substr(0, out.indexOf(close_index[0])) + ";") }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js build end wrap:", location)
 
 // Also create the closing wrapper which is pulled from the minified source and write it to the build directory.
-location = build_dir + "wrap_end_umd.frag"
+location = path.join(build_dir, "/wrap_end_umd.frag")
 try { fs.writeFileSync(location, close_index[2]) }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js build end wrap:", location)

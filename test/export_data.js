@@ -34,7 +34,7 @@ var expect = require("chai").expect,
 var Spawner = utils.Spawner,
 	remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "package.json")
 
-Spawner.prototype.log_stdout = true 
+Spawner.prototype.log_stdout = false 
 Spawner.prototype.log_stderr = true 
 Spawner.prototype.log_err = true 
 
@@ -71,15 +71,16 @@ describe("Using stop further progression methodology for dependencies in: "+path
 		})
 	})
 
-	describe("Brace UMD module export data", function() {
+	describe("the module export data", function() {
 
 		// An array with the values of the test directory is filtered to include all of the files included with the regex.
 		var config_file = fs.readdirSync(config_dir).filter(function(value) { return /^build_config_.*\.json/.test(value) })
 		config_file.forEach(function(value) {
 
 			value = path.join(__dirname, "/config/", value)
-
-			it_might("built using config file "+ value, function(done) {
+			
+			beforeEach(remove_cache)
+			it_might("using the build_umd.js script builds using the config file "+ value, function(done) {
 
 				// A new umd.js source build is created with the various config files in the test directory.
 				new Spawner("node", [build_path, "--config-file", value], undefined, function(exit_code) {
@@ -102,7 +103,6 @@ describe("Using stop further progression methodology for dependencies in: "+path
 				expect(data.wrap_end_option({abool: true})).to.include('{"abool":true}')
 				expect(data.wrap_end_option({abool: false})).to.include('{"abool":false}')
 				expect(data.wrap_end_option({cool: "joes", num: 0,num:44})).to.include('{"cool":"joes","num":44}')
-				remove_cache()
 				done()
 			})
 
@@ -112,7 +112,6 @@ describe("Using stop further progression methodology for dependencies in: "+path
 				var info = require("../package.json")
 				expect(data.build_information).to.be.an("object")
 				expect(data.build_information.version).to.equal(info.version)
-				remove_cache()
 				done()
 			})
 		})
