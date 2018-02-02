@@ -10,8 +10,8 @@
   "devDependencies": {
     "amdefine": "^1.0.1",
     "brace_maybe": "0.0.3",
+    "bracket_utils": "^0.1.0",
     "chai": "^4.1.1",
-    "intercept-stdout": "^0.1.2",
     "mocha": "^3.5.0",
     "requirejs": "^2.3.3",
     "uglify-js": "^3.0.25"

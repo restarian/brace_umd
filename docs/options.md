@@ -27,6 +27,3 @@ This option will enable automatic creation of anonymous  amdefine modules. The l
 
 This option will convert all definition types into the one specified. E.g. ```{force_type: "requirejs"}``` will use requirejs as the only definition type even if *define* is specified in the module. This is possible because all AMD syntax is similar. E.g. *function(id, deps array, callback, err_callback)*
 
-* print: *Object*
-
-This option will be passed to the bracket print module if one is found within the commonjs structure.

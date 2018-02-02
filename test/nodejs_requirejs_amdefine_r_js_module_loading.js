@@ -29,7 +29,6 @@ var expect = require("chai").expect,
 	path = require("path"),
 	fs = require("fs"),
 	test_help = require("test_help"),
-	intercept = require("intercept-stdout"),
 	maybe = require("brace_maybe")
 
 var Spinner = test_help.Spinner,
@@ -144,16 +143,9 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 						var define = require("amdefine")(module)
 						
-						var captured_text = "", unhook_intercept = intercept(function(txt) { captured_text += txt })
-
 						define(["require", path.join(example_module_dir, "/build", "/entry")], function(req, mod) { 
 							expect(mod).to.deep.equal({ id: "entry" })
-
-							setTimeout(function() {
-								unhook_intercept()
-								expect(captured_text).to.include("requirejs entry has initialized.")
-								done()
-							}, 200)
+							done()
 						})
 
 					}, function(err) {
@@ -170,16 +162,9 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 						var define = require("amdefine")(module)
 						
-						var captured_text = "", unhook_intercept = intercept(function(txt) { captured_text += txt })
-
 						define(["require", path.join(example_module_dir, "/build", "/entry")], function(req, mod) { 
 							expect(mod).to.deep.equal({ id: "entry" })
-
-							setTimeout(function() {
-								unhook_intercept()
-								expect(captured_text).to.include("requirejs entry has initialized.")
-								done()
-							}, 200)
+							done()
 						})
 
 					}, function(err) {

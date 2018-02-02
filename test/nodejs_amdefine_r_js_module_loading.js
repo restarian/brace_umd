@@ -29,7 +29,6 @@ var expect = require("chai").expect,
 	path = require("path"),
 	fs = require("fs"),
 	test_help = require("test_help"),
-	intercept = require("intercept-stdout"),
 	maybe = require("brace_maybe")
 
 var Spinner = test_help.Spinner,

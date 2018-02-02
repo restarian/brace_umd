@@ -28,17 +28,13 @@ SOFTWARE.
 var expect = require("chai").expect,
 	path = require("path"),
 	fs = require("fs"),
-	test_help = require("test_help"),
-	intercept = require("intercept-stdout"),
+	utils = require("bracket_utils"),
 	maybe = require("brace_maybe")
 
-var Spinner = test_help.Spinner,
-	remove_cache = test_help.remove_cache.bind(null, "brace_umd.js", "entry.js", "base_module.js", "amdefine.js", "r.js")
+var Spinner = utils.Spinner,
+	remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "base_module.js", "amdefine.js", "r.js", "factory.js", "factory_a.js", "factory_b.js")
 
-// Adding node to the command string will help windows know to use node with the file name. The unix shell knows what the #! at the beginning
-// of the file is for. The build_umd.js source will run if the spinner command is empty by setting the default_command member.
-Spinner.prototype.default_command = "node" 
-Spinner.prototype.log_stdout = true 
+Spinner.prototype.log_stdout = false 
 Spinner.prototype.log_stderr = true 
 Spinner.prototype.log_err = true 
 
@@ -46,11 +42,8 @@ module.paths.unshift(path.join(__dirname, "/..", "/../"))
 
 var build_path = path.join(__dirname, "/..", "/bin", "/build_umd.js"),
 	config_dir = path.join(__dirname, "/config")
-	//	rjs_path
 
 describe("Using stop further progression methodology for file dependencies: "+path.basename(__filename), function() { 
-
-	beforeEach(remove_cache)
 
 	// The stop property of the first describe enclosure is used to control test skipping.
 	this.stop = false
@@ -94,7 +87,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		fs.readdirSync(config_dir)
 		// An array with the values of the test directory is filtered to include all of the files included with the regex.
-		.filter(function(config_path) { return /^build_config_.*\.json/.test(config_path) }).slice(2,3).forEach(function(value) {
+		.filter(function(config_path) { return /^build_config_.*\.json/.test(config_path) }).forEach(function(value) {
 
 			value = path.join(config_dir, value)
 		
@@ -102,9 +95,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 				it_might("after building the brace umd source", function(done) {
 
-					// This will re-build the umd source with the config file but also keep the drop_console option to false to that the intercept-stdout 
-					// can be tested against what is logged in the non-minified source.
-					new Spinner("", [build_path, "--config-file", value, "--compress", "drop_console=false"], undefined, function(exit_code) {
+					new Spinner("node", [build_path, "--config-file", value, "--compress"], undefined, function(exit_code) {
 						expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 						done()
 					}, function(err) { 
@@ -113,95 +104,217 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 					})
 				})
 
+				describe("a non-requirejs-optimized factory implementation", function() {
+					// The current working directory of npm test commands is the module root which is what process.cwd() returns.
 
-				// The current working directory of npm test commands is the module root which is what process.cwd() returns.
-				var example_module_dir = path.join(__dirname, "/..", "/example", "/nodejs/", "/factory")
+					beforeEach(remove_cache)
+					var example_module_dir = path.join(__dirname, "/..", "/example", "/nodejs/", "/factory")
 
-				it_might("A non-requirejs-optimized factory implementation with and without the auto_anonymous option set will return the correct data" +
-							  " when using only a callback as the definition parameter", function(done) {
+					it_might("with and without the auto_anonymous option set will return the correct data" +
+								  " when using only a callback as the definition parameter", function(done) {
 
-					var umd = require("brace_umd")
-					var non_wrapped_path = path.join(example_module_dir, "/stand_alone_factory_a.js")
-					var module_text = fs.readFileSync(non_wrapped_path)
+						var umd = require("brace_umd")
 
-					var module_path_a = path.join(example_module_dir, "/build", "/stand_alone_factory_a.js")
-					var module_path_b = path.join(example_module_dir, "/build", "/stand_alone_factory_b.js")
+						var module_text = `
+							define("first", [], function() {
+								
+								return {
+									id: "first"
+								}
 
-					expect(module_text).to.be.a.instanceof(Buffer)
-					fs.writeFileSync(module_path_a, umd.wrap_start + module_text.toString() + umd.wrap_end_option({print: {title: false, style: false}, force_type: "factory", auto_anonymous: false}))
-					fs.writeFileSync(module_path_b, umd.wrap_start + module_text.toString() + umd.wrap_end_option({print: {title: false, style: false}, force_type: "factory", auto_anonymous: true}))
+							})
 
-					var captured_text = ""
-					var unhook_intercept = intercept(function(txt) { captured_text += txt })
-					var module_one = require(module_path_a)
-					var module_two = require(module_path_b)
-					unhook_intercept()
-					
-					expect(captured_text).to.include("Forcing use of the definition type factory")
+							define("second", [], function() {
+								
+								return {
+									id: "second"
+								}
 
-					expect(module_one).to.not.have.key("first")
-					expect(module_one).to.not.have.key("second")
-					expect(module_one).to.have.any.key("id")
-					expect(module_one).to.have.any.key("require")
-					expect(module_one.require).to.be.undefined
+							})
 
-					expect(module_two).to.not.have.key("first")
-					expect(module_two).to.not.have.key("second")
-					expect(module_two).to.have.any.key("id")
-					expect(module_two).to.have.any.key("require")
-					expect(module_two.require).to.be.undefined
+							define(function(req) {
 
-					remove_cache("stand_alone_factory_a.js", "stand_alone_factory_b.js")
-					done()
+								return {
+									id: "stand_alone",
+									require: req
+								}
+							})
+						`
 
-				})
+						var module_path_a = path.join(example_module_dir, "/build", "/factory_a.js")
+						var module_path_b = path.join(example_module_dir, "/build", "/factory_b.js")
 
-				it_might("A non-requirejs-optimized factory implementation without the auto_anonymous option set will return the correct data", function(done) {
+						try {
+							fs.writeFileSync(module_path_a, umd.wrap_start + module_text.toString() + 
+								umd.wrap_end_option({force_type: "factory", auto_anonymous: false}))
+							fs.writeFileSync(module_path_b, umd.wrap_start + module_text.toString() + 
+								umd.wrap_end_option({force_type: "factory", auto_anonymous: true}))
+						} catch(error) {
+							expect(false, error).to.be.true
+						}
 
-					var umd = require("brace_umd")
-					var non_wrapped_path = path.join(example_module_dir, "/stand_alone_factory.js")
-					var module_path = path.join(example_module_dir, "/build", "/stand_alone_factory.js")
-					var module_text = fs.readFileSync(non_wrapped_path)
+						var module_one = require(module_path_a)
+						var module_two = require(module_path_b)
+						
+						expect(module_one).to.not.have.key("first")
+						expect(module_one).to.not.have.key("second")
+						expect(module_one).to.have.any.key("id")
+						expect(module_one.require).to.be.a("function")
 
-					expect(module_text).to.be.a.instanceof(Buffer)
-					fs.writeFileSync(module_path, umd.wrap_start + module_text.toString() + umd.wrap_end_option({print: {title: false, style: false}, force_type: "factory"}))
+						expect(module_two).to.not.have.key("first")
+						expect(module_two).to.not.have.key("second")
+						expect(module_two).to.have.any.key("id")
+						expect(module_two).to.have.any.key("require")
+						expect(module_two.require).to.be.a("function")
 
-					var captured_text = ""
-					var unhook_intercept = intercept(function(txt) { captured_text += txt })
-					var entry = require(module_path)
-					unhook_intercept()
-					expect(captured_text).to.include("Forcing use of the definition type factory")
-					expect(entry).to.nested.include({'first.id': "first"})
-					expect(entry).to.nested.include({'second.id': "second"})
-					expect(entry).to.include({'id': "stand_alone"})
+						done()
 
-					remove_cache("stand_alone_factory.js")
-					done()
+					})
 
-				})
+					it_might("without the auto_anonymous option set will return the correct data", function(done) {
 
-				it_might("A non-requirejs-optimized factory implementation will output the correct error message and not load the module" +
-								  " if a unavailable dependency is specified", function(done) {
+						var umd = require("brace_umd")
+						var module_path = path.join(example_module_dir, "/build", "/factory.js")
+						var module_text = `
+						define("first", [], function() {
+							
+							return {
+								id: "first"
+							}
 
-					var umd = require("brace_umd")
-					var non_wrapped_path = path.join(example_module_dir, "/stand_alone_factory_unavailable_dependency.js")
-					var module_path = path.join(example_module_dir, "/build", "/stand_alone_factory_unavailable_dependency.js")
-					var module_text = fs.readFileSync(non_wrapped_path)
-					expect(module_text).to.be.a.instanceof(Buffer)
-					fs.writeFileSync(module_path, umd.wrap_start + module_text.toString() + umd.wrap_end_option({print: {title: false, style: false}, force_type: "factory"}))
+						})
 
-					var captured_text = ""
-					var unhook_intercept = intercept(function(txt) { captured_text += txt })
-					var entry = require(module_path)
-					unhook_intercept()
+						define("second", [], function() {
+							
+							return {
+								id: "second"
+							}
 
-					expect(captured_text).to.include("Forcing use of the definition type factory")
-					expect(captured_text).to.include("The dependency nope is not loaded into the factory. Skipping loading of the anonymous module")
-					expect(entry).to.nested.include({'first.id': "first"})
-					expect(entry).to.nested.include({'second.id': "second"})
+						})
 
-					remove_cache("stand_alone_factory_unavailable_dependency.js")
-					done()
+						define(["first", "second"], function(first, second) {
+
+							return {
+								id: "stand_alone",
+								first: first,
+								second: second
+							}
+						})
+						`
+						try {
+							fs.writeFileSync(module_path, umd.wrap_start + module_text + umd.wrap_end_option({force_type: "factory"}))
+						} catch(error) {
+							expect(false, error).to.be.true
+						}
+
+						var entry = require(module_path)
+
+						expect(entry).to.nested.include({'first.id': "first"})
+						expect(entry).to.nested.include({'second.id': "second"})
+						expect(entry).to.include({'id': "stand_alone"})
+						done()
+
+					})
+
+					it_might("will not load the module if it specifies an unavailable dependency", function(done) {
+
+						var umd = require("brace_umd")
+						var module_path = path.join(example_module_dir, "/build", "/factory.js")
+
+						var module_text = `
+							define("first", [], function() {
+								
+								return {
+									id: "first"
+								}
+
+							})
+
+							define("second", [], function() {
+								
+								return {
+									id: "second"
+								}
+
+							})
+
+							define(["first", "nope", "second"], function(first, nope, second) {
+
+								return {
+									id: "unmet",
+									first: first,
+									second: second
+								}
+							})
+						`
+
+						try {
+							fs.writeFileSync(module_path, umd.wrap_start + module_text + umd.wrap_end_option({force_type: "factory"}))
+						} catch(error) {
+							expect(false, error).to.be.true
+						}
+
+						var entry = require(module_path)
+						expect(entry).to.not.have.key("nope")
+						expect(entry).to.not.have.key("id")
+						expect(entry).to.nested.include({'first.id': "first"})
+						expect(entry).to.nested.include({'second.id': "second"})
+						done()
+
+					})
+
+					it_might("will load the require dependency as the require function", function(done) {
+
+						var umd = require("brace_umd")
+						var module_path = path.join(example_module_dir, "/build", "/factory.js")
+
+						var module_text = `
+							define("first", [], function() {
+								
+								return {
+									id: "first"
+								}
+
+							})
+
+							define("second", [], function() {
+								
+								return {
+									id: "second"
+								}
+
+							})
+
+							define(["require", "first", "second"], function(req, first, second) {
+								return {
+									id: "has_require",
+									first: first,
+									second: second,
+									require: req 
+								}
+							})
+						`
+						try {
+							fs.writeFileSync(module_path, umd.wrap_start + module_text + umd.wrap_end_option({force_type: "factory"}))
+						} catch(error) {
+							expect(false, error).to.be.true
+						}
+
+						var entry = require(module_path)
+						expect(entry).to.have.any.key("id").that.include({"id": "has_require"})
+						expect(entry).to.nested.include({'first.id': "first"})
+						expect(entry).to.nested.include({'second.id': "second"})
+						entry.id = "has_require_nest"
+						expect(entry.require).to.be.a("function")
+
+						var entry_nest = entry.require(module_path)
+						expect(entry_nest).to.have.any.key("id").that.include({"id": "has_require_nest"})
+						remove_cache("entry.js")
+						entry_nest = entry.require(module_path)
+						expect(entry_nest).to.have.any.key("id").that.include({"id": "has_require"})
+						done()
+
+					})
 
 				})
 			})
