@@ -10,7 +10,7 @@
   "devDependencies": {
     "amdefine": "^1.0.1",
     "brace_maybe": "0.0.3",
-    "bracket_utils": "^0.1.0",
+    "bracket_utils": "^0.1.1",
     "chai": "^4.1.1",
     "mocha": "^3.5.0",
     "requirejs": "^2.3.3",

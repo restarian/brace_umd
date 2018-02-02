@@ -31,12 +31,12 @@ var expect = require("chai").expect,
 	utils = require("bracket_utils"),
 	maybe = require("brace_maybe")
 
-var Spinner = utils.Spinner,
+var Spawner = utils.Spawner,
 	remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "base_module.js", "amdefine.js", "r.js", "factory.js", "factory_a.js", "factory_b.js")
 
-Spinner.prototype.log_stdout = false 
-Spinner.prototype.log_stderr = true 
-Spinner.prototype.log_err = true 
+Spawner.prototype.log_stdout = false 
+Spawner.prototype.log_stderr = true 
+Spawner.prototype.log_err = true 
 
 module.paths.unshift(path.join(__dirname, "/..", "/../"))
 
@@ -95,7 +95,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 				it_might("after building the brace umd source", function(done) {
 
-					new Spinner("node", [build_path, "--config-file", value, "--compress"], undefined, function(exit_code) {
+					new Spawner("node", [build_path, "--config-file", value, "--compress"], undefined, function(exit_code) {
 						expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 						done()
 					}, function(err) { 

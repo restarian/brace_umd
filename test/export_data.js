@@ -1,6 +1,5 @@
-/*
-MIT License
-Copyright (c) 2017 Robert Edward Steckroth
+/* MIT License
+Copyright (c) 2018 Robert Edward Steckroth
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,24 +23,20 @@ SOFTWARE.
 
   this file is a part of Brace UMD
 
- Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com>
-*/
+ Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com> */
 
 var expect = require("chai").expect,
 	path = require("path"),
 	fs = require("fs"),
-	test_help = require("test_help"),
+	utils = require("bracket_utils"),
 	maybe = require("brace_maybe")
 
-var Spinner = test_help.Spinner,
-	remove_cache = test_help.remove_cache.bind(null, "brace_umd.js", "package.json")
+var Spawner = utils.Spawner,
+	remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "package.json")
 
-// Adding node to the command string will help windows know to use node with the file name. The unix shell knows what the #! at the beginning
-// of the file is for. The build_umd.js source will run if the spinner command is empty by setting the default_command member.
-Spinner.prototype.default_command = "node" 
-Spinner.prototype.log_stdout = true 
-Spinner.prototype.log_stderr = true 
-Spinner.prototype.log_err = true 
+Spawner.prototype.log_stdout = false 
+Spawner.prototype.log_stderr = true 
+Spawner.prototype.log_err = true 
 
 module.paths.unshift(path.join(__dirname, "/..", "/../"))
 
@@ -56,6 +51,7 @@ describe("Using stop further progression methodology for dependencies in: "+path
 	var it_might = maybe(this)	
 
 	describe("Checking for dependencies..", function() { 
+
 /*
 		it_might("r_js in the system as a program", function(done) {
 			this.stop = true 
@@ -64,6 +60,7 @@ describe("Using stop further progression methodology for dependencies in: "+path
 			done()
 		})
 */
+
 		it_might("the build_umd program is available and at the right location", function(done) {
 			this.stop = true 
 			expect((function() { try { return require("brace_umd") }catch(e){} })(), "brace_umd was not found on system").to.be.a("object")
@@ -86,7 +83,7 @@ describe("Using stop further progression methodology for dependencies in: "+path
 			it_might("built using config file "+ value, function(done) {
 
 				// A new umd.js source build is created with the various config files in the test directory.
-				new Spinner("", [build_path, "--config-file", value], undefined, function(exit_code) {
+				new Spawner("node", [build_path, "--config-file", value], undefined, function(exit_code) {
 					expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 					done()
 				}, function(err) { 

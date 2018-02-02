@@ -241,3 +241,30 @@ umd.t(),
 // ---- Module definitions are added here. ---------------------------------------------------------------
 // Code below here is put into the wrap_end fragment. -------------------------------------------------------
 // If _last_define_id is a string (which has a length), than an anonymous module needs to be made.;
+
+
+define("second_module", [], function() {
+
+  var id = "second_module"
+  var mod = {}
+  mod.id = id
+  return mod
+})
+
+define(["second_module"], function(second) {
+
+	var m = function() {
+	
+	return {second: second}
+  }
+
+  m.id = "base_module"
+
+  return m
+  
+})
+;
+umd.n.length&&define([umd.n],function(e){
+return e
+})
+})(this,"function"==typeof define&&define||void 0,"function"==typeof requirejs&&requirejs||void 0,{"force_type":"factory","auto_anonymous":true})

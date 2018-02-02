@@ -499,19 +499,19 @@ build_option.mangle = mangle_option
 console.log("Options which will be used with uglify-js for module definitions:\n", build_option)
 console.log("\nExporting data to build directory:", build_dir)
 
-var location = build_dir + "build_options_" + info.version + ".json"
+var location = build_dir + "build_options.json"
 try { fs.writeFileSync(location, JSON.stringify(build_option, null, " ")) }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported build options:", location)
 
-location = build_dir + "umd_"+info.version+".js"
+location = build_dir + "umd.js"
 
 try { fs.writeFileSync(location, out) }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js primary script build:", location)
 
 // Assemble build meta data and store it in the build_information file.
-location = build_dir + "build_information_"+info.version+".json"
+location = build_dir + "build_information.json"
 var build_info = { 
 	tested_options_file: tested_option_file, 
 	version: info.version.toString(),
@@ -532,13 +532,13 @@ if ( !close_index || close_index.length < 3 ) {
 }
 // Write out the wrapping fragment for use with the requirejs optimizer (r.js). This should go in the {wrap {start: []} } part of the r.js optimizer 
 // build file.
-location = build_dir + "wrap_start_umd_"+info.version+".frag"
+location = build_dir + "wrap_start_umd.frag"
 try { fs.writeFileSync(location, out.substr(0, out.indexOf(close_index[0])) + ";") }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js build end wrap:", location)
 
 // Also create the closing wrapper which is pulled from the minified source and write it to the build directory.
-location = build_dir + "wrap_end_umd_"+info.version+".frag"
+location = build_dir + "wrap_end_umd.frag"
 try { fs.writeFileSync(location, close_index[2]) }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js build end wrap:", location)

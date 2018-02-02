@@ -27,18 +27,15 @@ SOFTWARE.
 var expect = require("chai").expect,
 	path = require("path"),
 	fs = require("fs"),
-	test_help = require("test_help"),
+	utils = require("bracket_utils"),
 	maybe = require("brace_maybe")
 
-var Spinner = test_help.Spinner,
-	remove_cache = test_help.remove_cache.bind(null, "brace_umd.js", "entry.js", "base_module.js", "amdefine.js", "r.js")
+var Spawner = utils.Spawner,
+	remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "base_module.js", "amdefine.js", "r.js", "entry.js")
 
-// Adding node to the command string will help windows know to use node with the file name. The unix shell knows what the #! at the beginning
-// of the file is for. The build_umd.js source will run if the spinner command is empty by setting the default_command member.
-Spinner.prototype.default_command = "node" 
-Spinner.prototype.log_stdout = true 
-Spinner.prototype.log_stderr = true 
-Spinner.prototype.log_err = true 
+Spawner.prototype.log_stdout = false 
+Spawner.prototype.log_stderr = true 
+Spawner.prototype.log_err = true 
 
 module.paths.unshift(path.join(__dirname, "/..", "/.."))
 
@@ -95,7 +92,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 			// This will use the run-time accessed tested_option but it does matter what is set to it.
 
-			new Spinner("", [build_path, "--tested-options", path.join(config_dir, "/unit_tested_option_a.json"), "--beautify", 
+			new Spawner("node", [build_path, "--tested-options", path.join(config_dir, "/unit_tested_option_a.json"), "--beautify", 
 									"preamble=false"], undefined, function(exit_code) {
 				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 				
@@ -108,7 +105,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		it_might("should provide a warning message when non-tested options which are attempted to be set", function(done) {
 
-			new Spinner("", [build_path, "--tested-options", path.join(config_dir, "/unit_tested_option_a.json"), "--compress", 
+			new Spawner("node", [build_path, "--tested-options", path.join(config_dir, "/unit_tested_option_a.json"), "--compress", 
 									"unused,unsafe"], undefined, function(exit_code) {
 				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 
@@ -121,7 +118,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		it_might("create the correct mangle build option output with the unit test file a", function(done) {
 
-			new Spinner("", [build_path, "--tested-options", path.join(config_dir, "/unit_tested_option_a.json"), "--mangle", 
+			new Spawner("node", [build_path, "--tested-options", path.join(config_dir, "/unit_tested_option_a.json"), "--mangle", 
 									"reserved=[cool],reservedd=[nope]", "--mangle-props", "reserved=[require],notme=true", "--beautify", 
 									"beautify=false,saywhat=false,semicolons=false"], undefined, function(exit_code) {
 				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
@@ -140,7 +137,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		it_might("create the correct mangle and compress output with the unit test file b", function(done) {
 
-			new Spinner("", [build_path, "--tested-options", path.join(config_dir, "/unit_tested_option_b.json"), "--mangle", 
+			new Spawner("node", [build_path, "--tested-options", path.join(config_dir, "/unit_tested_option_b.json"), "--mangle", 
 					"reservedd=true,properties=false", "--compress", "--beautify", 
 					"beautify=false,saywhat=false,semicolons=false"], undefined, function(exit_code) {
 				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
@@ -162,7 +159,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		it_might("should warn and exit when the tested-options file does not exist", function(done) {
 
-			new Spinner("", [build_path, "--tested-options", path.join(config_dir, "/unit_tested_option_nope.json"), "--compress", 
+			new Spawner("node", [build_path, "--tested-options", path.join(config_dir, "/unit_tested_option_nope.json"), "--compress", 
 					"unused=false,unsafe,nah,sequences", "--beautify", "saywhat=false"], undefined, function(exit_code) {
 
 				// 7 is the exit code for early returns in the build_script
@@ -174,7 +171,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		it_might("a config file with non-uglify options errors and exits with code 11", function(done) {
 
-			new Spinner("", [build_path, "--config-file", path.join(config_dir, "/build_config_b.json"), "--tested-options", 
+			new Spawner("node", [build_path, "--config-file", path.join(config_dir, "/build_config_b.json"), "--tested-options", 
 					path.join(config_dir, "/unit_tested_option_a.json")], undefined, function(exit_code) {
 
 				// return code 11 is an uglify-js error
@@ -188,7 +185,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		it_might("a config file with nested Object mangle options works as expected", function(done) {
 
-			new Spinner("", [build_path, "--config-file", path.join(config_dir, "/build_config_d.json"), "--tested-options", 
+			new Spawner("node", [build_path, "--config-file", path.join(config_dir, "/build_config_d.json"), "--tested-options", 
 					path.join(config_dir, "/unit_tested_option_a.json")], undefined, function(exit_code) {
 
 				var export_option = require("brace_umd").build_option
@@ -204,7 +201,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		it_might("config file with all options set to false will export correctly", function(done) {
 
-			new Spinner("", [build_path, "--config-file", path.join(config_dir, "/build_config_c.json")], undefined, function(exit_code) {
+			new Spawner("node", [build_path, "--config-file", path.join(config_dir, "/build_config_c.json")], undefined, function(exit_code) {
 				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 
 				var export_option = require("brace_umd").build_option
@@ -222,7 +219,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		it_might("should not make the changes of non-tested build options which are attempted to be set", function(done) {
 
-			new Spinner("", [build_path, "--tested-options", path.join(config_dir, "/unit_tested_option_a.json"), "--compress", 
+			new Spawner("node", [build_path, "--tested-options", path.join(config_dir, "/unit_tested_option_a.json"), "--compress", 
 					"unused=false,unsafe,nah,sequences", "--beautify", "saywhat=false"], undefined, function(exit_code) {
 				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 
@@ -239,7 +236,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		it_might("odd cli arguments are processed appropriately", function(done) {
 
-			new Spinner("", [build_path, "--tested-options", path.join(config_dir, "/unit_tested_option_a.json"), "--mangle", "_", 
+			new Spawner("node", [build_path, "--tested-options", path.join(config_dir, "/unit_tested_option_a.json"), "--mangle", "_", 
 					"--compress", "properties=false,sequences=false,nah,_un=ff,_,_=aa", "--beautify", "saywhat=false"], undefined, function(exit_code) {
 				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 
@@ -268,7 +265,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 		it_might("the mangle option is omitted if mangle not specified at all", function(done) {
 
 			// build_config_a.json in an empty Object
-			new Spinner("", [build_path, "--config-file", path.join(config_dir, "/build_config_a.json")], undefined, function(exit_code) {
+			new Spawner("node", [build_path, "--config-file", path.join(config_dir, "/build_config_a.json")], undefined, function(exit_code) {
 				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 
 				var export_option = require("brace_umd").build_option
@@ -281,7 +278,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 		it_might("the mangle reserved options creates values as Array data if the value is non-array via the command line", function(done) {
 
 			// build_config_a.json in an empty Object
-			new Spinner("", [build_path, "--config-file", path.join(config_dir, "/build_config_a.json"), "--mangle", "reserved=false", 
+			new Spawner("node", [build_path, "--config-file", path.join(config_dir, "/build_config_a.json"), "--mangle", "reserved=false", 
 					"--mangle-props", "reserved=true"], undefined, function(exit_code) {
 				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 
@@ -300,7 +297,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		it_might("the mangle reserved options creates values as Array data if Array syntax is set via the command line", function(done) {
 
-			new Spinner("", [build_path, "--config-file", path.join(config_dir, "/build_config_a.json"), "--mangle", "reserved=[false,'cool']", 
+			new Spawner("node", [build_path, "--config-file", path.join(config_dir, "/build_config_a.json"), "--mangle", "reserved=[false,'cool']", 
 					"--mangle-props", "reserved=[joes,true]"], undefined, function(exit_code) {
 				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 
@@ -319,7 +316,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 		})
 
 		it_might("the mangle reserved options create values as Array data if Array syntax is set via the config file (test/config/build_config_d.json", function(done) { 
-			new Spinner("", [build_path, "--config-file", path.join(config_dir, "/build_config_d.json")], undefined, function(exit_code) {
+			new Spawner("node", [build_path, "--config-file", path.join(config_dir, "/build_config_d.json")], undefined, function(exit_code) {
 				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 
 				var export_option = require("brace_umd").build_option
@@ -338,7 +335,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 		it_might("an empty config-file is accepted and used appropriately", function(done) {
 
 			// build_config_a.json in an empty Object
-			new Spinner("", [build_path, "--config-file", path.join(config_dir, "/build_config_a.json")], undefined, function(exit_code) {
+			new Spawner("node", [build_path, "--config-file", path.join(config_dir, "/build_config_a.json")], undefined, function(exit_code) {
 				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 
 				var info = require("brace_umd").build_information

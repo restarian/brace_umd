@@ -11,7 +11,6 @@ requirejs.config({baseUrl: "./", nodeRequire: require})
 requirejs(["./second_module"], function(here, two) {
 
   var id = "requirejs entry"
-  console.log(id + " has initialized.")
   var mod = {}
   mod.id = id
   return mod

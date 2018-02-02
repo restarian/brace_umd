@@ -28,18 +28,14 @@ SOFTWARE.
 var expect = require("chai").expect,
 	path = require("path"),
 	fs = require("fs"),
-	test_help = require("test_help"),
+	utils = require("bracket_utils"),
 	maybe = require("brace_maybe")
 
-var Spinner = test_help.Spinner
-	//remove_cache = test_help.remove_cache.bind(null, "brace_umd.js")
+var Spawner = utils.Spawner
 
-// Adding node to the command string will help windows know to use node with the file name. The unix shell knows what the #! at the beginning
-// of the file is for. The build_umd.js source will run if the spinner command is empty by setting the default_command member.
-Spinner.prototype.default_command = "node" 
-Spinner.prototype.log_stdout = true 
-Spinner.prototype.log_stderr = true 
-Spinner.prototype.log_err = true 
+Spawner.prototype.log_stdout = false 
+Spawner.prototype.log_stderr = true 
+Spawner.prototype.log_err = true 
 
 module.paths.unshift(path.join(__dirname, "/..", "/../"))
 
@@ -60,7 +56,6 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 			this.stop = false 
 			done()
 		})
-
 */
 
 		it_might("the build_umd program is available and at the right location", function(done) {
@@ -72,6 +67,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 			this.stop = false 
 			done()
 		})
+
 
 /*
 		it_might("has all module dependencies available", function(done) {
@@ -90,7 +86,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		it_might("this test is to build the project as the doc pages were", function(done) {
 
-			new Spinner("", [build_path, "--config-file", path.join(__dirname, "/..", "/minified_config.json")], undefined, function(exit_code) {
+			new Spawner("node", [build_path, "--config-file", path.join(__dirname, "/..", "/minified_config.json")], undefined, function(exit_code) {
 				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 				done()
 			}, function(err) { 

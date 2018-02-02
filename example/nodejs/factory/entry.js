@@ -4,7 +4,6 @@ if (typeof define !== 'function') {
 
 define("entry", ["module_one", "second_module"], function(one, two) {
 
-  console.log("entry has initialized.")
   var mod = {}
   mod.id = "entry" 
   mod[one.id] = one
