@@ -1,5 +1,5 @@
 {
-	"_init": !!module.paths.unshift(nodeRequire("path").join(config.baseUrl, "/../../../../")),
+	"_init": !!module.paths.unshift(nodeRequire("path").join(config.baseUrl, "../../../../../")),
 	"baseUrl": "./",
   	"dir": "build",
 	"optimize": "uglify2",
@@ -11,6 +11,6 @@
 	"wrap": {
 		// r.js redefines require and define again so make sure to use nodeRequire which will have the original require statement.
 		"start": nodeRequire("brace_umd").wrap_start,
-		"end": nodeRequire("brace_umd").wrap_end
+		"end": nodeRequire("brace_umd").wrap_end_option({force_type: "factory", auto_anonymous: true})
 	}
 }

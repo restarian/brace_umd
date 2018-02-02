@@ -108,7 +108,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 					// The current working directory of npm test commands is the module root which is what process.cwd() returns.
 
 					beforeEach(remove_cache)
-					var example_module_dir = path.join(__dirname, "/..", "/example", "/nodejs/", "/factory")
+					var example_module_dir = path.join(__dirname, "/example", "/nodejs/", "/factory")
 
 					it_might("with and without the auto_anonymous option set will return the correct data" +
 								  " when using only a callback as the definition parameter", function(done) {

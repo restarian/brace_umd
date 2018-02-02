@@ -1,7 +1,6 @@
 {
 	"compress": {
      "booleans": false,
-     "cascade": false,
      "collapse_vars": false,
      "comparisons": false,
      "conditionals": false,

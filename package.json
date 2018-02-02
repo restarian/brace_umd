@@ -8,13 +8,13 @@
     "commander": "^2.11.0"
   },
   "devDependencies": {
+    "amdefine": "^1.0.1",
     "brace_maybe": "0.0.3",
     "bracket_utils": "^0.1.1",
-    "mocha": "^3.5.0",
     "chai": "^4.1.1",
+    "mocha": "^3.5.0",
     "requirejs": "^2.3.3",
-    "amdefine": "^1.0.1",
-    "uglify-js": "^3.0.25"
+    "uglify-js": "=3.0.28"
   },
   "optionalDependencies": {
     "brace_navlink": "^0.2.0"

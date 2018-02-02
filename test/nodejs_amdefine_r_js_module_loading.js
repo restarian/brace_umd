@@ -23,7 +23,7 @@ SOFTWARE.
 
   this file is a part of Brace UMD
 
- Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com> */
+ Author: Robert Edward Steckroth, Bustout, <RobertSteckroth@gmail.com> */
 
 var expect = require("chai").expect,
 	path = require("path"),
@@ -34,7 +34,7 @@ var expect = require("chai").expect,
 var Spawner = utils.Spawner,
 	remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "entry.js", "base_module.js", "amdefine.js", "r.js")
 
-Spawner.prototype.log_stdout = false 
+Spawner.prototype.log_stdout = !false 
 Spawner.prototype.log_stderr = true 
 Spawner.prototype.log_err = true 
 
@@ -105,7 +105,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				})
 
 				// The current working directory of npm test commands is the module root which is what process.cwd() returns.
-				var example_module_dir = path.join(__dirname, "/../", "/example", "/nodejs/", "/amdefine")
+				var example_module_dir = path.join(__dirname, "/example", "/nodejs", "/amdefine")
 
 				it_might("the example module at " + example_module_dir + " will build using the rjs_config_auto_anonymous.js file and the correct" +
 							" module values will load using amdefine with the make_anonymous option used", function(done) {

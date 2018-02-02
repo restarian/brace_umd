@@ -69,7 +69,6 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 			this.stop = false 
 			done()
 		})
-
 /*
 		it_might("has all module dependencies available", function(done) {
 
@@ -81,7 +80,6 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 			done()
 		})
 */
-
 	})
 
 	describe("nodejs require loading after r_js optimization on modules using the factory", function() {
@@ -96,7 +94,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 		
 				it_might("after building the brace umd source", function(done) {
 					// A new umd.js source build is created with the various config files in the test directory.
-					new Spawner("node", [build_path, "--config-file", config_path, "--compress", "drop_console=false"], undefined, function(exit_code) {
+					new Spawner("node", [build_path, "--config-file", config_path, "--compress"], undefined, function(exit_code) {
 						expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 						done()
 					}, function(err) { 
@@ -106,10 +104,10 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				})
 
 				// The current working directory of npm test commands is the module root which is what process.cwd() returns.
-				var example_module_dir = path.join(__dirname, "/..", "/example", "/nodejs/", "/factory")
+				var example_module_dir = path.join(__dirname, "/example", "/nodejs/", "/factory")
 
 				it_might("the example module at " + example_module_dir + " will build using the rjs_config_force_factory.js file with force type of factory" +
-							" and the correct module values will load using commonjs require.", function(done) {
+							" and the correct module values will load using commonjs require", function(done) {
 
 					new Spawner("node", [rjs_path, "-o", path.join(example_module_dir, "/rjs_config_force_factory.js")], undefined, function(exit_code) {
 						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
@@ -134,7 +132,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				})
 
 				it_might("the example module at " + example_module_dir + " will build using the rjs_config_force_factory_auto_anonymous.js" +
-									 "file with force type of factory and the correct module values will load using commonjs require.", function(done) {
+									 "file with force type of factory and the correct module values will load using commonjs require", function(done) {
 
 					new Spawner("node", [rjs_path, "-o", path.join(example_module_dir, "/rjs_config_force_factory_auto_anonymous.js")], undefined, function(exit_code) {
 						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
