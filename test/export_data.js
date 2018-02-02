@@ -42,7 +42,6 @@ module.paths.unshift(path.join(__dirname, "/..", "/../"))
 
 var build_path = path.join(__dirname, "/..", "/bin", "/build_umd.js"),
 	config_dir = path.join(__dirname, "/config")
-//	rjs_path
 
 describe("Using stop further progression methodology for dependencies in: "+path.basename(__filename), function() { 
 
