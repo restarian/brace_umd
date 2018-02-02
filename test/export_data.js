@@ -34,7 +34,7 @@ var expect = require("chai").expect,
 var Spawner = utils.Spawner,
 	remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "package.json")
 
-Spawner.prototype.log_stdout = false 
+Spawner.prototype.log_stdout = true 
 Spawner.prototype.log_stderr = true 
 Spawner.prototype.log_err = true 
 
