@@ -27,7 +27,6 @@
 
 
 
-
 //Cool joes
 /* MIT License
 Copyright (c) 2018 Robert Steckroth <RobertSteckroth@gmail.com>
@@ -56,10 +55,11 @@ SOFTWARE.
 
  Author: Robert Edward Steckroth, Bustout, <RobertSteckroth@gmail.com> */
 // Global property namespace will be used inside this function so it is necessary to pass any globally defined properties into the function
-// because of how variable hosting works. The namespace would be immediately overwritten if it wasn't predefined as argument data.
-//module.require("bracket_print")
+// because of how variable hosting works. Otherwise, the namespace would be immediately overwritten if it wasn't predefined as argument data.
 !(function(e,i,r,t){
 var define,requirejs,require,
+
+
 
 
 
@@ -231,7 +231,7 @@ n,umd={
 // The support simply lists the available definition types (only the qualifier is used), in the script which can change by adding a few pieces of data.
 "r":function(){
 
-// Set the global data used in with amd definitions and a few extras common to javascript.
+// Set the global data used in with amd definitions.
 var e={
 
 // auto_anonymous relies on define_proxy do it must be used if that option is set.
@@ -252,11 +252,10 @@ require=e.require
 "f":false,
 "factory":function(i,r,t,n){
 
-// _factory is the default definition type and thusly is expected to exist.
-// This method will add the module to the native global Object (or whatever the first parameter is) or module.exports if in a commonjs environment.
-// The dependencies will have to be already added to the Object before this module is called (which requirejs does nicely). The module 
-// will fail to load with a message if any dependencies are unavailable. It is then up to the developer to re-order the modules so they load 
-// in the correct order. A string id is required to define the module if the platform is a browser.
+// The _factory argument is the default definition type and thusly is expected to exist. This method will add the module to the native 
+// global object (or whatever the first parameter is) or to the module.exports if this is ran in a commonjs environment. All module dependencies 
+// need to be already added to the object before the module is called (which requirejs does nicely). The module  will fail to load with a 
+// message if any dependencies are unavailable. It is then up to the developer to re-order the modules so they load in the correct order.
 // These checks shift the arguments sense an id string and dependency array are not mandatory.
 if(i&&i.constructor===Array){
 
@@ -315,6 +314,8 @@ void 0
 return
 }
 }
+// The property is added to the factory object if the module was not anonymous. It is necessary to use module.exports directly as creating 
+// links to it does not have the same effect.
 if(umd.e){
 module.exports[i]=t.apply(t.prototype,f)
 }else{
@@ -413,7 +414,7 @@ umd.requirejs=module.require("requirejs")
 umd.n=umd.requirejs
 
 
-;// Resetting the global variable data is necessary when re-assigning umd object data.
+;// Re-setting the global variable data is necessary when re-assigning umd object data.
 umd.r()
 
 return umd.requirejs[e]

@@ -4,16 +4,14 @@
 ------
 
 ### Document pages
-* [Synopsis](https://github.com/restarian/brace_umd/blob/master/docs/README.md)
-* [Rebuilding the source](https://github.com/restarian/brace_umd/blob/master/docs/build.md)
-* [Exported module data](https://github.com/restarian/brace_umd/blob/master/docs/exported_data.md)
-* [License information](https://github.com/restarian/brace_umd/blob/master/docs/license.md)
-* [Using brace umd with the requirejs optimizer](https://github.com/restarian/brace_umd/blob/master/docs/optimizer.md)
-* [Available option data](https://github.com/restarian/brace_umd/blob/master/docs/options.md)
-* **How to use option data**
-* [Module specifications](https://github.com/restarian/brace_umd/blob/master/docs/specification.md)
-* [The todo list](https://github.com/restarian/brace_umd/blob/master/docs/todo.md)
-* [Project specification data](https://github.com/restarian/brace_umd/blob/master/docs/specification.md)
+* [Synopsis](https://github.com/restarian/brace_umd/blob/master/doc/README.md)
+* [(Re)building the source](https://github.com/restarian/brace_umd/blob/master/doc/build.md)
+* [Exported module data ](https://github.com/restarian/brace_umd/blob/master/doc/exported_data.md)
+* [License information](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
+* [Using Brace UMD with the Requirejs optimizer](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md)
+* [Available option data](https://github.com/restarian/brace_umd/blob/master/doc/options.md)
+* [Specifications](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
+* [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
 
 ----
 

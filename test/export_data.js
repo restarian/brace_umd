@@ -23,7 +23,7 @@ SOFTWARE.
 
   this file is a part of Brace UMD
 
- Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com> */
+ Author: Robert Edward Steckroth, Bustout, <RobertSteckroth@gmail.com> */
 
 var expect = require("chai").expect,
 	path = require("path"),
@@ -31,42 +31,40 @@ var expect = require("chai").expect,
 	utils = require("bracket_utils"),
 	maybe = require("brace_maybe")
 
-var Spawner = utils.Spawner,
-	remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "package.json")
-
-Spawner.prototype.log_stdout = false 
-Spawner.prototype.log_stderr = true 
-Spawner.prototype.log_err = true 
-
-module.paths.unshift(path.join(__dirname, "/..", "/../"))
-
-var build_path = path.join(__dirname, "/..", "/bin", "/build_umd.js"),
-	config_dir = path.join(__dirname, "/config")
+module.paths.unshift(path.join(__dirname, "..", ".."))
+var it_will = global
 
 describe("Using stop further progression methodology for dependencies in: "+path.basename(__filename), function() { 
 
 	// The stop property of the first describe enclosure is used to control test skipping.
-	this.stop = false
-	var it_might = maybe(this)	
+	var it = maybe(it_will)	
+	it_will.stop = !!process.env.DRY_RUN  
+	it_will.quiet = !!process.env.QUIET
 
+	var remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "package.json")
+
+	var build_path = path.join(__dirname, "..", "bin", "build_umd.js"),
+		config_dir = path.join(__dirname, "config")
+
+	beforeEach(remove_cache)
 	describe("Checking for dependencies..", function() { 
 
-/*
-		it_might("r_js in the system as a program", function(done) {
-			this.stop = true 
-			expect(fs.existsSync(rjs_path = require.resolve("requirejs")), "could not find r.js dependency").to.be.true
-			this.stop = false 
+		/*
+		it("requirejs in available to the module system", function(done) {
+			it_will.stop = true 
+			expect((function() {try { rjs_path = require.resolve("requirejs"); return true } catch(e) { return e }})(), "could not load the requirejs dependency").to.be.true
+			it_will.stop = false 
 			done()
 		})
-*/
+		*/
 
-		it_might("the build_umd program is available and at the right location", function(done) {
-			this.stop = true 
-			expect((function() { try { return require("brace_umd") }catch(e){} })(), "brace_umd was not found on system").to.be.a("object")
+		it("the build_umd program is available and at the right location", function(done) {
+			it_will.stop = true 
+			expect((function() { try { return require("brace_umd") }catch(e){ return e} })(), "brace_umd was not found on system").to.be.a("object")
 			expect(fs.existsSync(build_path), "could not find the build_umd.js program").to.be.true
 			expect(build_path, "the expected path of the build_umd program is not the one located by the unit test")
 						.to.equal(require("brace_umd").build_program_path)
-			this.stop = false 
+			it_will.stop = false 
 			done()
 		})
 	})
@@ -77,23 +75,19 @@ describe("Using stop further progression methodology for dependencies in: "+path
 		var config_file = fs.readdirSync(config_dir).filter(function(value) { return /^build_config_.*\.json/.test(value) })
 		config_file.forEach(function(value) {
 
-			value = path.join(__dirname, "/config/", value)
+			value = path.join(__dirname, "config", value)
 			
-			beforeEach(remove_cache)
-			it_might("using the build_umd.js script builds using the config file "+ value, function(done) {
+			it("using the build_umd.js script builds using the config file "+ value, function(done) {
 
 				// A new umd.js source build is created with the various config files in the test directory.
-				new Spawner("node", [build_path, "--config-file", value], undefined, function(exit_code) {
+				utils.Spawn("node", [build_path, "--config-file", value], undefined, (exit_code, stdout, stderr) => {
 					expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 					done()
-				}, function(err) { 
-					expect(false).to.equal(true)
-					done()
-				})
+				}, function(err) { expect(false, err).to.equal(true); done() })
 
 			})
 
-			it_might("the export member wrap_end_option returns the correct string with the option data added to it", function(done) {
+			it("the export member wrap_end_option returns the correct string with the option data added to it", function(done) {
 
 				var data = require("../")
 				expect(data.wrap_end_option()).to.equal(data.wrap_end)
@@ -106,7 +100,7 @@ describe("Using stop further progression methodology for dependencies in: "+path
 				done()
 			})
 
-			it_might("the export member version is the same as the current one", function(done) {
+			it("the export member version is the same as the current one", function(done) {
 
 				var data = require("../")
 				var info = require("../package.json")

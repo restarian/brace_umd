@@ -9,8 +9,8 @@
   },
   "devDependencies": {
     "amdefine": "^1.0.1",
-    "brace_maybe": "0.0.3",
-    "bracket_utils": "^0.1.1",
+    "brace_maybe": "^0.1.3",
+    "bracket_utils": "^0.2.4",
     "chai": "^4.1.1",
     "mocha": "^3.5.0",
     "requirejs": "^2.3.3",
@@ -46,12 +46,52 @@
     "type": "git",
     "url": "https://github.com/restarian/brace_umd.git"
   },
-  "author": "Robert Steckroth",
   "maintainers": [
     {
       "name": "nickali",
       "email": "robertsteckroth@gmail.com"
     }
   ],
-  "license": "(MIT WITH BSD-2-Clause)"
+  "author": {
+    "name": "Robert Steckroth",
+    "email": "RobertSteckroth@gmail.com"
+  },
+  "license": "(MIT WITH BSD-2-Clause)",
+  "technologies": [
+    {
+      "name": "VIM",
+      "description": "As an IDE",
+      "url": "https://vim.org"
+    },
+    {
+      "name": "Windows 10",
+      "description": "For unit testing and as the base operating system",
+      "url": "https://www.microsoft.com/en-us/software-download/windows10"
+    },
+    {
+      "name": "Ubuntu on Windows",
+      "description": "As the development operating environment",
+      "url": "https://www.microsoft.com/en-us/store/p/ubuntu/9nblggh4msv6"
+    },
+    {
+      "name": "Git",
+      "description": "For repository management",
+      "url": "https://git-scm.com"
+    },
+    {
+      "name": "Github",
+      "description": "For repository storage",
+      "url": "https://github.com"
+    },
+    {
+      "name": "NPM",
+      "description": "For module storage",
+      "url": "https://npmjs.org"
+    },
+    {
+      "name": "Blender",
+      "description": "For logo design and rendering",
+      "url": "https://blender.org"
+    }
+  ]
 }

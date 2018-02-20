@@ -23,7 +23,7 @@ SOFTWARE.
 
   this file is a part of Brace UMD
 
- Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com> */
+ Author: Robert Edward Steckroth, Bustout, <RobertSteckroth@gmail.com> */
 
 var expect = require("chai").expect,
 	path = require("path"),
@@ -31,55 +31,55 @@ var expect = require("chai").expect,
 	utils = require("bracket_utils"),
 	maybe = require("brace_maybe")
 
-var Spawner = utils.Spawner,
-	remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "entry.js", "base_module.js", "amdefine.js", "r.js")
+module.paths.unshift(path.join(__dirname, "..", ".."))
+var it_will = global
 
-Spawner.prototype.log_stdout = false 
-Spawner.prototype.log_stderr = true 
-Spawner.prototype.log_err = true 
-
-module.paths.unshift(path.join(__dirname, "/..", "/../"))
-
-var build_path = path.join(__dirname, "/..", "/bin", "/build_umd.js"),
-	config_dir = path.join(__dirname, "/config"),
-	rjs_path
 
 describe("Using stop further progression methodology for file dependencies: "+path.basename(__filename), function() { 
 
 	// The stop property of the first describe enclosure is used to control test skipping.
+	var it = maybe(it_will)	
+	it_will.stop = !!process.env.DRY_RUN  
+	it_will.quiet = !!process.env.QUIET
+
+	var remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "entry.js", "base_module.js", "amdefine.js", "r.js")
+
+	var build_path = path.join(__dirname, "..", "bin", "build_umd.js"),
+		config_dir = path.join(__dirname, "config"),
+		rjs_path
+
 	beforeEach(remove_cache)
-	this.stop = false
-	var it_might = maybe(this)	
 
 	describe("Checking for dependencies:", function() { 
 
-		it_might("r_js in the system as a program", function(done) {
-			this.stop = true 
-			expect(fs.existsSync(rjs_path = require.resolve("requirejs")), "could not find r.js dependency").to.be.true
-			this.stop = false 
+		it("requirejs in available to the module system", function(done) {
+			it_will.stop = true 
+			expect((function() {try { rjs_path = require.resolve("requirejs"); return true } catch(e) { return e }})(), "could not load the requirejs dependency").to.be.true
+			it_will.stop = false 
 			done()
 		})
 
-		it_might("the build_umd program is available and at the right location", function(done) {
-			this.stop = true 
-			expect((function() { try { return require("brace_umd") }catch(e){} })(), "brace_umd was not found on system").to.be.a("object")
+		it("the build_umd program is available and at the right location", function(done) {
+			it_will.stop = true 
+			expect((function() { try { return require("brace_umd") }catch(e){ return e } })(), "brace_umd was not found on system").to.be.a("object")
 			expect(fs.existsSync(build_path), "could not find the build_umd.js program").to.be.true
 			expect(build_path, "the expected path of the build_umd program is not the one located by the unit test")
 						.to.equal(require("brace_umd").build_program_path)
-			this.stop = false 
+			it_will.stop = false 
 			done()
 		})
-/*
-		it_might("has all module dependencies available", function(done) {
 
-			this.stop = true 
-			expect((function() { try { return require("amdefine")(module) }catch(e){} })(), "amdefine was not found on system").to.be.a("function")
+		/*
+		it("has all module dependencies available", function(done) {
+			it_will.stop = true 
+			expect((function() { try { return require("amdefine")(module) }catch(e){ return e} })(), "amdefine was not found on system").to.be.a("function")
 				.that.have.property("require")
 			remove_cache()
-			this.stop = false 
+			it_will.stop = false 
 			done()
 		})
-*/
+		*/
+
 	})
 
 	describe("nodejs require loading after r_js optimization on modules using the factory", function() {
@@ -92,28 +92,25 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 			
 			describe("using config file "+ config_path + " with r_js", function() {
 		
-				it_might("after building the brace umd source", function(done) {
+				it("after building the brace umd source", function(done) {
 					// A new umd.js source build is created with the various config files in the test directory.
-					new Spawner("node", [build_path, "--config-file", config_path, "--compress"], undefined, function(exit_code) {
+					utils.Spawn("node", [build_path, "--config-file", config_path, "--compress"], undefined, (exit_code, stdout, stderr) => {
 						expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 						done()
-					}, function(err) { 
-						expect(false).to.equal(true); 
-						done()
-					})
+					}, function(err) { expect(false, err).to.equal(true); done() })
 				})
 
 				// The current working directory of npm test commands is the module root which is what process.cwd() returns.
-				var example_module_dir = path.join(__dirname, "/example", "/nodejs/", "/factory")
+				var example_module_dir = path.join(__dirname, "example", "nodejs/", "factory")
 
-				it_might("the example module at " + example_module_dir + " will build using the rjs_config_force_factory.js file with force type of factory" +
+				it("the example module at " + example_module_dir + " will build using the rjs_config_force_factory.js file with force type of factory" +
 							" and the correct module values will load using commonjs require", function(done) {
 
-					new Spawner("node", [rjs_path, "-o", path.join(example_module_dir, "/rjs_config_force_factory.js")], undefined, function(exit_code) {
+					utils.Spawn("node", [rjs_path, "-o", path.join(example_module_dir, "rjs_config_force_factory.js")], undefined, (exit_code, stdout, stderr) => {
 						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
 
-						var module_path = path.join(example_module_dir, "/build", "/entry.js")
-						var base_path = path.join(example_module_dir, "/build", "/base_module.js")
+						var module_path = path.join(example_module_dir, "build", "entry.js")
+						var base_path = path.join(example_module_dir, "build", "base_module.js")
 						var entry = require(module_path)
 
 						expect(entry).to.nested.include({'module_one.id': "module_one"})
@@ -125,20 +122,17 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 						done()
 
-					}, function() {
-					  expect(false).to.equal(true)
-					  done()
-					})
+					}, function(err) { expect(false, err).to.equal(true); done() })
 				})
 
-				it_might("the example module at " + example_module_dir + " will build using the rjs_config_force_factory_auto_anonymous.js" +
+				it("the example module at " + example_module_dir + " will build using the rjs_config_force_factory_auto_anonymous.js" +
 									 "file with force type of factory and the correct module values will load using commonjs require", function(done) {
 
-					new Spawner("node", [rjs_path, "-o", path.join(example_module_dir, "/rjs_config_force_factory_auto_anonymous.js")], undefined, function(exit_code) {
+					utils.Spawn("node", [rjs_path, "-o", path.join(example_module_dir, "rjs_config_force_factory_auto_anonymous.js")], undefined, (exit_code, stdout, stderr) => {
 						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
 						
-						var entry_path = path.join(example_module_dir, "/build", "/entry.js")
-						var base_path = path.join(example_module_dir, "/build", "/base_module.js")
+						var entry_path = path.join(example_module_dir, "build", "entry.js")
+						var base_path = path.join(example_module_dir, "build", "base_module.js")
 						
 						var entry = require(entry_path)
 						var base = require(base_path)
@@ -153,18 +147,18 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 						remove_cache()
 
 						// load the original base_module example specified with example_module_dir.
-						var base_path = path.join(example_module_dir, "/base_module.js")
+						var base_path = path.join(example_module_dir, "base_module.js")
 						var base = require(base_path)
 
 						expect(base).to.be.a("function").that.includes({'id': "base_module"})
 
 						remove_cache()
 	
-						base_path = path.join(example_module_dir, "/build", "/base_module.js")
+						base_path = path.join(example_module_dir, "build", "base_module.js")
 						var module_text = fs.readFileSync(base_path)
 						expect(module_text).to.be.a.instanceof(Buffer)
 
-						base_path = path.join(example_module_dir, "/build", "/base_module_mutated.js")
+						base_path = path.join(example_module_dir, "build", "base_module_mutated.js")
 						// This regex will strip out the id string from the base module definition which can happen when the UMD script is manually used (
 						// without requirejs optimizer).
 						fs.writeFileSync(base_path, module_text.toString().replace(/define\([\n,\r,\s]*[\",\']base_module[\",\'][\s]*,[\s]*/, "define("))
@@ -174,10 +168,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 						done()
 
-					}, function() {
-					  expect(false).to.equal(true)
-					  done()
-					})
+					}, function(err) { expect(false, err).to.equal(true); done() })
 				})
 
 			})

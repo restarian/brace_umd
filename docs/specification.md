@@ -1,38 +1,51 @@
+#  Brace Umd
+## Project Specification Data
 
-# Brace UMD
-### Module Specifications
 
-------
-
+---
 ### Document pages
-* [Synopsis](https://github.com/restarian/brace_umd/blob/master/doc/README.md)
-* [(Re)building the source](https://github.com/restarian/brace_umd/blob/master/doc/build.md)
-* [Exported module data ](https://github.com/restarian/brace_umd/blob/master/doc/exported_data.md)
-* [License information](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
-* [Using Brace UMD with the Requirejs optimizer](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md)
-* [Available option data](https://github.com/restarian/brace_umd/blob/master/doc/options.md)
-* [How to use option data](https://github.com/restarian/brace_umd/blob/master/doc/passing_option_data.md)
-* [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
+* [Synopsis](https://github.com/restarian/brace_umd/blob/master/docs/README.md)
+* [Rebuilding the source](https://github.com/restarian/brace_umd/blob/master/docs/build.md)
+* [Exported module data](https://github.com/restarian/brace_umd/blob/master/docs/exported_data.md)
+* [License information](https://github.com/restarian/brace_umd/blob/master/docs/license.md)
+* [Using brace umd with the requirejs optimizer](https://github.com/restarian/brace_umd/blob/master/docs/optimizer.md)
+* [Available option data](https://github.com/restarian/brace_umd/blob/master/docs/options.md)
+* [How to use option data](https://github.com/restarian/brace_umd/blob/master/docs/passing_option_data.md)
+* [Module specifications](https://github.com/restarian/brace_umd/blob/master/docs/specification.md)
+* [The todo list](https://github.com/restarian/brace_umd/blob/master/docs/todo.md)
+* **Project specification data**
 
-----
+---
+###  Provides a unified module definition wrapper for RequireJS and AMDefine definitions while staying seamlessly compliant with the RequireJS optimizer and factory based objects.
 
-**The breakdown**
-  * Note: all packages are tested with the latest available versions. Submit an [issue](https://github.com/restarian/brace_umd/issues) if any versions or environments break any of the unit tests. Brace UMD uses Uglify version 3 so only issues using minor or patch versions of Uglify-js will be valid.
+**Version**: 0.8.4
 
-* License: [MIT](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
-* Sub-license: Some parts of the Brace_UMD source include code licensed under the BDS-2-Clause license. The license will be stated and clearly marked wherever this happens.
-* Dependencies: [Commander](https://www.npmjs.com/package/commander)
-* Development dependencies: [Mocha](https://www.npmjs.com/package/mocha), [Chai](https://www.npmjs.com/package/chai), [UglifyJS-3](https://www.npmjs.com/package/uglify-js), [RequireJs](https://www.npmjs.com/package/requirejs), [AMDefine](https://www.npmjs.com/package/amdefine), [Brace_maybe](https://www.npmjs.com/package/brace_maybe), [Intercept-stdout](https://www.npmjs.com/package/intercept-stdout)
-* Optional dependencies: [Brace_navlink](https://github.com/restarian/brace_navlink)
-* Platform support: Windows 10, Ubuntu 16 *Apple products and other versions require an* [issue](https://github.com/restarian/brace_umd/issues) *submission if one is found*
-* Installer support: [npm](https://npmjs.org) *version 5 was used*
-* Supported Nodejs versions: only supports nodejs versions ^5.x.x
+**Author**: [Robert Steckroth](mailto:RobertSteckroth@gmail.com)
 
-**Technologies used in development**
+**Technologies used in development**:
+  * [VIM](https://vim.org) As an IDE
+  * [Windows 10](https://www.microsoft.com/en-us/software-download/windows10) For unit testing and as the base operating system
+  * [Ubuntu on Windows](https://www.microsoft.com/en-us/store/p/ubuntu/9nblggh4msv6) As the development operating environment
+  * [Git](https://git-scm.com) For repository management
+  * [Github](https://github.com) For repository storage
+  * [NPM](https://npmjs.org) For module storage
+  * [Blender](https://blender.org) For logo design and rendering
 
-* [Windows 10](https://www.microsoft.com/en-us/software-download/windows10)
-* [Ubuntu 16](https://www.ubuntu.com/download/desktop)
-* [Ubuntu on Windows](https://github.com/Microsoft/BashOnWindows) *for easy cross platform development*
+**License**: (MIT WITH BSD-2-Clause)
+
+**Dependencies**: [bracket_print](https://npmjs.org/package/bracket_print) [commander](https://npmjs.org/package/commander)
+
+**Development dependencies**: [amdefine](https://npmjs.org/package/amdefine) [brace_maybe](https://npmjs.org/package/brace_maybe) [bracket_utils](https://npmjs.org/package/bracket_utils) [chai](https://npmjs.org/package/chai) [mocha](https://npmjs.org/package/mocha) [requirejs](https://npmjs.org/package/requirejs) [uglify-js](https://npmjs.org/package/uglify-js)
+
+**Optional Dependencies**: [brace_navlink](https://npmjs.org/package/brace_navlink)
+
+**Package scripts**:
+
+| Name | Action |
+| ---- | ------ |
+ | test | mocha |
+ | build | ./bin/build_umd.js --config-file ./minified_config.json |
+ | docs_build | ./bin/build_umd.js --config-file ./docs/doc_config.json |https://github.com/Microsoft/BashOnWindows) *for easy cross platform development*
 * [VIM](www.vim.org) *As an IDE (ha)*
 * [Git/Github](https://github.com) *for repository management and storage*
 * [NPM](https://www.npmjs.com) *for package management*

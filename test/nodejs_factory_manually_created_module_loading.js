@@ -23,7 +23,7 @@ SOFTWARE.
 
   this file is a part of Brace UMD
 
- Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com> */
+ Author: Robert Edward Steckroth, Bustout, <RobertSteckroth@gmail.com> */
 
 var expect = require("chai").expect,
 	path = require("path"),
@@ -31,55 +31,54 @@ var expect = require("chai").expect,
 	utils = require("bracket_utils"),
 	maybe = require("brace_maybe")
 
-var Spawner = utils.Spawner,
-	remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "base_module.js", "amdefine.js", "r.js", "factory.js", "factory_a.js", "factory_b.js")
-
-Spawner.prototype.log_stdout = false 
-Spawner.prototype.log_stderr = true 
-Spawner.prototype.log_err = true 
-
-module.paths.unshift(path.join(__dirname, "/..", "/../"))
-
-var build_path = path.join(__dirname, "/..", "/bin", "/build_umd.js"),
-	config_dir = path.join(__dirname, "/config")
+module.paths.unshift(path.join(__dirname, "..", ".."))
+var it_will = global
 
 describe("Using stop further progression methodology for file dependencies: "+path.basename(__filename), function() { 
 
 	// The stop property of the first describe enclosure is used to control test skipping.
-	this.stop = false
-	var it_might = maybe(this)	
+	var it = maybe(it_will)	
+	it_will.stop = !!process.env.DRY_RUN  
+	it_will.quiet = !!process.env.QUIET
 
+	var remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "base_module.js", "amdefine.js", "r.js", "factory.js", "factory_a.js", "factory_b.js")
+
+	var build_path = path.join(__dirname, "..", "bin", "build_umd.js"),
+		config_dir = path.join(__dirname, "config")
+
+	beforeEach(remove_cache)
 	describe("Checking for dependencies:", function() { 
-/*
-		it_might("r_js in the system as a program", function(done) {
-			this.stop = true 
-			expect(fs.existsSync(rjs_path = require.resolve("requirejs")), "could not find r.js dependency").to.be.true
-			this.stop = false 
+
+
+		/*
+		it("requirejs in available to the module system", function(done) {
+			it_will.stop = true 
+			expect((function() {try { rjs_path = require.resolve("requirejs"); return true } catch(e) { return e }})(), "could not load the requirejs dependency").to.be.true
+			it_will.stop = false 
 			done()
 		})
-*/
+		*/
 
-		it_might("the build_umd program is available and at the right location", function(done) {
-			this.stop = true 
-			expect((function() { try { return require("brace_umd") }catch(e){} })(), "brace_umd was not found on system").to.be.a("object")
+		it("the build_umd program is available and at the right location", function(done) {
+			it_will.stop = true 
+			expect((function() { try { return require("brace_umd") }catch(e){ return e} })(), "brace_umd was not found on system").to.be.a("object")
 			expect(fs.existsSync(build_path), "could not find the build_umd.js program").to.be.true
 			expect(build_path, "the expected path of the build_umd program is not the one located by the unit test")
 						.to.equal(require("brace_umd").build_program_path)
-			this.stop = false 
+			it_will.stop = false 
 			done()
 		})
 
-/*
-		it_might("has all module dependencies available", function(done) {
-
-			this.stop = true 
-			expect((function() { try { return require("amdefine")(module) }catch(e){} })(), "amdefine was not found on system").to.be.a("function")
+		/*
+		it("has all module dependencies available", function(done) {
+			it_will.stop = true 
+			expect((function() { try { return require("amdefine")(module) }catch(e){ return e} })(), "amdefine was not found on system").to.be.a("function")
 				.that.have.property("require")
 			remove_cache()
-			this.stop = false 
+			it_will.stop = false 
 			done()
 		})
-*/
+		*/
 
 	})
 
@@ -93,24 +92,21 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 		
 			describe("using config file "+ value, function() {
 
-				it_might("after building the brace umd source", function(done) {
+				it("after building the brace umd source", function(done) {
 
-					new Spawner("node", [build_path, "--config-file", value, "--compress"], undefined, function(exit_code) {
+					utils.Spawn("node", [build_path, "--config-file", value, "--compress"], undefined, (exit_code, stdout, stderr) => {
 						expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 						done()
-					}, function(err) { 
-						expect(false).to.equal(true); 
-						done()
-					})
+					}, function(err) { expect(false, err).to.equal(true); done() })
 				})
 
 				describe("a non-requirejs-optimized factory implementation", function() {
 					// The current working directory of npm test commands is the module root which is what process.cwd() returns.
 
 					beforeEach(remove_cache)
-					var example_module_dir = path.join(__dirname, "/example", "/nodejs/", "/factory")
+					var example_module_dir = path.join(__dirname, "example", "nodejs", "factory")
 
-					it_might("with and without the auto_anonymous option set will return the correct data" +
+					it("with and without the auto_anonymous option set will return the correct data" +
 								  " when using only a callback as the definition parameter", function(done) {
 
 						var umd = require("brace_umd")
@@ -141,8 +137,8 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 							})
 						`
 
-						var module_path_a = path.join(example_module_dir, "/build", "/factory_a.js")
-						var module_path_b = path.join(example_module_dir, "/build", "/factory_b.js")
+						var module_path_a = path.join(example_module_dir, "build", "factory_a.js")
+						var module_path_b = path.join(example_module_dir, "build", "factory_b.js")
 
 						try {
 							fs.writeFileSync(module_path_a, umd.wrap_start + module_text.toString() + 
@@ -171,10 +167,10 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 					})
 
-					it_might("without the auto_anonymous option set will return the correct data", function(done) {
+					it("without the auto_anonymous option set will return the correct data", function(done) {
 
 						var umd = require("brace_umd")
-						var module_path = path.join(example_module_dir, "/build", "/factory.js")
+						var module_path = path.join(example_module_dir, "build", "factory.js")
 						var module_text = `
 						define("first", [], function() {
 							
@@ -216,10 +212,10 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 					})
 
-					it_might("will not load the module if it specifies an unavailable dependency", function(done) {
+					it("will not load the module if it specifies an unavailable dependency", function(done) {
 
 						var umd = require("brace_umd")
-						var module_path = path.join(example_module_dir, "/build", "/factory.js")
+						var module_path = path.join(example_module_dir, "build", "factory.js")
 
 						var module_text = `
 							define("first", [], function() {
@@ -263,10 +259,10 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 					})
 
-					it_might("will load the require dependency as the require function", function(done) {
+					it("will load the require dependency as the require function", function(done) {
 
 						var umd = require("brace_umd")
-						var module_path = path.join(example_module_dir, "/build", "/factory.js")
+						var module_path = path.join(example_module_dir, "build", "factory.js")
 
 						var module_text = `
 							define("first", [], function() {
