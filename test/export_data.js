@@ -31,6 +31,7 @@ var expect = require("chai").expect,
 	utils = require("bracket_utils"),
 	maybe = require("brace_maybe")
 
+var cache = utils.cacheManager(require)
 module.paths.unshift(path.join(__dirname, "..", ".."))
 var it_will = global
 
@@ -41,12 +42,12 @@ describe("Using stop further progression methodology for dependencies in: "+path
 	it_will.stop = !!process.env.DRY_RUN  
 	it_will.quiet = !!process.env.QUIET
 
-	var remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "package.json")
-
 	var build_path = path.join(__dirname, "..", "bin", "build_umd.js"),
 		config_dir = path.join(__dirname, "config")
 
-	beforeEach(remove_cache)
+	beforeEach(cache.start.bind(cache))
+	afterEach(cache.dump.bind(cache))
+
 	describe("Checking for dependencies..", function() { 
 
 		/*

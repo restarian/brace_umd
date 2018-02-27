@@ -32,6 +32,7 @@ var expect = require("chai").expect,
 	maybe = require("brace_maybe")
 
 module.paths.unshift(path.join(__dirname, "..", ".."))
+var cache = utils.cacheManager(require)
 var it_will = global
 
 describe("Using stop further progression methodology for file dependencies: "+path.basename(__filename), function() { 
@@ -41,13 +42,13 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 	it_will.stop = !!process.env.DRY_RUN  
 	it_will.quiet = !!process.env.QUIET
 
-	var remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "entry.js", "base_module.js", "amdefine.js", "r.js")
-
 	var build_path = path.join(__dirname, "..", "bin", "build_umd.js"),
 		config_dir = path.join(__dirname, "config"),
 		rjs_path
 
-	beforeEach(remove_cache)
+	beforeEach(cache.start.bind(cache))
+	afterEach(cache.dump.bind(cache))
+
 	describe("Checking for dependencies:", function() { 
 
 		it("requirejs in available to the module system", function(done) {
@@ -73,7 +74,6 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 			it_will.stop = true 
 			expect((function() { try { return require("amdefine")(module) }catch(e){} })(), "amdefine was not found on system").to.be.a("function")
 				.that.have.property("require")
-			remove_cache()
 			it_will.stop = false 
 			done()
 		})

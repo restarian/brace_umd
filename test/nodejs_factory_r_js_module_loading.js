@@ -31,6 +31,7 @@ var expect = require("chai").expect,
 	utils = require("bracket_utils"),
 	maybe = require("brace_maybe")
 
+var cache = utils.cacheManager(require)
 module.paths.unshift(path.join(__dirname, "..", ".."))
 var it_will = global
 
@@ -42,13 +43,12 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 	it_will.stop = !!process.env.DRY_RUN  
 	it_will.quiet = !!process.env.QUIET
 
-	var remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "entry.js", "base_module.js", "amdefine.js", "r.js")
-
 	var build_path = path.join(__dirname, "..", "bin", "build_umd.js"),
 		config_dir = path.join(__dirname, "config"),
 		rjs_path
 
-	beforeEach(remove_cache)
+	beforeEach(cache.start.bind(cache))
+	afterEach(cache.dump.bind(cache))
 
 	describe("Checking for dependencies:", function() { 
 
@@ -74,7 +74,6 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 			it_will.stop = true 
 			expect((function() { try { return require("amdefine")(module) }catch(e){ return e} })(), "amdefine was not found on system").to.be.a("function")
 				.that.have.property("require")
-			remove_cache()
 			it_will.stop = false 
 			done()
 		})
@@ -144,7 +143,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 						expect(entry).to.include.key({"id": "entry"})
 
 						// remove all of the amd definitions from the cache and any loaded example modules.
-						remove_cache()
+						cache.dump()
 
 						// load the original base_module example specified with example_module_dir.
 						var base_path = path.join(example_module_dir, "base_module.js")
@@ -152,7 +151,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 						expect(base).to.be.a("function").that.includes({'id': "base_module"})
 
-						remove_cache()
+						cache.dump()
 	
 						base_path = path.join(example_module_dir, "build", "base_module.js")
 						var module_text = fs.readFileSync(base_path)

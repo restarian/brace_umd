@@ -176,7 +176,7 @@
 
   * Using stop further progression methodology for file dependencies: nodejs_factory_manually_created_module_loading.js
 
-    * Checking for dependencies:
+    * Checking for dependencies..
 
       * ✓ the build_umd program is available and at the right location
 

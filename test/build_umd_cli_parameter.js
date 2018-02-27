@@ -31,6 +31,7 @@ var expect = require("chai").expect,
 	maybe = require("brace_maybe")
 
 var it_will = global
+var cache = utils.cacheManager(require)
 module.paths.unshift(path.join(__dirname, "..", ".."))
 
 describe("Using stop further progression methodology for dependencies in: "+path.basename(__filename), function() { 
@@ -39,14 +40,13 @@ describe("Using stop further progression methodology for dependencies in: "+path
 	it_will.stop = !!process.env.DRY_RUN  
 	it_will.quiet = !!process.env.QUIET
 
-	var remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "base_module.js", "amdefine.js", "r.js", "entry.js")
-
 	var build_path = path.join(__dirname, "..", "bin", "build_umd.js"),
 		config_dir = path.join(__dirname, "config"),
 		rjs_path
 
 	// The stop property of the first describe enclosure is used to control test skipping.
-	beforeEach(remove_cache)
+	beforeEach(cache.start.bind(cache))
+	afterEach(cache.dump.bind(cache))
 
 	describe("Checking for dependencies:", function() { 
 
@@ -84,8 +84,6 @@ describe("Using stop further progression methodology for dependencies in: "+path
 	})
 
 	describe("The build script", function() {
-
-		beforeEach(remove_cache)
 
 		it("should export the correct build file with only the preamble option set to false", function(done) {
 

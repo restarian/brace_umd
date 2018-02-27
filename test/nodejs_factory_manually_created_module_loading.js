@@ -31,6 +31,7 @@ var expect = require("chai").expect,
 	utils = require("bracket_utils"),
 	maybe = require("brace_maybe")
 
+var cache = utils.cacheManager(require)
 module.paths.unshift(path.join(__dirname, "..", ".."))
 var it_will = global
 
@@ -41,23 +42,12 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 	it_will.stop = !!process.env.DRY_RUN  
 	it_will.quiet = !!process.env.QUIET
 
-	var remove_cache = utils.remove_cache.bind(null, "brace_umd.js", "base_module.js", "amdefine.js", "r.js", "factory.js", "factory_a.js", "factory_b.js")
-
 	var build_path = path.join(__dirname, "..", "bin", "build_umd.js"),
 		config_dir = path.join(__dirname, "config")
 
-	beforeEach(remove_cache)
-	describe("Checking for dependencies:", function() { 
-
-
-		/*
-		it("requirejs in available to the module system", function(done) {
-			it_will.stop = true 
-			expect((function() {try { rjs_path = require.resolve("requirejs"); return true } catch(e) { return e }})(), "could not load the requirejs dependency").to.be.true
-			it_will.stop = false 
-			done()
-		})
-		*/
+	beforeEach(cache.start.bind(cache))
+	afterEach(cache.dump.bind(cache))
+	describe("Checking for dependencies..", function() { 
 
 		it("the build_umd program is available and at the right location", function(done) {
 			it_will.stop = true 
@@ -68,17 +58,6 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 			it_will.stop = false 
 			done()
 		})
-
-		/*
-		it("has all module dependencies available", function(done) {
-			it_will.stop = true 
-			expect((function() { try { return require("amdefine")(module) }catch(e){ return e} })(), "amdefine was not found on system").to.be.a("function")
-				.that.have.property("require")
-			remove_cache()
-			it_will.stop = false 
-			done()
-		})
-		*/
 
 	})
 
@@ -103,7 +82,6 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				describe("a non-requirejs-optimized factory implementation", function() {
 					// The current working directory of npm test commands is the module root which is what process.cwd() returns.
 
-					beforeEach(remove_cache)
 					var example_module_dir = path.join(__dirname, "example", "nodejs", "factory")
 
 					it("with and without the auto_anonymous option set will return the correct data" +
@@ -305,7 +283,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 						var entry_nest = entry.require(module_path)
 						expect(entry_nest).to.have.any.key("id").that.include({"id": "has_require_nest"})
-						remove_cache("entry.js")
+						cache.dump()
 						entry_nest = entry.require(module_path)
 						expect(entry_nest).to.have.any.key("id").that.include({"id": "has_require"})
 						done()

@@ -20,11 +20,9 @@
 
 **Author**: [Robert Steckroth](mailto:RobertSteckroth@gmail.com)
 
-**Dependencies**: [bracket_print](https://npmjs.org/package/bracket_print) [commander](https://npmjs.org/package/commander)
+**Dependencies**: [commander](https://npmjs.org/package/commander)
 
 **Development dependencies**: [amdefine](https://npmjs.org/package/amdefine) [brace_maybe](https://npmjs.org/package/brace_maybe) [bracket_utils](https://npmjs.org/package/bracket_utils) [chai](https://npmjs.org/package/chai) [mocha](https://npmjs.org/package/mocha) [requirejs](https://npmjs.org/package/requirejs) [uglify-js](https://npmjs.org/package/uglify-js)
-
-**Optional Dependencies**: [brace_navlink](https://npmjs.org/package/brace_navlink)
 
 **Package scripts**:
 
