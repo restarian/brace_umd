@@ -1,5 +1,4 @@
-# Brace UMD
-### Synopsis
+## Synopsis
 
 #### A unified module definition script to support Requirejs and AMDefine definitions while working seamlessly with the RequireJs optimizer and native global Objects.
 
@@ -11,20 +10,20 @@
 | ![Brace](https://raw.githubusercontent.com/restarian/restarian/master/brace/doc/image/brace_logo_small.png) | [![Ubuntu on Windows](https://raw.githubusercontent.com/restarian/restarian/master/doc/image/ubuntu_windows_logo.png)](https://github.com/Microsoft/BashOnWindows) | 
 
 
-------
-
+---
 ### Document pages
-* [(Re)building the source](https://github.com/restarian/brace_umd/blob/master/doc/build.md)
-* [Exported module data ](https://github.com/restarian/brace_umd/blob/master/doc/exported_data.md)
-* [License information](https://github.com/restarian/brace_umd/blob/master/doc/license.md)
-* [Using Brace UMD with the Requirejs optimizer](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md)
-* [Available option data](https://github.com/restarian/brace_umd/blob/master/doc/options.md)
-* [How to use option data](https://github.com/restarian/brace_umd/blob/master/doc/passing_option_data.md)
-* [Specifications](https://github.com/restarian/brace_umd/blob/master/doc/specification.md)
-* [Todo](https://github.com/restarian/brace_umd/blob/master/doc/todo.md)
+* [Building the umd with other options](https://github.com/restarian/brace_umd/blob/master/docs/building_the_umd_with_other_options.md)
+* [How option handling works](https://github.com/restarian/brace_umd/blob/master/docs/how_option_handling_works.md)
+* [Passing option data to the umd](https://github.com/restarian/brace_umd/blob/master/docs/passing_option_data_to_the_umd.md)
+* **Synopsis**
+* [Using the optimizer](https://github.com/restarian/brace_umd/blob/master/docs/using_the_optimizer.md)
+* [What the build exports](https://github.com/restarian/brace_umd/blob/master/docs/what_the_build_exports.md)
+* Specification
+  * [License information](https://github.com/restarian/brace_umd/blob/master/docs/specification/license_information.md)
+  * [Package specification](https://github.com/restarian/brace_umd/blob/master/docs/specification/package_specification.md)
+  * [Unit test output](https://github.com/restarian/brace_umd/blob/master/docs/specification/unit_test_output.md)
 
-----
-
+---
 
 **Author: Robert Steckroth, _Bust0ut_ [<RobertSteckroth@gmail.com>](mailto:robertsteckroth@gmail.com)**
 

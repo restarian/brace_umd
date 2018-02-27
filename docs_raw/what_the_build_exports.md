@@ -1,5 +1,4 @@
-# Brace UMD
-### Exported module data 
+## Exported module data 
 
 ---
 ### Document pages

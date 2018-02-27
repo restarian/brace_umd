@@ -1,18 +1,17 @@
-# Brace UMD
-### Exported module data 
+## Exported module data 
 
 ---
 ### Document pages
-* [Synopsis](https://github.com/restarian/brace_umd/blob/master/docs/README.md)
-* [Rebuilding the source](https://github.com/restarian/brace_umd/blob/master/docs/build.md)
-* **Exported module data**
-* [License information](https://github.com/restarian/brace_umd/blob/master/docs/license.md)
-* [Using brace umd with the requirejs optimizer](https://github.com/restarian/brace_umd/blob/master/docs/optimizer.md)
-* [Available option data](https://github.com/restarian/brace_umd/blob/master/docs/options.md)
-* [How to use option data](https://github.com/restarian/brace_umd/blob/master/docs/passing_option_data.md)
-* [Module specifications](https://github.com/restarian/brace_umd/blob/master/docs/specification.md)
-* [The todo list](https://github.com/restarian/brace_umd/blob/master/docs/todo.md)
-* [Project specification data](https://github.com/restarian/brace_umd/blob/master/docs/specification.md)
+* [Building the umd with other options](https://github.com/restarian/brace_umd/blob/master/docs/building_the_umd_with_other_options.md)
+* [How option handling works](https://github.com/restarian/brace_umd/blob/master/docs/how_option_handling_works.md)
+* [Passing option data to the umd](https://github.com/restarian/brace_umd/blob/master/docs/passing_option_data_to_the_umd.md)
+* [Synopsis](https://github.com/restarian/brace_umd/blob/master/docs/synopsis.md)
+* [Using the optimizer](https://github.com/restarian/brace_umd/blob/master/docs/using_the_optimizer.md)
+* **What the build exports**
+* Specification
+  * [License information](https://github.com/restarian/brace_umd/blob/master/docs/specification/license_information.md)
+  * [Package specification](https://github.com/restarian/brace_umd/blob/master/docs/specification/package_specification.md)
+  * [Unit test output](https://github.com/restarian/brace_umd/blob/master/docs/specification/unit_test_output.md)
 
 ---
 

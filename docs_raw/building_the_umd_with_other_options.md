@@ -1,5 +1,4 @@
-# Brace UMD
-### Rebuilding the source
+## Rebuilding the UMD source
 
 ---
 ### Document pages

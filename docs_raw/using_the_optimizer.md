@@ -1,5 +1,4 @@
-# Brace UMD
-### Using Brace UMD with the Requirejs optimizer
+## Using Brace UMD with the Requirejs optimizer
 
 ---
 ### Document pages
