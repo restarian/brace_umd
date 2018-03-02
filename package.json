@@ -1,6 +1,6 @@
 {
   "name": "brace_umd",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "description": "Provides a unified module definition wrapper for RequireJS and AMDefine definitions while staying seamlessly compliant with the RequireJS optimizer and factory based objects.",
   "main": "lib/brace_umd.js",
   "dependencies": {
@@ -29,8 +29,8 @@
   "scripts": {
     "test": "mocha",
     "build": "./bin/build_umd.js --config-file minified_config.json",
-	"make_docs": "brace_document --navlink -i docs_raw -b docs --force-title --title 'Brace UMD pages' --sort alphanumeric -R",
-	"make_docs_extra": "npm run make_docs --silent -- --batten-document-specification --batten-document-mocha --specification-path package_information.md --mocha-path unit_testing_outline.md "
+    "make_docs": "brace_document --navlink -i docs_raw -b docs --force-title --title 'Brace UMD pages' --sort alphanumeric -R",
+    "make_docs_extra": "npm run make_docs --silent -- --batten-document-specification --batten-document-mocha --specification-path package_information.md --mocha-path unit_testing_outline.md "
   },
   "keywords": [
     "brace",
