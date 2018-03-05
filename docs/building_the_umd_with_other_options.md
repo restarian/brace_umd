@@ -4,22 +4,21 @@
 ### Brace UMD pages
 * [What the build exports](https://github.com/restarian/brace_umd/blob/master/docs/what_the_build_exports.md)
 * [Using the optimizer](https://github.com/restarian/brace_umd/blob/master/docs/using_the_optimizer.md)
+* [Unit testing outline](https://github.com/restarian/brace_umd/blob/master/docs/unit_testing_outline.md)
 * [Synopsis](https://github.com/restarian/brace_umd/blob/master/docs/synopsis.md)
 * [Passing option data to the umd](https://github.com/restarian/brace_umd/blob/master/docs/passing_option_data_to_the_umd.md)
 * [Package information](https://github.com/restarian/brace_umd/blob/master/docs/package_information.md)
 * [How option handling works](https://github.com/restarian/brace_umd/blob/master/docs/how_option_handling_works.md)
 * **Building the umd with other options**
-* [Unit testing outline](https://github.com/restarian/brace_umd/blob/master/docs/unit_testing_outline.md)
 
 ---
 
-Brace UMD is built using Uglify-JS version 3 and is tested on Windows 10 and Ubuntu 16. The command line program *(bin/build_umd)* accepts the exact same parameters as Uglify-JS does. E.g.
-
-    build_umd --beautify comments="all",beautify=false
-
+### Brace UMD is built using Uglify-JS version 3 and is tested on Windows 10 and Ubuntu 16. 
+The command line program *(bin/build_umd)* accepts the exact same parameters as Uglify-JS does. E.g. ```build_umd --beautify comments="all",beautify=false```
 Given the above command, the minified data in the build directory will contain any comments included in the lib source. The builds will also not have beautified code. See <https://github.com/mishoo/UglifyJS2> for further reading on command line usage.
 
-Only some of the uglify-js options can be used sense the build code needs to be unit tested. Therefore, only options which are defined in the *lib/tested_option.json* file will be configurable. The *build_umd* script will warn when a non-tested option is attempted to be set. E.g. --
+### Only some of the uglify-js options can be used sense the build code needs to be unit tested. 
+Therefore, only options which are defined in the *lib/tested_option.json* file will be configurable. The *build_umd* script will warn when a non-tested option is attempted to be set. E.g. --
 
 	:> ./bin/build_umd.js  --compress unused,unsafe --mangle toplevel --beautify --comments="all"
 	Option mangle.toplevel is not defined in the tested options file: /home/wasman/Restarian/brace_umd/lib/.unit_tested_option.js -- Therefore it is not safe to use and will be skipped.

@@ -1,11 +1,9 @@
 ## Available option data
 
-----
+---
 ### Document pages
 
-----
-
-This page is a reference of the available options to the UMD wrapper.
+---
 
 **Options:**
 

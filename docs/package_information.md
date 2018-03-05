@@ -3,15 +3,15 @@
 ### Brace UMD pages
 * [What the build exports](https://github.com/restarian/brace_umd/blob/master/docs/what_the_build_exports.md)
 * [Using the optimizer](https://github.com/restarian/brace_umd/blob/master/docs/using_the_optimizer.md)
+* [Unit testing outline](https://github.com/restarian/brace_umd/blob/master/docs/unit_testing_outline.md)
 * [Synopsis](https://github.com/restarian/brace_umd/blob/master/docs/synopsis.md)
 * [Passing option data to the umd](https://github.com/restarian/brace_umd/blob/master/docs/passing_option_data_to_the_umd.md)
 * **Package information**
 * [How option handling works](https://github.com/restarian/brace_umd/blob/master/docs/how_option_handling_works.md)
 * [Building the umd with other options](https://github.com/restarian/brace_umd/blob/master/docs/building_the_umd_with_other_options.md)
-* [Unit testing outline](https://github.com/restarian/brace_umd/blob/master/docs/unit_testing_outline.md)
  
  
-**Version**: 0.8.6
+**Version**: 0.8.7
 
 **Description**: Provides a unified module definition wrapper for RequireJS and AMDefine definitions while staying seamlessly compliant with the RequireJS optimizer and factory based objects.
 

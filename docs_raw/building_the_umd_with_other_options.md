@@ -5,13 +5,12 @@
 
 ---
 
-Brace UMD is built using Uglify-JS version 3 and is tested on Windows 10 and Ubuntu 16. The command line program *(bin/build_umd)* accepts the exact same parameters as Uglify-JS does. E.g.
-
-    build_umd --beautify comments="all",beautify=false
-
+### Brace UMD is built using Uglify-JS version 3 and is tested on Windows 10 and Ubuntu 16. 
+The command line program *(bin/build_umd)* accepts the exact same parameters as Uglify-JS does. E.g. ```build_umd --beautify comments="all",beautify=false```
 Given the above command, the minified data in the build directory will contain any comments included in the lib source. The builds will also not have beautified code. See <https://github.com/mishoo/UglifyJS2> for further reading on command line usage.
 
-Only some of the uglify-js options can be used sense the build code needs to be unit tested. Therefore, only options which are defined in the *lib/tested_option.json* file will be configurable. The *build_umd* script will warn when a non-tested option is attempted to be set. E.g. --
+### Only some of the uglify-js options can be used sense the build code needs to be unit tested. 
+Therefore, only options which are defined in the *lib/tested_option.json* file will be configurable. The *build_umd* script will warn when a non-tested option is attempted to be set. E.g. --
 
 	:> ./bin/build_umd.js  --compress unused,unsafe --mangle toplevel --beautify --comments="all"
 	Option mangle.toplevel is not defined in the tested options file: /home/wasman/Restarian/brace_umd/lib/.unit_tested_option.js -- Therefore it is not safe to use and will be skipped.

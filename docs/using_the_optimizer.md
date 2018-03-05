@@ -4,16 +4,16 @@
 ### Brace UMD pages
 * [What the build exports](https://github.com/restarian/brace_umd/blob/master/docs/what_the_build_exports.md)
 * **Using the optimizer**
+* [Unit testing outline](https://github.com/restarian/brace_umd/blob/master/docs/unit_testing_outline.md)
 * [Synopsis](https://github.com/restarian/brace_umd/blob/master/docs/synopsis.md)
 * [Passing option data to the umd](https://github.com/restarian/brace_umd/blob/master/docs/passing_option_data_to_the_umd.md)
 * [Package information](https://github.com/restarian/brace_umd/blob/master/docs/package_information.md)
 * [How option handling works](https://github.com/restarian/brace_umd/blob/master/docs/how_option_handling_works.md)
 * [Building the umd with other options](https://github.com/restarian/brace_umd/blob/master/docs/building_the_umd_with_other_options.md)
-* [Unit testing outline](https://github.com/restarian/brace_umd/blob/master/docs/unit_testing_outline.md)
 
 ---
 
-#### Basic usage of Brace UMD with the Requirejs optimizer
+### Basic usage of Brace UMD with the Requirejs optimizer
 
 The *r.js* (requirejs optimizer), script also uses *uglify-js* so the options used in building the umd.js source are imported from the build directory which also contains the wrapping fragments. 
 **Note:** *Brace UMD* uses UglifyJS-3 and is not compatible with any other major versions of Uglify-js.
@@ -49,9 +49,9 @@ wrap: {
 }
 ```
 
-#### Optimizing modules which were built using Brace UMD or another UMD
-
-All modules built with Brace UMD (or another UMD wrapper), should have two builds. The first build should contain the UMD wrapper which should also be the main module entry file. The other build file will not incorporate the UMD design practice. The requirejs optimizer build config snippet below shows how to build modules which do not inject dependency module UMD wrappers into new module build. Thusly, the build directory of modules should look like the example below.
+### Optimizing modules which were built using Brace UMD or another UMD
+#### All modules built with Brace UMD (or another UMD wrapper), should have two builds. 
+The first build should contain the UMD wrapper which should also be the main module entry file. The other build file will not incorporate the UMD design practice. The requirejs optimizer build config snippet below shows how to build modules which do not inject dependency module UMD wrappers into new module build. Thusly, the build directory of modules should look like the example below.
 
 ```
 my_module/
@@ -65,7 +65,8 @@ my_module/
     my_module_umd.js  <- contains UMD wrapped module
 ```
 
-Building modules which are wrapped with UMD script will cause superflurous UMD code to be placed into modules. This will result in multiple UMD wrappers to be placed in modules when the purpose of UMD is to only have one UMD wrapper per module file. However, the solution is simple when using requirejs. The *onBuildRead* configuration option needs to remove files which contain a "_umd.js" suffix and return the build file name which does not contain a UMD wrapper. 
+#### Building modules which are wrapped with UMD script will cause superfluous UMD code to be placed into modules.
+This will result in multiple UMD wrappers to be placed in modules when the purpose of UMD is to only have one UMD wrapper per module file. However, the solution is simple when using requirejs. The *onBuildRead* configuration option needs to remove files which contain a "_umd.js" suffix and return the build file name which does not contain a UMD wrapper. 
 
 
 ```javascript

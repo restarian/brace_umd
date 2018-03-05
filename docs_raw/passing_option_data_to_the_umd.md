@@ -5,9 +5,8 @@
 
 ---
 
-Passing in option data to the UMD can happen in two ways.
-
-* First way:
+### Passing in option data to the UMD can happen in two ways.
+#### First way
 
 The option data can be manually added to the function call as parameter. The option data must be the last 
 parameter and all of the other parameters must always remain in the call. The snippet below is an example 
@@ -18,7 +17,7 @@ of how to pass in the *auto_anonymous* option to the umd wrapper.
 // Note: auto_anonymous should not be used as a 
 ```
 
-* Second way:
+#### Second way
 
 Option data can be passed to the UMD wrapper via the *wrap_end_option({[option data]})* member contained
 in the loaded commonjs module. This member will add the data to the UMD wrapper function call like above

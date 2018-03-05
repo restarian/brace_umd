@@ -1,29 +1,31 @@
 ## Synopsis
 
-#### A unified module definition script to support Requirejs and AMDefine definitions while working seamlessly with the RequireJs optimizer and native global Objects.
-
 [![Build status](https://ci.appveyor.com/api/projects/status/8ou8s3c7ocq0972h/branch/master?svg=true)](https://ci.appveyor.com/project/restarian/brace-umd/branch/master) [![Build Status](https://travis-ci.org/restarian/brace_umd.svg?branch=master)](https://travis-ci.org/restarian/brace_umd) [![Downloads](https://img.shields.io/npm/dm/brace_umd.svg?svg=true)](https://npmjs.org/package/brace_umd)
 
+| **The [Brace Suite]** | **[Ubuntu on Windows]**   |
+|:---------------------:|:-------------------------:|
+| ![Brace logo]         | ![Ubuntu on Windows logo] |         |
 
-| A part of the [Brace suite](https://github.com/restarian/restarian/blob/master/brace/README.md)| Developed with Windows 10 and Ubuntu 16 
-| ---- | ----
-| ![Brace](https://raw.githubusercontent.com/restarian/restarian/master/brace/doc/image/brace_logo_small.png) | [![Ubuntu on Windows](https://raw.githubusercontent.com/restarian/restarian/master/doc/image/ubuntu_windows_logo.png)](https://github.com/Microsoft/BashOnWindows) | 
+[Brace Suite]: https://github.com/restarian/restarian/tree/master/brace/
+[Ubuntu on Windows]: https://www.microsoft.com/en-us/store/p/ubuntu/9nblggh4msv6?activetab=pivot%3aoverviewtab 
 
+[Ubuntu on Windows logo]: https://raw.githubusercontent.com/restarian/restarian/master/doc/image/ubuntu_windows_logo.png
+[Brace logo]: https://raw.githubusercontent.com/restarian/restarian/master/brace/doc/image/brace_logo_small.png
 
 ---
 ### Brace UMD pages
 * [What the build exports](https://github.com/restarian/brace_umd/blob/master/docs/what_the_build_exports.md)
 * [Using the optimizer](https://github.com/restarian/brace_umd/blob/master/docs/using_the_optimizer.md)
+* [Unit testing outline](https://github.com/restarian/brace_umd/blob/master/docs/unit_testing_outline.md)
 * **Synopsis**
 * [Passing option data to the umd](https://github.com/restarian/brace_umd/blob/master/docs/passing_option_data_to_the_umd.md)
 * [Package information](https://github.com/restarian/brace_umd/blob/master/docs/package_information.md)
 * [How option handling works](https://github.com/restarian/brace_umd/blob/master/docs/how_option_handling_works.md)
 * [Building the umd with other options](https://github.com/restarian/brace_umd/blob/master/docs/building_the_umd_with_other_options.md)
-* [Unit testing outline](https://github.com/restarian/brace_umd/blob/master/docs/unit_testing_outline.md)
 
 ---
 
-**Author: Robert Steckroth, _Bust0ut_ [<RobertSteckroth@gmail.com>](mailto:robertsteckroth@gmail.com)**
+#### A unified module definition script to support Requirejs and AMDefine definitions while working seamlessly with the RequireJs optimizer and native global Objects.
 
 **Licensed under: MIT WITH BSD-2-Clause**
 
@@ -42,7 +44,7 @@
 
 **Brace UMD is way better than other more simple module definitions** by providing _uglify-js_ functionality and option passing. The AMD library is only loaded and used if the correlated call to it is contained within the script. E.g. The *amdefine* module is not loaded unless a call to *define* is inside of the script. Otherwise, a proxy function is supplied for the supported definitions.
 
-**Note**: it is acceptable to use mangle and mangle properties with the UMD source and in the requirejs optimizing process. This is done by storing the build config options used and then passing them back into uglify-js via the r.js build config file (see [using with requirejs](https://github.com/restarian/brace_umd/blob/master/doc/optimizer.md), for more information.
+**Note**: it is acceptable to use mangle and mangle properties with the UMD source and in the requirejs optimizing process. This is done by storing the build config options used and then passing them back into uglify-js via the r.js build config file (see [using with requirejs](https://github.com/restarian/brace_umd/blob/master/docs/using_the_optimizer.md), for more information.
 
 **Below is the UMD complete umd script. The following code will work in nodejs or the browser and can use any of the supported definitions:**
 
