@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-/* MIT License
-Copyright (c) 2018 Robert Steckroth <RobertSteckroth@gmail.com>
+/* Copyright (c) 2018 Robert Steckroth <RobertSteckroth@gmail.com>
+
+Brace UMD resides under the MIT License
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -8,6 +9,10 @@ in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
+
+  Brace UMD is a unified module definition script to use when defining javascript modules.
+
+  this file is a part of Brace UMD
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
@@ -18,24 +23,17 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-  Brace UMD is a unified module definition script to use when defining javascript modules.
-
-  this code segment is a part of Brace UMD
-
- Author: Robert Edward Steckroth II, Bustout, <RobertSteckroth@gmail.com> */
+SOFTWARE. */
 
 var path = require("path"),
 fs = require("fs"),
-lib = path.join(__dirname, "/..", "/lib"),
-build_dir = path.join(lib, "/..", "/build"),
-info = require(path.join(lib, "/..", "/package.json")),
+lib = path.join(__dirname, "..", "lib"),
+build_dir = path.join(lib, "..", "build"),
+info = require(path.join(lib, "..", "package.json")),
 UglifyJS = require("uglify-js"),
 program = require("commander"),
 tested_option_file = "",
 bare_mangle_properties = []
-
 
 /* The following program includes code from another module (UglifyJS). The license and code follows until specified otherwise.
 UglifyJS is released under the BSD license:
