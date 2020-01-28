@@ -13,15 +13,18 @@
 [Brace logo]: https://raw.githubusercontent.com/restarian/restarian/master/brace/doc/image/brace_logo_small.png
 
 ---
-### Brace UMD pages
-* [What the build exports](https://github.com/restarian/brace_umd/blob/master/docs/what_the_build_exports.md)
-* [Using the optimizer](https://github.com/restarian/brace_umd/blob/master/docs/using_the_optimizer.md)
-* [Unit testing outline](https://github.com/restarian/brace_umd/blob/master/docs/unit_testing_outline.md)
-* **Synopsis**
-* [Passing option data to the umd](https://github.com/restarian/brace_umd/blob/master/docs/passing_option_data_to_the_umd.md)
-* [Package information](https://github.com/restarian/brace_umd/blob/master/docs/package_information.md)
-* [How option handling works](https://github.com/restarian/brace_umd/blob/master/docs/how_option_handling_works.md)
+### Brace Umd help pages
 * [Building the umd with other options](https://github.com/restarian/brace_umd/blob/master/docs/building_the_umd_with_other_options.md)
+* [How option handling works](https://github.com/restarian/brace_umd/blob/master/docs/how_option_handling_works.md)
+* [Package information](https://github.com/restarian/brace_umd/blob/master/docs/package_information.md)
+* [Passing option data to the umd](https://github.com/restarian/brace_umd/blob/master/docs/passing_option_data_to_the_umd.md)
+* **Synopsis**
+* [Unit testing outline](https://github.com/restarian/brace_umd/blob/master/docs/unit_testing_outline.md)
+* [Using the optimizer](https://github.com/restarian/brace_umd/blob/master/docs/using_the_optimizer.md)
+* [What the build exports](https://github.com/restarian/brace_umd/blob/master/docs/what_the_build_exports.md)
+* Specification
+  * [Package information](https://github.com/restarian/brace_umd/blob/master/docs/specification/package_information.md)
+  * [Unit test output](https://github.com/restarian/brace_umd/blob/master/docs/specification/unit_test_output.md)
 
 ---
 
