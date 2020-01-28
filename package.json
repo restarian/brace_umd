@@ -19,14 +19,13 @@
     "brace_document": "^1.0.2",
     "brace_document_navlink": "^1.0.2",
     "brace_document_link": "^1.0.1",
-    "brace_document_specification": "^1.0.1",
-    "batten_document_mocha": "https://github.com/restarian/batten_document_mocha.git"
+    "brace_document_specification": "^1.0.1"
   },
   "bin": "bin/build_umd.js",
   "scripts": {
     "test": "mocha",
     "build": "bin/build_umd.js --config-file minified_config.json",
-    "make_docs": "brace_document --navlink --link --link-dest ../README.md --link-path ../docs/synopsis.md -r -i docs --force-title --title \"Brace Umd help pages\" --sort depth",
+    "make_docs": "brace_document --navlink --link --link-dest ../README.md --link-path ../docs/synopsis.md -r -i docs_raw -b docs --force-title --title \"Brace Umd help pages\" --sort depth",
     "make_docs_extra": "npm run make_docs --silent -- --specification --mocha"
   },
   "bugs": {
