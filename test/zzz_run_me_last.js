@@ -31,8 +31,8 @@ var expect = require("chai").expect,
 	utils = require("bracket_utils"),
 	maybe = require("brace_maybe")
 
-var cache = utils.cacheManager(require)
 module.paths.unshift(path.join(__dirname, "..", ".."))
+var cache = utils.cacheManager(require)
 var it_will = global
 
 

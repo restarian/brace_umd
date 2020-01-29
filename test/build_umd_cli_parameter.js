@@ -30,9 +30,9 @@ var expect = require("chai").expect,
 	utils = require("bracket_utils"),
 	maybe = require("brace_maybe")
 
+module.paths.unshift(path.join(__dirname, "..", ".."))
 var it_will = global
 var cache = utils.cacheManager(require)
-module.paths.unshift(path.join(__dirname, ".."))
 
 describe("Using stop further progression methodology for dependencies in: "+path.basename(__filename), function() { 
 
