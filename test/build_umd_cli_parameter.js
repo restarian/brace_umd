@@ -1,5 +1,5 @@
-/* MIT License
-Copyright (c) 2018 Robert Edward Steckroth 
+/* MIT License Copyright (c) 2020 Robert Steckroth <robertsteckroth@gmail.com>
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -18,9 +18,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-  Brace UMD is a unified module definition script to use when defining javascript modules.
+  Brace Umd is a unified module definition script to use when defining javascript modules.
 
-  this file is a part of Brace UMD
+  this file is a part of Brace Umd
 
  Author: Robert Edward Steckroth, Bustout, <RobertSteckroth@gmail.com> */
 
@@ -32,7 +32,7 @@ var expect = require("chai").expect,
 
 var it_will = global
 var cache = utils.cacheManager(require)
-module.paths.unshift(path.join(__dirname, "..", ".."))
+module.paths.unshift(path.join(__dirname, ".."))
 
 describe("Using stop further progression methodology for dependencies in: "+path.basename(__filename), function() { 
 
@@ -92,11 +92,8 @@ describe("Using stop further progression methodology for dependencies in: "+path
 			utils.Spawn("node", [build_path, "--tested-options", path.join(config_dir, "unit_tested_option_a.json"), "--beautify", 
 									"preamble=false"], undefined, (exit_code, stdout, stderr) => {
 
-				console.log(stdout)
-				done()
-				return
 				expect(Boolean(stderr), stderr).to.be.false
-				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
+				expect(exit_code, "the build_umd script exited with code other than 0 "+stdout+stderr).to.equal(0)
 				
 				var export_option = require("brace_umd").build_option
 				expect(export_option).to.be.an("object")
@@ -109,9 +106,9 @@ describe("Using stop further progression methodology for dependencies in: "+path
 
 			utils.Spawn("node", [build_path, "--tested-options", path.join(config_dir, "unit_tested_option_a.json"), "--compress", 
 									"unused,unsafe"], undefined, (exit_code, stdout, stderr) => {
-				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
+				expect(exit_code, "the build_umd script exited with code other than 0 "+stdout+stderr).to.equal(0)
 
-				var tested_file = require("brace_umd").build_information.tested_options_file
+				var tested_file = require("brace_umd").build_information.tested_option_file
 				expect(stdout).to.include("Option compress.unsafe is not defined in the tested options file: " + tested_file + 
 								" -- Therefore it is not safe to use and will be skipped.")
 				done()
@@ -123,10 +120,10 @@ describe("Using stop further progression methodology for dependencies in: "+path
 			utils.Spawn("node", [build_path, "--tested-options", path.join(config_dir, "unit_tested_option_a.json"), "--mangle", 
 									"reserved=[cool],reservedd=[nope]", "--mangle-props", "reserved=[require],notme=true", "--beautify", 
 									"beautify=false,saywhat=false,semicolons=false"], undefined, (exit_code, stdout, stderr) => {
-				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 
+				expect(exit_code, "the build_umd script exited with code other than 0 "+stdout+stderr).to.equal(0)
 
-				var tested_file = require("brace_umd").build_information.tested_options_file
+				var tested_file = require("brace_umd").build_information.tested_option_file
 				var export_option = require("brace_umd").build_option
 
 				expect(stdout).to.include("Option mangle.reservedd is not defined in the tested options file: " + tested_file + 
@@ -142,9 +139,10 @@ describe("Using stop further progression methodology for dependencies in: "+path
 			utils.Spawn("node", [build_path, "--tested-options", path.join(config_dir, "unit_tested_option_b.json"), "--mangle", 
 					"reservedd=true,properties=false", "--compress", "--beautify", 
 					"beautify=false,saywhat=false,semicolons=false"], undefined, (exit_code, stdout, stderr) => {
-				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 
-				var tested_file = require("brace_umd").build_information.tested_options_file
+				expect(exit_code, "the build_umd script exited with code other than 0 "+stdout+stderr).to.equal(0)
+
+				var tested_file = require("brace_umd").build_information.tested_option_file
 				// This does not change so the require cache will not need to be deleted in the afterEach above.
 				var export_option = require("brace_umd").build_option
 
@@ -204,7 +202,7 @@ describe("Using stop further progression methodology for dependencies in: "+path
 		it("config file with all options set to false will export correctly", function(done) {
 
 			utils.Spawn("node", [build_path, "--config-file", path.join(config_dir, "build_config_c.json")], undefined, (exit_code, stdout, stderr) => {
-				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
+				expect(exit_code, "the build_umd script exited with code other than 0 "+stdout+stderr).to.equal(0)
 
 				var export_option = require("brace_umd").build_option
 				expect(export_option).to.be.an("object")
@@ -223,7 +221,7 @@ describe("Using stop further progression methodology for dependencies in: "+path
 
 			utils.Spawn("node", [build_path, "--tested-options", path.join(config_dir, "unit_tested_option_a.json"), "--compress", 
 					"unused=false,unsafe,nah,sequences", "--beautify", "saywhat=false"], undefined, (exit_code, stdout, stderr) => {
-				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
+				expect(exit_code, "the build_umd script exited with code other than 0 "+stdout+stderr).to.equal(0)
 
 				var export_option = require("brace_umd").build_option
 				expect(stdout).to.include("Option compress.unused is not defined in the tested options file: " + 
@@ -240,11 +238,13 @@ describe("Using stop further progression methodology for dependencies in: "+path
 
 			utils.Spawn("node", [build_path, "--tested-options", path.join(config_dir, "unit_tested_option_a.json"), "--mangle", "_", 
 					"--compress", "properties=false,sequences=false,nah,_un=ff,_,_=aa", "--beautify", "saywhat=false"], undefined, (exit_code, stdout, stderr) => {
-				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 
-				var tested_file = require("brace_umd").build_information.tested_options_file
+				expect(exit_code, "the build_umd script exited with code other than 0 "+stdout+stderr).to.equal(0)
+
+				var tested_file = require("brace_umd").build_information.tested_option_file
 				var export_option = require("brace_umd").build_option
-				expect(stdout).to.include("Option compress.nah is not defined in the tested options file: " + tested_file + 
+
+				expect(stdout, stderr).to.include("Option compress.nah is not defined in the tested options file: " + tested_file + 
 						" -- Therefore it is not safe to use and will be skipped.")
 				expect(stdout).to.include("Option compress._un is not defined in the tested options file: " + tested_file + 
 						" -- Therefore it is not safe to use and will be skipped.")
@@ -267,7 +267,7 @@ describe("Using stop further progression methodology for dependencies in: "+path
 
 			// build_config_a.json in an empty Object
 			utils.Spawn("node", [build_path, "--config-file", path.join(config_dir, "build_config_a.json")], undefined, (exit_code, stdout, stderr) => {
-				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
+				expect(exit_code, "the build_umd script exited with code other than 0 "+stdout+stderr).to.equal(0)
 
 				var export_option = require("brace_umd").build_option
 				expect(export_option).to.be.an("object")
@@ -281,7 +281,7 @@ describe("Using stop further progression methodology for dependencies in: "+path
 			// build_config_a.json in an empty Object
 			utils.Spawn("node", [build_path, "--config-file", path.join(config_dir, "build_config_a.json"), "--mangle", "reserved=false", 
 					"--mangle-props", "reserved=true"], undefined, (exit_code, stdout, stderr) => {
-				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
+				expect(exit_code, "the build_umd script exited with code other than 0 "+stdout+stderr).to.equal(0)
 
 				var export_option = require("brace_umd").build_option
 
@@ -300,7 +300,7 @@ describe("Using stop further progression methodology for dependencies in: "+path
 
 			utils.Spawn("node", [build_path, "--config-file", path.join(config_dir, "build_config_a.json"), "--mangle", "reserved=[false,'cool']", 
 					"--mangle-props", "reserved=[joes,true]"], undefined, (exit_code, stdout, stderr) => {
-				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
+				expect(exit_code, "the build_umd script exited with code other than 0 "+stdout+stderr).to.equal(0)
 
 				var export_option = require("brace_umd").build_option
 
@@ -318,7 +318,7 @@ describe("Using stop further progression methodology for dependencies in: "+path
 
 		it("the mangle reserved options create values as Array data if Array syntax is set via the config file (test/config/build_config_d.json", function(done) { 
 			utils.Spawn("node", [build_path, "--config-file", path.join(config_dir, "build_config_d.json")], undefined, (exit_code, stdout, stderr) => {
-				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
+				expect(exit_code, "the build_umd script exited with code other than 0 "+stdout+stderr).to.equal(0)
 
 				var export_option = require("brace_umd").build_option
 
@@ -337,7 +337,7 @@ describe("Using stop further progression methodology for dependencies in: "+path
 
 			// build_config_a.json in an empty Object
 			utils.Spawn("node", [build_path, "--config-file", path.join(config_dir, "build_config_a.json")], undefined, (exit_code, stdout, stderr) => {
-				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
+				expect(exit_code, "the build_umd script exited with code other than 0 "+stdout+stderr).to.equal(0)
 
 				var info = require("brace_umd").build_information
 				var export_option = require("brace_umd").build_option

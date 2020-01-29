@@ -1,5 +1,4 @@
-/* MIT License
-Copyright (c) 2018 Robert Edward Steckroth
+/* MIT License Copyright (c) 2020 Robert Steckroth <robertsteckroth@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,9 +18,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-  Brace UMD is a unified module definition script to use when defining javascript modules.
+  Brace Umd is a unified module definition script to use when defining javascript modules.
 
-  this file is a part of Brace UMD
+  this file is a part of Brace Umd
 
  Author: Robert Edward Steckroth, Bustout, <RobertSteckroth@gmail.com> */
 
@@ -32,7 +31,7 @@ var expect = require("chai").expect,
 	maybe = require("brace_maybe")
 
 var cache = utils.cacheManager(require)
-module.paths.unshift(path.join(__dirname, "..", ".."))
+module.paths.unshift(path.join(__dirname, ".." ))
 var it_will = global
 
 describe("Using stop further progression methodology for dependencies in: "+path.basename(__filename), function() { 
@@ -82,7 +81,7 @@ describe("Using stop further progression methodology for dependencies in: "+path
 
 				// A new umd.js source build is created with the various config files in the test directory.
 				utils.Spawn("node", [build_path, "--config-file", value], undefined, (exit_code, stdout, stderr) => {
-					expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
+					expect(exit_code, "the build_umd script exited with a code other than 0 "+ stdout+stderr).to.equal(0)
 					done()
 				}, function(err) { expect(false, err).to.equal(true); done() })
 

@@ -35,7 +35,6 @@ var cache = utils.cacheManager(require)
 module.paths.unshift(path.join(__dirname, "..", ".."))
 var it_will = global
 
-
 describe("Using stop further progression methodology for file dependencies: "+path.basename(__filename), function() { 
 
 	// The stop property of the first describe enclosure is used to control test skipping.
@@ -146,7 +145,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 						cache.dump()
 
 						// load the original base_module example specified with example_module_dir.
-						var base_path = path.join(example_module_dir, "base_module.js")
+						var base_path = path.join(example_module_dir, "build", "base_module.js")
 						var base = require(base_path)
 
 						expect(base).to.be.a("function").that.includes({'id': "base_module"})

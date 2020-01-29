@@ -1,6 +1,6 @@
 {
 	"_init": !!module.paths.unshift(nodeRequire("path").join(config.baseUrl, "../../../../../")),
-	"baseUrl": "./",
+	"baseUrl": "lib",
   	"dir": "build",
 	"optimize": "uglify2",
 	"uglify2": nodeRequire("brace_umd").build_option_extend({mangle: {properties: {reserved: ["config"]}}}),

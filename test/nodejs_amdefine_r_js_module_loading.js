@@ -31,7 +31,7 @@ var expect = require("chai").expect,
 	utils = require("bracket_utils"),
 	maybe = require("brace_maybe")
 
-module.paths.unshift(path.join(__dirname, "..", ".."))
+module.paths.unshift(path.join(__dirname, ".."))
 var cache = utils.cacheManager(require)
 var it_will = global
 
@@ -48,6 +48,10 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 	beforeEach(cache.start.bind(cache))
 	afterEach(cache.dump.bind(cache))
+	var err_msg = function(msg) {
+		expect(false, msg).to.be.true
+		done()
+	}
 
 	describe("Checking for dependencies:", function() { 
 
@@ -83,7 +87,9 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 	describe("Requirejs module loading after using r_js optimization on amdefined modules", function() {
 
 		// An array with the values of the test directory is filtered to include all of the files included with the regex.
-		var config_file = fs.readdirSync(config_dir).filter(function(value) { return /^build_config_.*\.json/.test(value) })
+		//var config_file = fs.readdirSync(config_dir).filter(function(value) { return /^build_config_.*\.json/.test(value) })
+		var config_file = ["build_config_c.json"]
+
 		config_file.forEach(function(value) {
 			value = path.join(__dirname, "config", value)
 		
@@ -92,9 +98,9 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				it("will build the Brace umd source using the build_umd program", function(done) {
 					// A new umd.js source build is created with the various config files in the test directory.
 					utils.Spawn("node", [build_path, "--config-file", value], undefined, (exit_code, stdout, stderr) => {
-						expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
+						expect(exit_code, "the build_umd script exited with a code other than 0"+stdout+stderr).to.equal(0)
 						done()
-					}, function(err) { expect(false, err).to.equal(true); done() })
+					}, err_msg)
 				})
 
 				// The current working directory of npm test commands is the module root which is what process.cwd() returns.
@@ -103,30 +109,28 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				it("the example module at " + example_module_dir + " will build using the rjs_config_auto_anonymous.js file and the correct" +
 							" module values will load using amdefine with the make_anonymous option used", function(done) {
 
-					utils.Spawn("node", [rjs_path, "-o", path.join(example_module_dir, "rjs_config_auto_anonymous.js")], undefined, (exit_code, stdout, stderr) => {
-						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
+					utils.Spawn("node", [rjs_path, "-o", path.join(example_module_dir, "rjs_config_auto_anonymous.js")], undefined, function(exit_code, stdout, stderr) {
+						expect(exit_code, "r_js exited with a code other than 0"+stdout+stderr).to.equal(0)
 						var define = require("amdefine")(module)
 						define([path.join(example_module_dir, "build", "entry.js")], function(entry) {
 
-							expect(entry).to.deep.equal({id: "entry", module_one: {id: "module_one"}, second_module: {id: "second_module"}})
+							expect(entry, stdout+stderr).to.deep.equal({id: "entry", module_one: {id: "module_one"}, second_module: {id: "second_module"}})
 							done()
 						})
-
-					}, function(err) { expect(false, err).to.equal(true); done() })
+					}, err_msg)
 				})
 
 				it("the example module at " + example_module_dir + " will build using the rjs_config_auto_anonymous.js file and the correct" +
 							" module values will load using commonjs require with the make_anonymous option used", function(done) {
 
-					utils.Spawn("node", [rjs_path, "-o", path.join(example_module_dir, "rjs_config_auto_anonymous.js")], undefined, (exit_code, stdout, stderr) => {
+					utils.Spawn("node", [rjs_path, "-o", path.join(example_module_dir, "rjs_config_auto_anonymous.js")], undefined, function(exit_code, stdout, stderr) {
 
-						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
+						expect(exit_code, "r_js exited with a code other than 0"+stdout+stderr).to.equal(0)
 						var entry = require(path.join(example_module_dir, "build", "entry.js"))
 
 						expect(entry).to.deep.equal({id: "entry", module_one: {id: "module_one"}, second_module: {id: "second_module"}})
 						done()
-
-					}, function(err) { expect(false, err).to.equal(true); done() })
+					}, err_msg)
 				})
 
 				it("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
@@ -134,7 +138,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 					utils.Spawn("node", [rjs_path, "-o", path.join(example_module_dir, "rjs_config.js")], undefined, (exit_code, stdout, stderr) => {
 						
-						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
+						expect(exit_code, "r_js exited with a code other than 0"+stdout+stderr).to.equal(0)
 						var define = require("amdefine")(module)
 
 						define([path.join(example_module_dir, "build", "entry.js")], function(entry) {
@@ -144,7 +148,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 							expect(entry).to.deep.equal({})
 							done()
 						})
-					}, function(err) { expect(false, err).to.equal(true); done() })
+					}, err_msg)
 				})
 			})
 		})
