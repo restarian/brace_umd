@@ -16,17 +16,17 @@
   * [Unit test output](https://github.com/restarian/brace_umd/blob/master/docs/specification/unit_test_output.md)
 ----
 
-**Version**: 0.8.7
+**Version**: 0.9.0
 
 **Description**: Provides a unified module definition wrapper for RequireJS and AMDefine definitions while staying seamlessly compliant with the RequireJS optimizer and factory based objects.
 
 **Author**: [Robert Steckroth](mailto:RobertSteckroth@gmail.com)
 
-**Dependencies**: [commander](https://npmjs.org/package/commander)
+**Dependencies**: [commander](https://npmjs.org/package/commander) [requirejs](https://npmjs.org/package/requirejs) [uglify-js](https://npmjs.org/package/uglify-js)
 
-**Development dependencies**: [amdefine](https://npmjs.org/package/amdefine) [brace_maybe](https://npmjs.org/package/brace_maybe) [bracket_utils](https://npmjs.org/package/bracket_utils) [chai](https://npmjs.org/package/chai) [mocha](https://npmjs.org/package/mocha) [requirejs](https://npmjs.org/package/requirejs) [uglify-js](https://npmjs.org/package/uglify-js)
+**Development dependencies**: [amdefine](https://npmjs.org/package/amdefine) [brace_maybe](https://npmjs.org/package/brace_maybe) [bracket_utils](https://npmjs.org/package/bracket_utils) [chai](https://npmjs.org/package/chai) [mocha](https://npmjs.org/package/mocha)
 
-**Optional Dependencies**: [brace_document](https://npmjs.org/package/brace_document) [brace_document_navlink](https://npmjs.org/package/brace_document_navlink) [brace_document_link](https://npmjs.org/package/brace_document_link) [brace_document_specification](https://npmjs.org/package/brace_document_specification)
+**Optional Dependencies**: [brace_document](https://npmjs.org/package/brace_document) [brace_document_link](https://npmjs.org/package/brace_document_link) [brace_document_mocha](https://npmjs.org/package/brace_document_mocha) [brace_document_navlink](https://npmjs.org/package/brace_document_navlink) [brace_document_specification](https://npmjs.org/package/brace_document_specification)
 
 **Package scripts**:
 
@@ -34,8 +34,7 @@
 | ---- | ------ |
  | test | ```mocha``` |
  | build | ```bin/build_umd.js --config-file minified_config.json``` |
- | make_docs | ```brace_document --navlink --link --link-dest ../README.md --link-path ../docs/synopsis.md -r -i docs_raw -b docs --force-title --title "Brace Umd help pages" --sort depth``` |
- | make_docs_extra | ```npm run make_docs --silent -- --specification --mocha``` |
+ | make_docs | ```brace_document --navlink --link --link-dest ../README.md --link-path ../docs/synopsis.md -r -i docs_raw -b docs --force-title --title "Brace Umd help pages" --sort depth --specification --mocha``` |
 
 **Keywords**: *brace*, *umd*, *unified*, *amd*, *module*, *definition*
 

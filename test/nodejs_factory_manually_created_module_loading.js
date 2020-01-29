@@ -73,7 +73,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 				it("after building the brace umd source", function(done) {
 
-					utils.Spawn("node", [build_path, "--config-file", value, "--compress"], undefined, (exit_code, stdout, stderr) => {
+					utils.Spawn("node", [build_path, "--config-file", value, "--compress"], undefined, function(exit_code, stdout, stderr) {
 						expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 						done()
 					}, function(err) { expect(false, err).to.equal(true); done() })

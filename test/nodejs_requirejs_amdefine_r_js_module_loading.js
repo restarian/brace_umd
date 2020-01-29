@@ -89,7 +89,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 				it("after building the brace umd source", function(done) {
 					// A new umd.js source build is created with the various config files in the test directory.
-					utils.Spawn("node", [build_path, "--config-file", config_path], undefined, (exit_code, stdout, stderr) => {
+					utils.Spawn("node", [build_path, "--config-file", config_path], undefined, function(exit_code, stdout, stderr) {
 						expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 						done()
 					}, function(err) { 
@@ -104,7 +104,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				it("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
 							" load using requirejs", function(done) {
 
-					utils.Spawn("node", [rjs_path, "-o", path.join(example_module_dir, "rjs_config.js")], undefined, (exit_code, stdout, stderr) => {
+					utils.Spawn("node", [rjs_path, "-o", path.join(example_module_dir, "rjs_config.js")], undefined, function(exit_code, stdout, stderr) {
 						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
 
 						this.log_stdout = true
@@ -130,7 +130,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				it("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
 							" load using amdefine", function(done) {
 
-					utils.Spawn("node", [rjs_path, "-o", path.join(example_module_dir, "rjs_config.js")], undefined, (exit_code, stdout, stderr) => {
+					utils.Spawn("node", [rjs_path, "-o", path.join(example_module_dir, "rjs_config.js")], undefined, function(exit_code, stdout, stderr) {
 						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
 
 						this.log_stdout = true
@@ -151,7 +151,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				it("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
 							" load using amdefine", function(done) {
 
-					utils.Spawn("node", [rjs_path, "-o", path.join(example_module_dir, "rjs_config.js")], undefined, (exit_code, stdout, stderr) => {
+					utils.Spawn("node", [rjs_path, "-o", path.join(example_module_dir, "rjs_config.js")], undefined, function(exit_code, stdout, stderr) {
 						expect(exit_code, "r_js exited with a code other than 0").to.equal(0)
 
 						var define = require("amdefine")(module)

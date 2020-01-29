@@ -80,7 +80,7 @@ describe("Using stop further progression methodology for dependencies in: "+path
 			it("using the build_umd.js script builds using the config file "+ value, function(done) {
 
 				// A new umd.js source build is created with the various config files in the test directory.
-				utils.Spawn("node", [build_path, "--config-file", value], undefined, (exit_code, stdout, stderr) => {
+				utils.Spawn("node", [build_path, "--config-file", value], undefined, function(exit_code, stdout, stderr) {
 					expect(exit_code, "the build_umd script exited with a code other than 0 "+ stdout+stderr).to.equal(0)
 					done()
 				}, function(err) { expect(false, err).to.equal(true); done() })

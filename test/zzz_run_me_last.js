@@ -85,7 +85,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 		it("this test is to build the project as the doc pages were", function(done) {
 
-			utils.Spawn("node", [build_path, "--config-file", path.join(__dirname, "/..", "/minified_config.json")], undefined, (exit_code, stdout, stderr) => {
+			utils.Spawn("node", [build_path, "--config-file", path.join(__dirname, "/..", "/minified_config.json")], undefined, function(exit_code, stdout, stderr) {
 				expect(exit_code, "the build_umd script exited with a code other than 0").to.equal(0)
 				done()
 			}, function(err) { 

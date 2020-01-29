@@ -97,7 +97,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 
 				it("will build the Brace umd source using the build_umd program", function(done) {
 					// A new umd.js source build is created with the various config files in the test directory.
-					utils.Spawn("node", [build_path, "--config-file", value], undefined, (exit_code, stdout, stderr) => {
+					utils.Spawn("node", [build_path, "--config-file", value], undefined, function(exit_code, stdout, stderr) {
 						expect(exit_code, "the build_umd script exited with a code other than 0"+stdout+stderr).to.equal(0)
 						done()
 					}, err_msg)
@@ -136,7 +136,7 @@ describe("Using stop further progression methodology for file dependencies: "+pa
 				it("the example module at " + example_module_dir + " will build using the rjs_config.js file and the correct module values will" +
 							" load using amdefine", function(done) {
 
-					utils.Spawn("node", [rjs_path, "-o", path.join(example_module_dir, "rjs_config.js")], undefined, (exit_code, stdout, stderr) => {
+					utils.Spawn("node", [rjs_path, "-o", path.join(example_module_dir, "rjs_config.js")], undefined, function(exit_code, stdout, stderr) {
 						
 						expect(exit_code, "r_js exited with a code other than 0"+stdout+stderr).to.equal(0)
 						var define = require("amdefine")(module)
