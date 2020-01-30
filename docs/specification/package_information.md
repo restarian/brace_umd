@@ -16,7 +16,7 @@
   * [Unit test output](https://github.com/restarian/brace_umd/blob/master/docs/specification/unit_test_output.md)
 ----
 
-**Version**: 0.9.0
+**Version**: 0.10.0
 
 **Description**: Provides a unified module definition wrapper for RequireJS and AMDefine definitions while staying seamlessly compliant with the RequireJS optimizer and factory based objects.
 

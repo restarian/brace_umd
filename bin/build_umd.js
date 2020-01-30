@@ -30,12 +30,10 @@ fs = require("fs"),
 lib = path.join(__dirname, "..", "lib"),
 build_dir = path.join(lib, "..", "build"),
 info = require(path.join(lib, "..", "package.json")),
-UglifyJS = require(path.join("..", "node_modules", "uglify-js", "tools", "node")),
+UglifyJS = require("uglify-js"),
 program = require("commander"),
 tested_option_file = "",
 bare_mangle_properties = []
-
-require(path.join("..", "node_modules", "uglify-js", "tools", "exit"))
 
 /* The following program includes code from another module (UglifyJS). The license and code follows until specified otherwise.
 UglifyJS is released under the BSD license:
@@ -68,6 +66,22 @@ TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 SUCH DAMAGE.
 */
+
+// workaround for tty output truncation upon process.exit()
+var exit = process.exit;
+process.exit = function() {
+    var args = [].slice.call(arguments);
+    process.once("uncaughtException", function() {
+        (function callback() {
+            if (process.stdout.bufferSize || process.stderr.bufferSize) {
+                setImmediate(callback);
+            } else {
+                exit.apply(process, args);
+            }
+        })();
+    });
+    throw exit;
+};
 
 var skip_keys = [ "cname", "inlined", "parent_scope", "scope", "uses_eval", "uses_with" ];
 var files = {};
