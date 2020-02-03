@@ -87,7 +87,7 @@ This project relies heavily on (and includes) the [Uglify-js](https://github.com
 				nodeRequire("fs").readFileSync(module_path.replace(/_umd\.js$/, ".js")).toString() || content
 	},
 	"paths": {
-		"brace_option": nodeRequire.resolve("brace_option").replace(/\.js\s*$/, "")
+		//"": nodeRequire.resolve("").replace(/\.js\s*$/, "")
 	},
 	// We do not optimize here so all of the individually built modules will keep their structure.
 	"wrap": {

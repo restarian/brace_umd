@@ -14,20 +14,21 @@
 
 ---
 ### Brace Umd help pages
-* [Building the umd with other options](https://github.com/restarian/brace_umd/blob/master/docs/building_the_umd_with_other_options.md)
-* [How option handling works](https://github.com/restarian/brace_umd/blob/master/docs/how_option_handling_works.md)
-* [Passing option data to the umd](https://github.com/restarian/brace_umd/blob/master/docs/passing_option_data_to_the_umd.md)
-* [Requirejs project configuration](https://github.com/restarian/brace_umd/blob/master/docs/requirejs_project_configuration.md)
 * **Synopsis**
-* [Using the optimizer](https://github.com/restarian/brace_umd/blob/master/docs/using_the_optimizer.md)
-* [What the build exports](https://github.com/restarian/brace_umd/blob/master/docs/what_the_build_exports.md)
 * Contibutors
-  * [Contributor code of conduct](https://github.com/restarian/brace_umd/blob/master/docs/Contibutors/contributor_code_of_conduct.md)
-  * [Guidelines for contributing](https://github.com/restarian/brace_umd/blob/master/docs/Contibutors/guidelines_for_contributing.md)
+  * [Contributor code of conduct](https://github.com/restarian/brace_umd/blob/master/docs/contibutors/contributor_code_of_conduct.md)
+  * [Guidelines for contributing](https://github.com/restarian/brace_umd/blob/master/docs/contibutors/guidelines_for_contributing.md)
 * Specification
   * [License information](https://github.com/restarian/brace_umd/blob/master/docs/specification/license_information.md)
   * [Package information](https://github.com/restarian/brace_umd/blob/master/docs/specification/package_information.md)
   * [Unit test output](https://github.com/restarian/brace_umd/blob/master/docs/specification/unit_test_output.md)
+* Using the project
+  * [Building the umd with other options](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/building_the_umd_with_other_options.md)
+  * [How option handling works](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/how_option_handling_works.md)
+  * [Passing option data to the umd](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/passing_option_data_to_the_umd.md)
+  * [Requirejs project configuration](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/requirejs_project_configuration.md)
+  * [Using the optimizer](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/using_the_optimizer.md)
+  * [What the build exports](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/what_the_build_exports.md)
 
 ---
 
@@ -101,7 +102,7 @@ This project relies heavily on (and includes) the [Uglify-js](https://github.com
 				nodeRequire("fs").readFileSync(module_path.replace(/_umd\.js$/, ".js")).toString() || content
 	},
 	"paths": {
-		"brace_option": nodeRequire.resolve("brace_option").replace(/\.js\s*$/, "")
+		//"": nodeRequire.resolve("").replace(/\.js\s*$/, "")
 	},
 	// We do not optimize here so all of the individually built modules will keep their structure.
 	"wrap": {
