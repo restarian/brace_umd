@@ -5,9 +5,13 @@
 * [Building the umd with other options](https://github.com/restarian/brace_umd/blob/master/docs/building_the_umd_with_other_options.md)
 * [How option handling works](https://github.com/restarian/brace_umd/blob/master/docs/how_option_handling_works.md)
 * [Passing option data to the umd](https://github.com/restarian/brace_umd/blob/master/docs/passing_option_data_to_the_umd.md)
+* [Requirejs project configuration](https://github.com/restarian/brace_umd/blob/master/docs/requirejs_project_configuration.md)
 * [Synopsis](https://github.com/restarian/brace_umd/blob/master/docs/synopsis.md)
 * **Using the optimizer**
 * [What the build exports](https://github.com/restarian/brace_umd/blob/master/docs/what_the_build_exports.md)
+* Contibutors
+  * [Contributor code of conduct](https://github.com/restarian/brace_umd/blob/master/docs/Contibutors/contributor_code_of_conduct.md)
+  * [Guidelines for contributing](https://github.com/restarian/brace_umd/blob/master/docs/Contibutors/guidelines_for_contributing.md)
 * Specification
   * [License information](https://github.com/restarian/brace_umd/blob/master/docs/specification/license_information.md)
   * [Package information](https://github.com/restarian/brace_umd/blob/master/docs/specification/package_information.md)

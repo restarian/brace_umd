@@ -1,15 +1,15 @@
-## Rebuilding the UMD source
+## Rebuilding the umd script source
 
 ---
 ### Document pages
 
 ---
 
-### Brace UMD is built using Uglify-JS version 3 and is tested on Windows 10 and Ubuntu 16. 
+### Brace Umd is built using Uglify-JS version 3 and is tested on Windows 10 and Ubuntu 16.
 The command line program *(bin/build_umd)* accepts the exact same parameters as Uglify-JS does. E.g. ```build_umd --beautify comments="all",beautify=false```
 Given the above command, the minified data in the build directory will contain any comments included in the lib source. The builds will also not have beautified code. See <https://github.com/mishoo/UglifyJS2> for further reading on command line usage.
 
-### Only some of the uglify-js options can be used sense the build code needs to be unit tested. 
+### Only most of the uglify-js options can be used sense the build code needs to be unit tested.
 Therefore, only options which are defined in the *lib/tested_option.json* file will be configurable. The *build_umd* script will warn when a non-tested option is attempted to be set. E.g. --
 
 	:> ./bin/build_umd.js  --compress unused,unsafe --mangle toplevel --beautify --comments="all"
@@ -28,6 +28,6 @@ Therefore, only options which are defined in the *lib/tested_option.json* file w
 	Exported uglify-js build end wrap: /home/wasman/Restarian/brace_umd/build/wrap_start_umd_0.3.2.frag
 	Exported uglify-js build end wrap: /home/wasman/Restarian/brace_umd/build/wrap_end_umd_0.3.2.frag
 
-The above options passed in to the command are set except for those which are not defined in the *tested_option.json* file. Notice that the *mangle.toplevel* is not defined in the tested options file (it may break the build source), and thusly are not set. **Additional unit tests are needed if any properties are added to the lib/tested_option.json file.** It is safe to change the values of any properties defined in the file contained in the commit of the repository. 
-	* Note: The values stored in the testing options file are not used as default values. The only time a tested options file property value is significant is when it defines an Object with more options properties. 
+The above options passed in to the command are set except for those which are not defined in the *tested_option.json* file. Notice that the *mangle.toplevel* is not defined in the tested options file (it may break the build source), and thusly are not set. **Additional unit tests are needed if any properties are added to the lib/tested_option.json file.** It is safe to change the values of any properties defined in the file contained in the commit of the repository.
+	* Note: The values stored in the testing options file are not used as default values. The only time a tested options file property value is significant is when it defines an Object with more options properties.
 	*Note*: The *output.preamble* option is special. A default string will be provided if the *output.preamble* option is set to *true*. Setting it to *false* will disable the preamble from use (same as with uglify-js). Setting a string to it will use that for the preamble.
