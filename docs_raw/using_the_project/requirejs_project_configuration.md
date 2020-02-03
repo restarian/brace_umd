@@ -31,3 +31,19 @@ E.g. if a module named *another* is included in the AMD call chain of a project 
 ```
 
 For simpler projects, the above *paths* entry should be the only thing to alter when incorporating Brace Umd into modules.
+
+**Important** When building the second r_js configuration file the a *suffix* option needs to be passed in by r_jj with the "_umd" set as its value for umd script output.
+
+**Important**  the non-umd rjs configurations need to be ran first to avoid namespace collision in the build directory. This may be changed in later versions. This can be omitted if not using the umd script however.
+
+A working example of the rjs_build configuratin files being executed from the package json file with npm:
+
+```javascript
+
+"scripts": {
+  "build_config": "node ./node_modules/example_project/bin/build_umd.js --config-file uglify_option.json",
+  "build_umd": "r_js -o ./rjs_build.js && r_js -o ./rjs_build_final.js suffix=\"_umd\"",
+  "build_amd": "r_js -o ./rjs_build.js && r_js -o ./rjs_build_final.js",
+  "build": "npm run build_config && npm run build_umd && npm run build_amd"
+}
+```
