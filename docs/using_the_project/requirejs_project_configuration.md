@@ -57,8 +57,8 @@ A working example of the rjs_build configuratin files being executed from the pa
 
 "scripts": {
   "build_config": "node ./node_modules/example_project/bin/build_umd.js --config-file uglify_option.json",
-  "build_umd": "r_js -o ./rjs_build.js && r_js -o ./rjs_build_final.js suffix=\"_umd\"",
-  "build_amd": "r_js -o ./rjs_build.js && r_js -o ./rjs_build_final.js",
+  "build_umd": "r_js -o ./rjs_build_first.js && r_js -o ./rjs_build_second.js suffix=\"_umd\"",
+  "build_amd": "r_js -o ./rjs_build_first.js && r_js -o ./rjs_build_second.js",
   "build": "npm run build_config && npm run build_umd && npm run build_amd"
 }
 ```

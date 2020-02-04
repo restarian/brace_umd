@@ -27,7 +27,7 @@
 
 **Author**: [Robert Steckroth](mailto:RobertSteckroth@gmail.com)
 
-**Dependencies**: [commander](https://npmjs.org/package/commander) [requirejs](https://npmjs.org/package/requirejs) [uglify-js](https://npmjs.org/package/uglify-js)
+**Dependencies**: [bracket_print](https://npmjs.org/package/bracket_print) [commander](https://npmjs.org/package/commander) [requirejs](https://npmjs.org/package/requirejs) [uglify-js](https://npmjs.org/package/uglify-js)
 
 **Development dependencies**: [amdefine](https://npmjs.org/package/amdefine) [brace_maybe](https://npmjs.org/package/brace_maybe) [bracket_utils](https://npmjs.org/package/bracket_utils) [chai](https://npmjs.org/package/chai) [mocha](https://npmjs.org/package/mocha)
 
@@ -38,7 +38,7 @@
 | Name | Action |
 | ---- | ------ |
  | test | ```mocha``` |
- | build | ```bin/build_umd.js --config-file minified_config.json``` |
+ | build | ```node ./bin/build_umd.js --config-file minified_config.json``` |
  | make_docs | ```brace_document --navlink --link --link-dest ../README.md --link-path ../docs/synopsis.md -r -i docs_raw -b docs --force-title --title "Brace Umd help pages" --sort depth --specification --mocha``` |
 
 **Keywords**: *brace*, *umd*, *unified*, *amd*, *module*, *definition*

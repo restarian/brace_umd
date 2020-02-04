@@ -4,6 +4,7 @@
   "version": "0.10.1",
   "description": "Provides a unified module definition wrapper for RequireJS and AMDefine definitions while staying seamlessly compliant with the RequireJS optimizer and factory based objects.",
   "dependencies": {
+    "bracket_print": "^0.11.2",
     "commander": "^4.1.0",
     "requirejs": "^2.3.3",
     "uglify-js": "^3.7.6"
@@ -11,21 +12,21 @@
   "devDependencies": {
     "amdefine": "^1.0.1",
     "brace_maybe": "^0.1.3",
-    "bracket_utils": "^0.3.3",
+    "bracket_utils": "^0.3.7",
     "chai": "^4.2.0",
-    "mocha": "^7.0.0"
+    "mocha": "^7.0.1"
   },
   "optionalDependencies": {
-    "brace_document": "^1.0.2",
-    "brace_document_link": "^1.0.1",
-    "brace_document_mocha": "^1.1.0",
+    "brace_document": "^1.1.10",
+    "brace_document_link": "^1.1.11",
+    "brace_document_mocha": "^1.1.3",
     "brace_document_navlink": "^1.0.2",
-    "brace_document_specification": "^1.0.1"
+    "brace_document_specification": "^1.2.3"
   },
   "bin": "bin/build_umd.js",
   "scripts": {
     "test": "mocha",
-    "build": "bin/build_umd.js --config-file minified_config.json",
+    "build": "node ./bin/build_umd.js --config-file minified_config.json",
     "make_docs": "brace_document --navlink --link --link-dest ../README.md --link-path ../docs/synopsis.md -r -i docs_raw -b docs --force-title --title \"Brace Umd help pages\" --sort depth --specification --mocha"
   },
   "license": "(MIT WITH BSD-2-Clause)",
