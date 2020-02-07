@@ -5,7 +5,7 @@
     "semicolons": true,
     "quote_style": 1,
     "preamble": true,
-    "comments": false
+	 "comments": false
   },
   "compress": true,
   "warnings": true,

@@ -683,13 +683,38 @@ build_option.mangle = mangle_option
 console.log("Options which will be used with uglify-js for module definitions:\n", build_option)
 console.log("\nExporting data to build directory:", build_dir)
 
+var license = `/* Brace Umd resided under the MIT License Copyright (c) 2020 Robert Steckroth <RobertSteckroth@gmail.com>
+
+  Brace Umd is a unified module definition script to use when defining javascript modules.
+
+  this file is a part of Brace Umd
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. */
+`
+
 var location = path.join(build_dir, "build_options.json")
 try { fs.writeFileSync(location, JSON.stringify(build_option, null, " ")) }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported build options:", location)
 
 location = path.join(build_dir, "umd.js")
-try { fs.writeFileSync(location, out) }
+try { fs.writeFileSync(location, license + out) }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js primary script build:", location)
 
@@ -717,7 +742,7 @@ if ( close_index === -1 ) {
 // Write out the wrapping fragment for use with the requirejs optimizer (r.js). This should go in the {wrap {start: []} } part of the r.js optimizer 
 // build file.
 location = path.join(build_dir, "wrap_start_umd.frag")
-try { fs.writeFileSync(location, out.substr(0, close_index) + ";") }
+try { fs.writeFileSync(location, license + out.substr(0, close_index) + ";") }
 catch(e) { console.log(e); process.exit(7) }
 console.log("Exported uglify-js build start wrap:", location)
 
