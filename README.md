@@ -27,7 +27,7 @@
   * [How option handling works](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/how_option_handling_works.md)
   * [Passing option data to the umd](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/passing_option_data_to_the_umd.md)
   * [Requirejs project configuration](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/requirejs_project_configuration.md)
-  * [The prpject init tool](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/the_prpject_init_tool.md)
+  * [The project initializer tool](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/the_project_initializer_tool.md)
   * [Using the optimizer](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/using_the_optimizer.md)
   * [What the build exports](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/what_the_build_exports.md)
 
@@ -36,7 +36,7 @@
 #### More than a unified module definition:
 Brace Umd is a source-building platform to support AMD (*asynchronous module definition*) modules built by the [RequireJs](https://requirejs.org/docs/node.html) optimizer. There will be no further need to handle individual license insertions in build files or if individual modules will be working after project obfuscations. Brace Umd ensures **optimal**, **finished** and **deterministic** deployments of large multi-library javscript bundles.
 
-##### Creates a localized platform to maintain a completley fininished build module no matter where it gets used.
+#### Creates a localized platform to maintain a completley fininished build module no matter where it gets used.
 
 Individual AMD modules will store optimization build information. The module is then built, tested and distributed with a known optimization output. Other projects can then be meticulously compiled again using the same procedure for consistent package builds which consist of multiple packages and modules.
 
@@ -47,7 +47,7 @@ This project relies heavily on (and includes) the [Uglify-js](https://github.com
 
 **Bonuses:**
 * Enables cross-platform module bundling when used with the r.js optimizer and the built in factory loader
-* Provides an anonymous module option for [amdefine](https://github.com/jrburke/amdefine) modules to avoid its dependency conundrum.
+* Provides an anonymous module option for [amdefine](https://github.com/jrburke/amdefine) to avoid its dependency conundrum.
 * The wrapper only adds only one new namespace (umd), by using a self-destructing proxy method
 * Provides a way to switch between definition types without altering source code
 * Allows for minification of wrapped source code using almost all of the uglify-js options
