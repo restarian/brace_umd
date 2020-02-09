@@ -1,0 +1,9 @@
+{ 
+   "main": "my_file", 
+   "scripts": { 
+      "build": "exists", 
+      "build_config": "build_umd --config-file uglify_option.json", 
+      "build_amd": "r_js -o ./rjs_build_first.js && r_js -o ./rjs_build_second.js", 
+      "build_umd": "r_js -o ./rjs_build_first.js && r_js -o ./rjs_build_second.js suffix=\"+umd\""
+   }
+}

@@ -10,9 +10,7 @@ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
-  Brace UMD is a unified module definition script to use when defining javascript modules.
-
-  this file is a part of Brace UMD
+Brace UMD is a unified module definition script to use when defining javascript modules.
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
