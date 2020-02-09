@@ -1,4 +1,5 @@
 node_modules/
 !test/node_modules/
+!test/example/my_project/node_modules/
 npm-debug.*
 *.sw[a-z]

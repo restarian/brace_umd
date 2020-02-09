@@ -20,7 +20,7 @@ If the default configurations are not adequate and it is not ideal to make the c
 
 ### Below is a simple example of how to use the Initializer tool within a amd build:
 
-Note: This script uses the awesome [comander](https://github.com/tj/commander.js) utility to handle option data therefor the module constructor option Object data should reflect the output of commander.parse() data.
+Note: The Initializer tool uses the [comander](https://github.com/tj/commander.js) utility to handle option data therefor the module constructor option Object data should reflect the output of commander.parse() data.
 
 ```javascript
 require("requirejs")(["init"], function(init) {

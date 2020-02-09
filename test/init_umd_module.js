@@ -151,6 +151,5 @@ describe("Using stop further progression methodology for dependencies in: "+path
 			})
 		})
 	})
-
 })
 
