@@ -29,8 +29,8 @@
   },
   "scripts": {
     "test": "mocha",
-    "build_umd": "build_umd",
-    "init_umd": "init_umd",
+    "build_umd": "node ./bin/build_umd.js",
+    "init_umd": "node ./bin/init_umd.js",
     "build": "build_umd --config-file minified_config.json",
     "make_docs": "brace_document --navlink --link --link-dest ../Readme.md --link-path ../docs/synopsis.md -r -i docs_raw -b docs --force-title --title \"Brace Umd help pages\" --sort depth --specification --mocha"
   },

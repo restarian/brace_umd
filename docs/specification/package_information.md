@@ -17,11 +17,12 @@
   * [How option handling works](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/how_option_handling_works.md)
   * [Passing option data to the umd](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/passing_option_data_to_the_umd.md)
   * [Requirejs project configuration](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/requirejs_project_configuration.md)
+  * [The prpject init tool](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/the_prpject_init_tool.md)
   * [Using the optimizer](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/using_the_optimizer.md)
   * [What the build exports](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/what_the_build_exports.md)
 ----
 
-**Version**: 0.10.2
+**Version**: 0.11.0
 
 **Description**: Provides a unified module definition wrapper for RequireJS and AMDefine definitions while staying seamlessly compliant with the RequireJS optimizer and factory based objects.
 
@@ -38,7 +39,9 @@
 | Name | Action |
 | ---- | ------ |
  | test | ```mocha``` |
- | build | ```node ./bin/build_umd.js --config-file minified_config.json``` |
+ | build_umd | ```node ./bin/build_umd.js``` |
+ | init_umd | ```node ./bin/init_umd.js``` |
+ | build | ```build_umd --config-file minified_config.json``` |
  | make_docs | ```brace_document --navlink --link --link-dest ../Readme.md --link-path ../docs/synopsis.md -r -i docs_raw -b docs --force-title --title "Brace Umd help pages" --sort depth --specification --mocha``` |
 
 **Keywords**: *brace*, *umd*, *unified*, *amd*, *module*, *definition*

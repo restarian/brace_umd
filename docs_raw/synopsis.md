@@ -18,29 +18,25 @@
 ---
 
 #### More than a unified module definition:
-Brace Umd is also a source-building platform to support AMD (*asynchronous module definition*) modules built by the [RequireJs](https://requirejs.org/docs/node.html) optimizer.
+Brace Umd is a source-building platform to support AMD (*asynchronous module definition*) modules built by the [RequireJs](https://requirejs.org/docs/node.html) optimizer. There will be no further need to handle individual license insertions in build files or if individual modules will be working after project obfuscations. Brace Umd ensures **optimal**, **finished** and **deterministic** deployments of large multi-library javscript bundles.
 
-##### Creates a localized platform:
+##### Creates a localized platform to maintain a completley fininished build module no matter where it gets used.
 
 Individual AMD modules will store optimization build information. The module is then built, tested and distributed with a known optimization output. Other projects can then be meticulously compiled again using the same procedure for consistent package builds which consist of multiple packages and modules.
 
-**Brace Umd is better than other more simple module definitions** by providing localized _uglify-js_ functionality and option passing.
+**Brace Umd is better than other more simple module definitions** by providing localized _uglify-js_ functionality and option passing, the build modules will maintain stability and practicality without creating bloat.
 
 **Licensed under: MIT WITH BSD-2-Clause**
-This project relies heavily on (and includes) the [Uglify-js](https://github.com/mishoo/UglifyJS2) source code.
+This project relies heavily on (and includes) the [Uglify-js](https://github.com/mishoo/UglifyJS2) source code. Kodos, to the Uglify-js team!
 
 **Bonuses:**
-* Allows for zero dependency module creation when used with the r.js optimizer and the built in factory loader
-* Provides an anonymous module option for amdefine modules
-* Adds only one new namespace (umd), by using a self-destructing proxy method
+* Enables cross-platform module bundling when used with the r.js optimizer and the built in factory loader
+* Provides an anonymous module option for [amdefine](https://github.com/jrburke/amdefine) modules to avoid its dependency conundrum.
+* The wrapper only adds only one new namespace (umd), by using a self-destructing proxy method
 * Provides a way to switch between definition types without altering source code
 * Allows for minification of wrapped source code using almost all of the uglify-js options
-* Extensible friendly design regarding other asynchronous module definitions
 * Well commented, professionally engineered and thoroughly documented code
 * Vast and deep unit tests on Windows 10 and Ubuntu 18
-
-**Caveats:**
-  * Requires nodejs version 6 or greater
 
 **Note**: it is acceptable to use mangle and mangle properties with the Umd source and in the requirejs optimizing process. This is done by storing the build config options used and then passing them back into uglify-js via the r.js build config file (see [using with requirejs](https://github.com/restarian/brace_umd/blob/master/docs/using_the_optimizer.md), for more information.
 
@@ -53,7 +49,7 @@ This project relies heavily on (and includes) the [Uglify-js](https://github.com
 	"name": nodeRequire("path").basename(config.baseUrl),
 	"out": nodeRequire("path").join("build", nodeRequire("path").basename(config.baseUrl))+".js",
 	"baseUrl": "lib",
-	"onBuildRead": function (module_name, module_path, content) {
+	"onBuildWrite": function (module_name, module_path, content) {
 		// This is how a module is built which has dependency modules which use brace_umd. The non-brace_umd module version is used instead when a module is
 		// loaded which was a brace_umd built module (it will contain a _umd.js suffix). It is assumed that any module which contains a _umd.js suffix is
 		// a brace_umd wrapped module. Note: this should only apply when using a require.resolve as a requirejs paths value.
