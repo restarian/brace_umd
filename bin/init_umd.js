@@ -10,7 +10,7 @@ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
-Brace UMD is a unified module definition script to use when defining javascript modules.
+Brace Umd is a module building platform with an integrated unified module definition wrapper.
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
@@ -27,7 +27,7 @@ var info = require("../package.json"),
 	program = require("commander"),
 	print = require("bracket_print"),
 	path = require("path"),
-	up = print({log_level: "", level: 0, title_stamp: false, title: false})
+	up = print({log_level: "", title_stamp: false, title: false})
 
 program.version(info.name + " " + info.version)
 .usage(`[options] 
@@ -49,8 +49,7 @@ proper "scripts" entry in the project json file.`)
 .option("-i, --input-location [directory or file path]", up.toStyleString("The project to operate on. The package.json file must be in the project root",
 	"(as determined by the git repository root) or an exact path to a json config (including the filename which ends in a .json) must be provided.",
 	"Example: C:\\my_projects\\project, or C:\\my_projects\\project\\config\\project.json the default will use the nearest git repository",
-	"travling up from this file."), process.cwd())
+	"travling up from this file. Relative paths are from the process current working directory (which is the default)."), process.cwd())
 
-require("../lib/init")(program, print({level: 1, title_stamp: false, log_title: path.join("bin", "init_umd")})).run(
-	function(exit_code) { process.exit(exit_code||0) }, function(exit_code) { process.exit(exit_code||99) })
+require("../lib/init")(program, print({level: 1, title_stamp: false, log_title: path.join("bin", "init_umd")})).run(process.exit.bind(process), process.exit.bind(process))
 

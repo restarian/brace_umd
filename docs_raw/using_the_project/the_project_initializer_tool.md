@@ -17,3 +17,19 @@ Note: The script is safe and will not clobber data already within the json file 
 
 ### Copying the templates to the project base directory.
 If the default configurations are not adequate and it is not ideal to make the changes from the *template* directory of the local Brace Umd module installation, than the *-t* flag can be used to copy the templates to the base directory of the project. It is important to note however, that if the scripts are already in place and the templates are copied over, the *--force* flag will need to be used in order to re-create the *scripts* entry data in the json file. Otherwise, the *scripts* entries will still point to the other template files even though the templates have been copied over. Exactly what occurred can be deduced by parsing verbose console output of the script as well.
+
+### Below is a simple example of how to use the Initializer tool within a amd build:
+
+Note: This script uses the awesome [comander](https://github.com/tj/commander.js) utility to handle option data therefor the module constructor option Object data should reflect the output of commander.parse() data.
+
+```javascript
+require("requirejs")(["init"], function(init) {
+  // Commander options from the command line help menu are the same here.
+  var option = {verbose: true, createScript: true, ...}
+  init(option).run(function() {
+    console.log("Success")
+  }, function(error) {
+    console.log(error)
+  })
+})
+```
