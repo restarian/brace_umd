@@ -2,7 +2,7 @@
    "scripts": { 
       "build_config": "build_umd --config-file uglify_option.json", 
       "build_amd": "r_js -o ./rjs_build_first.js && r_js -o ./rjs_build_second.js", 
-      "build_umd": "r_js -o ./rjs_build_first.js && r_js -o ./rjs_build_second.js suffix=\"+umd\"", 
+      "build_umd": "r_js -o ./rjs_build_first.js && r_js -o ./rjs_build_second.js suffix=\"_umd\"", 
       "build": "npm run build_config && npm run build_umd && npm run build_amd"
    }
 }
