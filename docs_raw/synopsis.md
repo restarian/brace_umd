@@ -48,7 +48,7 @@ This project relies heavily on (and includes) the [Uglify-js](https://github.com
 	"name": nodeRequire("path").basename(config.baseUrl),
 	"out": nodeRequire("path").join("build", nodeRequire("path").basename(config.baseUrl))+".js",
 	"baseUrl": "lib",
-	"onBuildWrite": function (module_name, module_path, content) {
+	"onBuildRead": function (module_name, module_path, content) {
 		// This is how a module is built which has dependency modules which use brace_umd. The non-brace_umd module version is used instead when a module is
 		// loaded which was a brace_umd built module (it will contain a _umd.js suffix). It is assumed that any module which contains a _umd.js suffix is
 		// a brace_umd wrapped module. Note: this should only apply when using a require.resolve as a requirejs paths value.
@@ -56,7 +56,7 @@ This project relies heavily on (and includes) the [Uglify-js](https://github.com
 				nodeRequire("fs").readFileSync(module_path.replace(/_umd\.js$/, ".js")).toString() || content
 	},
 	"paths": {
-  // Add any external packages use in this project here with an :empty value
+	// Add any external packages use in this project here with an :empty value
 	//	"": "empty:"
 	},
 	"optimize": "uglify",
@@ -84,7 +84,6 @@ This project relies heavily on (and includes) the [Uglify-js](https://github.com
 	"paths": {
 		//"": nodeRequire.resolve("").replace(/\.js\s*$/, "")
 	},
-	// We do not optimize here so all of the individually built modules will keep their structure.
 	"wrap": {
 		"start": config.suffix === "_umd" && nodeRequire("brace_umd").wrap_start || "",
 		// Add an anonymous definition.

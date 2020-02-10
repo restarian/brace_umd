@@ -33,14 +33,13 @@
 
 ---
 
-#### More than a unified module definition:
+### More than a unified module definition
 Brace Umd is a source-building platform to support AMD (*asynchronous module definition*) modules built by the [RequireJs](https://requirejs.org/docs/node.html) optimizer. There will be no further need to handle individual license insertions in build files or if individual modules will be working after project obfuscations. Brace Umd ensures **optimal**, **finished** and **deterministic** deployments of large multi-library javscript bundles.
 
-#### Creates a localized platform to maintain a completley fininished build module no matter where it gets used.
+### How it works
+Individual amd modules sit above Brace Umd as a dependency descendant which holds the optimization build information. The module is then built, tested and distributed with this known optimization build output. Other projects can then be compiled using their own optimizations provied by Brace Umd while not altering the external dependecy build. Then the umd wrapper is applies to the project build for deployment. This makes for consistent package builds which consist of multiple packages and modules without need of dependency optimizing.
 
-Individual AMD modules will store optimization build information. The module is then built, tested and distributed with a known optimization output. Other projects can then be meticulously compiled again using the same procedure for consistent package builds which consist of multiple packages and modules.
-
-**Brace Umd is better than other more simple module definitions** by providing localized _uglify-js_ functionality and option passing, the build modules will maintain stability and practicality without creating bloat.
+The Brace Umd wrapper is better than other unified module definition wrappers by providing localized _uglify-js_ functionality and option passing. This allows the umd wrap to only ever be inserted once while using projects which also are umd wraped.
 
 **Licensed under: MIT WITH BSD-2-Clause**
 This project relies heavily on (and includes) the [Uglify-js](https://github.com/mishoo/UglifyJS2) source code. Kodos, to the Uglify-js team!
@@ -65,7 +64,7 @@ This project relies heavily on (and includes) the [Uglify-js](https://github.com
 	"name": nodeRequire("path").basename(config.baseUrl),
 	"out": nodeRequire("path").join("build", nodeRequire("path").basename(config.baseUrl))+".js",
 	"baseUrl": "lib",
-	"onBuildWrite": function (module_name, module_path, content) {
+	"onBuildRead": function (module_name, module_path, content) {
 		// This is how a module is built which has dependency modules which use brace_umd. The non-brace_umd module version is used instead when a module is
 		// loaded which was a brace_umd built module (it will contain a _umd.js suffix). It is assumed that any module which contains a _umd.js suffix is
 		// a brace_umd wrapped module. Note: this should only apply when using a require.resolve as a requirejs paths value.
@@ -73,7 +72,7 @@ This project relies heavily on (and includes) the [Uglify-js](https://github.com
 				nodeRequire("fs").readFileSync(module_path.replace(/_umd\.js$/, ".js")).toString() || content
 	},
 	"paths": {
-  // Add any external packages use in this project here with an :empty value
+	// Add any external packages use in this project here with an :empty value
 	//	"": "empty:"
 	},
 	"optimize": "uglify",
@@ -101,7 +100,6 @@ This project relies heavily on (and includes) the [Uglify-js](https://github.com
 	"paths": {
 		//"": nodeRequire.resolve("").replace(/\.js\s*$/, "")
 	},
-	// We do not optimize here so all of the individually built modules will keep their structure.
 	"wrap": {
 		"start": config.suffix === "_umd" && nodeRequire("brace_umd").wrap_start || "",
 		// Add an anonymous definition.

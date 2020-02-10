@@ -22,7 +22,7 @@
   * [What the build exports](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/what_the_build_exports.md)
 ----
 
-**Version**: 0.11.0
+**Version**: 0.11.1
 
 **Description**: Provides a unified module definition wrapper for RequireJS and AMDefine definitions while staying seamlessly compliant with the RequireJS optimizer and factory based objects.
 
