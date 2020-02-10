@@ -4,7 +4,7 @@
   "version": "0.11.3",
   "description": "Provides a unified module definition wrapper for RequireJS and AMDefine definitions while staying seamlessly compliant with the RequireJS optimizer and factory based objects.",
   "dependencies": {
-    "bracket_print": "^0.11.2",
+    "bracket_print": "^0.11.7",
     "commander": "^4.1.0",
     "requirejs": "^2.3.3",
     "uglify-js": "^3.7.6"
