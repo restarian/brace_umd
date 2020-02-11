@@ -28,11 +28,15 @@ Brace Umd comes with a tool that runs from the bin script *init_umd* which can b
 
 Note: The script is safe and will not clobber data already within the json file or write over configuration files unless the *--force* flag us set.
 
+The *--input-location* parameter can also be used to specify package json configuration files elsewhere or with file names other than *package.json*. Otherwise, if the parameter is omitted, the base url is determined by the nearest git repoitory root directory in regards to the *process.cwd()* directory.
+
 ### The project scripts entries
-  The package.json (or another json) file can be modified to easily build projects using Brace Umd without remembering long commands or having to enter per-project configurations. This is possible due to the highly module nature of [Requirejs](https://github.com/requirejs) coupled with clever usage within the build configurations. To create scripts entries in your package.json (or another project configuration file), pass the *-s* flag to the *init_umd* script. The *--input-location* parameter can also be used to specify files elsewhere or with names other than package.json
+The package.json (or another json) file can be modified to easily build projects using Brace Umd without remembering long commands or having to enter per-project configurations. This is possible due to the highly module nature of [Requirejs](https://github.com/requirejs) coupled with clever usage within the build configurations. To create scripts entries in your package.json (or another project configuration file), pass the *--create-script* flag to the *init_umd* script. 
 
 ### Copying the templates to the project base directory.
-If the default configurations are not adequate and it is not ideal to make the changes from the *template* directory of the local Brace Umd module installation, than the *-t* flag can be used to copy the templates to the base directory of the project. It is important to note however, that if the scripts are already in place and the templates are copied over, the *--force* flag will need to be used in order to re-create the *scripts* entry data in the json file. Otherwise, the *scripts* entries will still point to the other template files even though the templates have been copied over. Exactly what occurred can be deduced by parsing verbose console output of the script as well.
+The *--create-template* flag can be used to copy the template files to the base url of the project. If the scripts are already in place and the *init_umd* command is ran, the *--force* flag will need to be used in order to re-copy the templates over the existing ones. Note: What occurred in script execution can be deduced by parsing verbose console output of the script.
+
+**An example of command line usage: .\node_modules\.bin\init_umd -vst**
 
 ### Below is a simple example of how to use the Initializer tool within a amd build:
 

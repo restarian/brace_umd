@@ -66,31 +66,24 @@
       * √ the export member wrap_end_option returns the correct string with the option data added to it
       * √ the export member version is the same as the current one
 
-  * Using stop further progression methodology for dependencies in: init_umd_cli.js
-    * Checking for dependencies..
-      * √ the build_umd program is available and at the right location
-    * The init_umd script functions when using the cli invoked via node process
-      * √ when the json file is not valid json data it returns error code 11
-      * √ when the json file is valid json data and the --create-template flag is not set with the --force flag set
-      * √ when the json file is valid json data and the --create-template flag is not set with the --force flag set
-      * √ when the json file is valid json with a relative path for the input-location and the --create-template flag is set but the --force flag is not that the script is not altered
-      * √ when the json file is valid json data and the --create-template flag is set and the --force flag is set that the data is altered
-    * The init_umd script functions when using the npm run script
-      * √ when the json file is not valid json data it returns error code 11
-      * √ when the json file is valid json data and the --create-template flag is not set with the --force flag set
-      * √ when the json file is valid json data and the --create-template flag is not set with the --force flag set
-      * √ when the json file is valid json data and the --create-template flag is set but the --force flag is not that the script is not altered
-      * √ when the json file is valid json with a relative path and the --create-template flag is set and the --force flag is set that the data is altered
-
-  * Using stop further progression methodology for dependencies in: init_umd_module.js
+  * Using stop further progression methodology for dependencies in: init_umd.js
     * Checking for dependencies..
       * √ the build_umd program is available and at the right location
       * √ r_js in the system as a program
+    * The init_umd script functions when using the cli invoked via node process
+      * √ when the json file is not valid json data it returns error code 11
+      * √ when the json file is valid json data with the --force flag set that the data is altered
+      * √ when the json file is valid json with a relative path for the input-location but the --force flag is not that the script is not altered
+      * √ when the json file is valid json with a relaitve path and all of the long flag names are used that the data is altered
+    * The init_umd script functions when using the npm run script
+      * √ when the json file is not valid json data it returns error code 11
+      * √ when the json file is valid json data with the --force flag set that the data is altered
+      * √ when the json file is valid json with a relative path for the input-location but the --force flag is not that the script is not altered
+      * √ when the json file is valid json with a relaitve path and all of the long flag names are used that the data is altered
     * The init.js api functions when using the library module with an amd loader
       * √ when the json file is not valid json data it returns error code 11
-      * √ when the json file is valid json data and the --create-template flag is not set with the --force flag set
-      * √ when the json file is valid json data and the --create-template flag is set but the --force flag is not that the script is not altered
-      * √ when the json file is valid json data and the --create-template flag is set and the --force flag is set that the data is altered
+      * √ when the json file is valid json data with the --force flag set
+      * √ when the json file is valid json data but the --force flag is not that the script is not altered
 
   * Using stop further progression methodology for file dependencies: nodejs_amdefine_r_js_module_loading.js
     * Checking for dependencies:
@@ -224,7 +217,7 @@
     * This test is ran to build the project source back to the default because the unit tests
       * √ this test is to build the project as the doc pages were
 
-  * 139 passing
+  * 135 passing
 
 
 ### ---------- End of unit testing ----------

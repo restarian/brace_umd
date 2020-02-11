@@ -22,7 +22,7 @@
   * [What the build exports](https://github.com/restarian/brace_umd/blob/master/docs/using_the_project/what_the_build_exports.md)
 ----
 
-**Version**: 0.11.1
+**Version**: 0.11.5
 
 **Description**: Provides a unified module definition wrapper for RequireJS and AMDefine definitions while staying seamlessly compliant with the RequireJS optimizer and factory based objects.
 
@@ -41,7 +41,7 @@
  | test | ```mocha``` |
  | build_umd | ```node ./bin/build_umd.js``` |
  | init_umd | ```node ./bin/init_umd.js``` |
- | build | ```build_umd --config-file minified_config.json``` |
+ | build | ```node ./bin/build_umd --config-file minified_config.json``` |
  | make_docs | ```brace_document --navlink --link --link-dest ../Readme.md --link-path ../docs/synopsis.md -r -i docs_raw -b docs --force-title --title "Brace Umd help pages" --sort depth --specification --mocha``` |
 
 **Keywords**: *brace*, *umd*, *unified*, *amd*, *module*, *definition*
